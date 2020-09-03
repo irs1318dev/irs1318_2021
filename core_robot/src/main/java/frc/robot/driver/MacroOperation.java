@@ -6,8 +6,6 @@ public enum MacroOperation implements IOperation
 
     // DriveTrain operations:
     PIDBrake,
-    TurnInPlaceLeft,
-    TurnInPlaceRight,
 
     // Testing operations
     FollowSomePath,

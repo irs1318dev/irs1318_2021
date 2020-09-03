@@ -35,9 +35,4 @@ public class ElectronicsConstants
     public static final int INDICATOR_LIGHT_X_DIO = -1;
 
     //================================================== DriveTrain ==============================================================
-
-    public static final int DRIVETRAIN_LEFT_MASTER_CAN_ID = 1;
-    public static final int DRIVETRAIN_LEFT_FOLLOWER_CAN_ID = 2;
-    public static final int DRIVETRAIN_RIGHT_MASTER_CAN_ID = 4;
-    public static final int DRIVETRAIN_RIGHT_FOLLOWER_CAN_ID = 5;
 }

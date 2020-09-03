@@ -40,74 +40,11 @@ public class RoadRunnerTankTranslator
 
     public static List<PathStep> convert(Path path, boolean isBackwards)
     {
-        // initialize roadrunner constraints
-        DriveConstraints constraints = new DriveConstraints(
-            TuningConstants.ROADRUNNER_MAX_VELOCITY,
-            TuningConstants.ROADRUNNER_MAX_ACCELERATION,
-            TuningConstants.ROADRUNNER_MAX_JERK,
-            TuningConstants.ROADRUNNER_MAX_ANGULAR_VELOCITY,
-            TuningConstants.ROADRUNNER_MAX_ANGULAR_ACCELERATION,
-            TuningConstants.ROADRUNNER_MAX_ANGULAR_JERK);
-
-        TankConstraints constraintsTank = new TankConstraints(constraints, HardwareConstants.DRIVETRAIN_WHEEL_SEPARATION_DISTANCE);
-        Trajectory traj = TrajectoryGenerator.INSTANCE.generateTrajectory(path, constraintsTank);
-
-        double duration = traj.duration();
-        List<PathStep> steps = new ArrayList<PathStep>((int)(duration / TuningConstants.ROADRUNNER_TIME_STEP));
-
-        double leftWheelPos = 0.0;
-        double rightWheelPos = 0.0;
-
-        for (double i = 0; i < duration; i += TuningConstants.ROADRUNNER_TIME_STEP)
-        {
-            PathStep step = RoadRunnerTankTranslator.buildPathStep(i, traj, leftWheelPos, rightWheelPos, isBackwards);
-            leftWheelPos = step.getLeftPosition();
-            rightWheelPos = step.getRightPosition();
-            steps.add(step);
-        }
-
-        return steps;
+        return null;
     }
 
     public static PathStep buildPathStep(double time, Trajectory traj, double leftWheelPos, double rightWheelPos, boolean isBackwards)
     {
-        Pose2d pose = traj.get(time);
-        Pose2d poseVel = traj.velocity(time);
-        Pose2d poseAcc = traj.acceleration(time);
-
-        // converts the each pose from a field frame of reference to a robot frame of reference
-        Pose2d robotVelocity = Kinematics.fieldToRobotVelocity(pose, poseVel);
-        Pose2d robotAcceleration = Kinematics.fieldToRobotAcceleration(pose, poseVel, poseAcc);
-
-        // converts unicycle model given by trajectory to left/right wheel velocities and accelerations
-        List<Double> velocities = TankKinematics.robotToWheelVelocities(robotVelocity, HardwareConstants.DRIVETRAIN_WHEEL_SEPARATION_DISTANCE);
-        double leftWheelVel = velocities.get(0);
-        double rightWheelVel = velocities.get(1);
-
-        List<Double> accelerations = TankKinematics.robotToWheelAccelerations(robotAcceleration, HardwareConstants.DRIVETRAIN_WHEEL_SEPARATION_DISTANCE);
-        double leftWheelAcc = accelerations.get(0);
-        double rightWheelAcc = accelerations.get(1);
-
-        if (isBackwards)
-        {
-            leftWheelVel *= -1;
-            rightWheelVel *= -1;
-            leftWheelAcc *= -1;
-            rightWheelAcc *= -1;
-        }
-
-        // calculates position of each wheel by multiplying the vel at a time step by the time step length
-        leftWheelPos += leftWheelVel * TuningConstants.ROADRUNNER_TIME_STEP;
-        rightWheelPos += rightWheelVel * TuningConstants.ROADRUNNER_TIME_STEP;
-        double heading = pose.getHeading() * Helpers.RADIANS_TO_DEGREES;
-
-        return new PathStep(
-            leftWheelPos,
-            rightWheelPos,
-            leftWheelVel,
-            rightWheelVel,
-            leftWheelAcc,
-            rightWheelAcc,
-            heading);
+        return null;
     }
 }
