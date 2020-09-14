@@ -19,14 +19,22 @@ public class HardwareConstants
     public static final double CAMERA_YAW = 0.0; // in degrees
 
     //================================================== DriveTrain ==============================================================
-
-    
-    
-    
-    
-    
-    
     
     public static final boolean ANGLE_MOTOR_INVERT_OUTPUT = false;
     public static final boolean ANGLE_MOTOR_INVERT_SENSOR = false;
+    public static final boolean DRIVE_MOTOR_INVERT_OUTPUT = false;
+    public static final boolean DRIVE_MOTOR_INVERT_SENSOR = false;
+
+    
+
+
+    public static final double DRIVETRAIN_DRIVE_ENCODER_PULSES_PER_REVOLUTION = 0.0;
+    public static final double DRIVETRAIN_DRIVE_GEAR_RATIO = 18.0; //set correctly 
+    public static final double DRIVETRAIN_DRIVE_WHEEL_DIAMETER = 4.0; // (in inches)
+    public static final double DRIVETRAIN_DRIVE_WHEEL_CIRCUMFERENCE = Math.PI * HardwareConstants.DRIVETRAIN_DRIVE_WHEEL_DIAMETER;
+    public static final double DRIVETRAIN_DRIVE_PULSE_DISTANCE = HardwareConstants.DRIVETRAIN_DRIVE_WHEEL_CIRCUMFERENCE / (HardwareConstants.DRIVETRAIN_DRIVE_GEAR_RATIO * HardwareConstants.DRIVETRAIN_DRIVE_ENCODER_PULSES_PER_REVOLUTION);
+    public static final double DRIVETRAIN_DRIVE_TICKS_PER_INCH = (HardwareConstants.DRIVETRAIN_DRIVE_GEAR_RATIO * HardwareConstants.DRIVETRAIN_DRIVE_ENCODER_PULSES_PER_REVOLUTION) / HardwareConstants.DRIVETRAIN_DRIVE_WHEEL_CIRCUMFERENCE;
+
+
+
 }
