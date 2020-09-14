@@ -36,8 +36,5 @@ public class ElectronicsConstants
 
     //================================================== DriveTrain ==============================================================
     public static final int DRIVETRAIN_DRIVE_MASTER_CAN_ID = 1;
-    public static final int DRIVETRAIN_DRIVE_MASTER_PDP_SLOT = 1;
-    public static final int DRIVETRAIN_DRIVE_FOLLOWER_CAN_ID = 2;
-    public static final int DRIVETRAIN_DRIVE_FOLLOWER_PDP_SLOT = 0;
 
 }
