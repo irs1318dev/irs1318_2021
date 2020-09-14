@@ -19,4 +19,14 @@ public class HardwareConstants
     public static final double CAMERA_YAW = 0.0; // in degrees
 
     //================================================== DriveTrain ==============================================================
+
+    
+    
+    
+    
+    
+    
+    
+    public static final boolean ANGLE_MOTOR_INVERT_OUTPUT = false;
+    public static final boolean ANGLE_MOTOR_INVERT_SENSOR = false;
 }

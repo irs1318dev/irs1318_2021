@@ -25,12 +25,12 @@ public class DriveTrainMechanism implements IMechanism {
     private final ITimer timer;
 
     private final ITalonFX driveMotor;
-    private final ITalonFX steeringMotor;
+    private final ITalonFX angleMotor;
 
     private Driver driver;
 
     private PIDHandler drivePID;
-    private PIDHandler steeringPID;
+    private PIDHandler anglePID;
 
     private boolean usePID;
     private boolean useBrakeMode;
@@ -38,9 +38,9 @@ public class DriveTrainMechanism implements IMechanism {
     private double driveVelocity;
     private double driveError;
     private int drivePosition;
-    private double steeringVelocity;
-    private double steeringError;
-    private int steeringPosition;
+    private double angleVelocity;
+    private double angleError;
+    private int anglePosition;
 
     @Inject
     public DriveTrainMechanism(
@@ -51,20 +51,41 @@ public class DriveTrainMechanism implements IMechanism {
         this.logger = logger;
         this.timer = timer;
 
-        this.turret = provider.getTalonSRX(ElectronicsConstants.POWERCELL_TURRET_MOTOR_CAN_ID);
-        this.turret.setInvertOutput(HardwareConstants.POWERCELL_TURRET_INVERT_OUTPUT);
-        this.turret.setInvertSensor(HardwareConstants.POWERCELL_TURRET_INVERT_SENSOR);
-        this.turret.setNeutralMode(MotorNeutralMode.Brake);
-        this.turret.setSensorType(TalonXFeedbackDevice.QuadEncoder);
-        this.turret.setPosition(0);
-        this.turret.setForwardLimitSwitch(TuningConstants.POWERCELL_TURRET_FORWARD_LIMIT_SWITCH_ENABLED, TuningConstants.POWERCELL_TURRET_FORWARD_LIMIT_SWITCH_NORMALLY_OPEN);
-        this.turret.setReverseLimitSwitch(TuningConstants.POWERCELL_TURRET_REVERSE_LIMIT_SWITCH_ENABLED, TuningConstants.POWERCELL_TURRET_REVERSE_LIMIT_SWITCH_NORMALLY_OPEN);
-        this.turret.setControlMode(TalonSRXControlMode.Position);
-        this.turret.setPIDF(
-            TuningConstants.POWERCELL_TURRET_POSITION_PID_KP,
-            TuningConstants.POWERCELL_TURRET_POSITION_PID_KI,
-            TuningConstants.POWERCELL_TURRET_POSITION_PID_KD,
-            TuningConstants.POWERCELL_TURRET_POSITION_PID_KF,
-            PowerCellMechanism.slotId);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        this.angleMotor = provider.getTalonSRX(ElectronicsConstants.ANGLE_MOTOR_CAN_ID);
+        this.angleMotor.setInvertOutput(HardwareConstants.ANGLE_MOTOR_INVERT_OUTPUT);
+        this.angleMotor.setInvertSensor(HardwareConstants.ANGLE_MOTOR_INVERT_SENSOR);
+        this.angleMotor.setNeutralMode(MotorNeutralMode.Brake);
+        this.angleMotor.setSensorType(AnalogInput.);
+        this.angleMotor.setPosition(0);
+        this.angleMotor.setControlMode(TalonSRXControlMode.Position);
+        this.angleMotor.setPIDF(
+            TuningConstants.ANGLE_MOTOR_POSITION_PID_KP,
+            TuningConstants.ANGLE_MOTOR_POSITION_PID_KI,
+            TuningConstants.ANGLE_MOTOR_POSITION_PID_KD,
+            TuningConstants.ANGLE_MOTOR_POSITION_PID_KF,
+            DriveTrainMechanism.slotId);
     }
 }

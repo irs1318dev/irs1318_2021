@@ -259,8 +259,16 @@ public class TuningConstants
 
     //================================================== DriveTrain ==============================================================
 
+    
+    
+    
+    
 
-    // gets the max speed in inches per second
-    // (TalonSRX: 10 * (ticks per 100ms) * (inches per tick) * (10) == in / s)
-    // (SparkMAX: (rotations per second) * (inches per rotation) == in / s)
+
+
+    public static final double ANGLE_MOTOR_POSITION_PID_KP = 0.0;
+    public static final double ANGLE_MOTOR_POSITION_PID_KI = 0.0;
+    public static final double ANGLE_MOTOR_POSITION_PID_KD = 0.0;
+    public static final double ANGLE_MOTOR_POSITION_PID_KF = 0.0;
+
 }

@@ -35,4 +35,6 @@ public class ElectronicsConstants
     public static final int INDICATOR_LIGHT_X_DIO = -1;
 
     //================================================== DriveTrain ==============================================================
+
+    public static final int ANGLE_MOTOR_CAN_ID = 1;
 }
