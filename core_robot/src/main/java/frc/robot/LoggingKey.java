@@ -24,7 +24,16 @@ public enum LoggingKey
     PositionNavxX("pos.navx_x"),
     PositionNavxY("pos.navx_y"),
     PositionNavxZ("pos.navx_z"),
-    PositionStartingAngle("pos.startingAngle");
+    PositionStartingAngle("pos.startingAngle"),
+    SwerveDriveVelocity("dt.drive_vel"),
+    SwerveDrivePosition("dt.drive_pos"),
+    SwerveDriveError("dt.drive_err"),
+    SwerveDriveVelocityGoal("dt.drive_goal"),
+    SwerveAngleVelocity("dt.angle_vel"),
+    SwerveAnglePosition("dt.angle_pos"),
+    SwerveAngleError("dt.angle_err"),
+    SwerveAnglePositionGoal("dt.angle_goal");
+    
 
     public final String value;
     public final boolean shouldLog;
