@@ -39,6 +39,8 @@ public class ElectronicsConstants
     public static final int ANGLE_MOTOR_CAN_ID = 1;
     public static final int DRIVE_MOTOR_CAN_ID = 1;
 
+    public static final int ABSOLUTE_ENCODER = 2;
+
     //public static final int 
 
 }

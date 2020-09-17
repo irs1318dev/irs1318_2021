@@ -23,6 +23,7 @@ public class DriveTrainMechanism implements IMechanism {
 
     private final ILogger logger;
     private final ITimer timer;
+    private final IAnalogInput absoluteEncoder;
 
     private final ITalonFX driveMotor;
     private final ITalonFX angleMotor;
@@ -41,6 +42,8 @@ public class DriveTrainMechanism implements IMechanism {
     private double angleVelocity;
     private double angleError;
     private int anglePosition;
+
+
 
     @Inject
     public DriveTrainMechanism(
@@ -87,6 +90,8 @@ public class DriveTrainMechanism implements IMechanism {
             TuningConstants.DRIVETRAIN_SUPPLY_CURRENT_MAX,
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_CURRENT,
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_DURATION);
+
+        this.absoluteEncoder = provider.getAnalogInput(ElectronicsConstants.ABSOLUTE_ENCODER);
 
     }
     public double getDriveVelocity()
@@ -149,6 +154,9 @@ public class DriveTrainMechanism implements IMechanism {
     @Override
     public void readSensors()
     {
+        double encoderVoltage = this.absoluteEncoder.getVoltage();
+        double encoderAngle = encoderVoltage * 72;
+        
         this.driveVelocity = this.driveMotor.getVelocity();
         this.angleVelocity = this.angleMotor.getVelocity();
 
@@ -204,13 +212,13 @@ public class DriveTrainMechanism implements IMechanism {
 
     public void setControlMode()
     {
-
+        //Can we define this in the beginning 
     }
 
     private Setpoint calculateSetpoint()
     {
-        double driveGoal = 0.0;
-        double angleGoal = 0.0;
+        double driveVelocityGoal = 0.0;
+        double anglePositionGoal = 0.0;
 
         double turnAngle = this.driver.getAnalog(AnalogOperation.DriveTrainTurn);
         double forwardVelocity = this.driver.getAnalog(AnalogOperation.DriveTrainMoveForward);
@@ -236,4 +244,6 @@ public class DriveTrainMechanism implements IMechanism {
 
         return new Setpoint(drive, angle);
     }
+
+
 }
