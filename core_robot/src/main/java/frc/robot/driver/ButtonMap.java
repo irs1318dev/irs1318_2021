@@ -26,7 +26,27 @@ public class ButtonMap implements IButtonMap
 
     public static AnalogOperationDescription[] AnalogOperationSchema = new AnalogOperationDescription[]
     {
-        // DriveTrain operations
+        new AnalogOperationDescription(
+            AnalogOperation.DriveTrainMoveForward,
+            UserInputDevice.Driver,
+            AnalogAxis.XBONE_LSY,
+            ElectronicsConstants.INVERT_XBONE_LEFT_Y_AXIS,
+            TuningConstants.DRIVETRAIN_DEAD_ZONE
+        ),
+        new AnalogOperationDescription(
+            AnalogOperation.DriveTrainTurnX,
+            UserInputDevice.Driver,
+            AnalogAxis.XBONE_RSX,
+            ElectronicsConstants.INVERT_XBONE_RIGHT_X_AXIS,
+            TuningConstants.DRIVETRAIN_DEAD_ZONE
+        ),
+        new AnalogOperationDescription(
+            AnalogOperation.DriveTrainTurnY,
+            UserInputDevice.Driver,
+            AnalogAxis.XBONE_RSY,
+            ElectronicsConstants.INVERT_XBONE_RIGHT_Y_AXIS,
+            TuningConstants.DRIVETRAIN_DEAD_ZONE
+        ),
     };
 
     public static DigitalOperationDescription[] DigitalOperationSchema = new DigitalOperationDescription[]

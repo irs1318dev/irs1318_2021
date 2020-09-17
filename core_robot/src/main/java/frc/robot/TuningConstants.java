@@ -265,6 +265,7 @@ public class TuningConstants
     public static final double ANGLE_MOTOR_POSITION_PID_KI = 0.0;
     public static final double ANGLE_MOTOR_POSITION_PID_KD = 0.0;
     public static final double ANGLE_MOTOR_POSITION_PID_KF = 0.0;
+    public static final double ANGLE_MOTOR_VELOCITY_PID_KS = 0.0; 
 
     // Velocity PID (drive)
     public static final double DRIVE_MOTOR_VELOCITY_PID_KP = 0.0;
@@ -277,6 +278,8 @@ public class TuningConstants
     public static final double DRIVETRAIN_K2 = 0.0;
 
     public static final double DRIVETRAIN_MAX_POWER_LEVEL = 0.0;
+
+    public static final double DRIVETRAIN_DEAD_ZONE = 0.05;
 
 
     
