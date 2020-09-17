@@ -12,6 +12,15 @@ import frc.robot.driver.common.Driver;
 
 import com.google.inject.Inject;
 
+/*
+DriveTrainMechanism
+
+authors: Vanshika, Arushi
+
+Started idk sometime in september
+*/
+
+
 @Singleton
 public class DriveTrainMechanism implements IMechanism {
 
@@ -61,14 +70,14 @@ public class DriveTrainMechanism implements IMechanism {
         this.angleMotor.setInvertSensor(HardwareConstants.ANGLE_MOTOR_INVERT_SENSOR);
         this.angleMotor.setNeutralMode(MotorNeutralMode.Brake);
         //this.angleMotor.setSensorType();
-        this.angleMotor.setPosition((int)this.encoderAngle);
+        this.angleMotor.setPosition((int)this.encoderAngle); //would this work?
         this.angleMotor.setControlMode(TalonSRXControlMode.Position);
         this.angleMotor.setPIDF(
             TuningConstants.ANGLE_MOTOR_POSITION_PID_KP,
             TuningConstants.ANGLE_MOTOR_POSITION_PID_KI,
             TuningConstants.ANGLE_MOTOR_POSITION_PID_KD,
             TuningConstants.ANGLE_MOTOR_POSITION_PID_KF,
-            DriveTrainMechanism.slotId);
+            DriveTrainMechanism.pidSlotId);
 
         this.driveMotor = provider.getTalonFX(ElectronicsConstants.DRIVE_MOTOR_CAN_ID);
         this.driveMotor.setNeutralMode(MotorNeutralMode.Brake);
@@ -156,7 +165,7 @@ public class DriveTrainMechanism implements IMechanism {
     public void readSensors()
     {
         this.encoderVoltage = this.absoluteEncoder.getVoltage();
-        this.encoderAngle = encoderVoltage * 72;
+        this.encoderAngle = this.encoderVoltage * 72;
         
         this.driveVelocity = this.driveMotor.getVelocity();
         this.angleVelocity = this.angleMotor.getVelocity();
@@ -236,5 +245,39 @@ public class DriveTrainMechanism implements IMechanism {
         return new Setpoint(driveVelocityGoal, anglePositionGoal);
     }
 
+    private class Setpoint
+    {
+        private double angle;
+        private double drive;
+
+        /**
+         * Initializes a new Setpoint
+         * @param drive value to apply
+         * @param angle value to apply
+         */
+        public Setpoint(double drive, double angle)
+        {
+            this.drive = drive;
+            this.angle = angle;
+        }
+
+        /**
+         * gets the drive setpoint
+         * @return drive setpoint value
+         */
+        public double getDrive()
+        {
+            return this.drive;
+        }
+
+        /**
+         * gets the angle setpoint
+         * @return angle setpoint value
+         */
+        public double getAngle()
+        {
+            return this.angle;
+        }
+    }
 
 }

@@ -279,6 +279,13 @@ public class TuningConstants
 
     public static final double DRIVETRAIN_MAX_POWER_LEVEL = 0.0;
 
+    public static final boolean DRIVETRAIN_VOLTAGE_COMPENSATION_ENABLED = false;
+    public static final double DRIVETRAIN_VOLTAGE_COMPENSATION = 0.0;
+    public static final boolean DRIVETRAIN_SUPPLY_CURRENT_LIMITING_ENABLED = false;
+    public static final double DRIVETRAIN_SUPPLY_CURRENT_MAX = 0.0;
+    public static final double DRIVETRAIN_SUPPLY_TRIGGER_CURRENT = 0.0;
+    public static final double DRIVETRAIN_SUPPLY_TRIGGER_DURATION = 0.0;
+
     public static final double DRIVETRAIN_DEAD_ZONE = 0.05;
 
 
