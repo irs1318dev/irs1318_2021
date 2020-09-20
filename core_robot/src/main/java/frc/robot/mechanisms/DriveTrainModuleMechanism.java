@@ -2,7 +2,7 @@
 /*
 DriveTrainModuleMechanism
 
-authors: Vanshika, Arushi
+authors: Will, Vanshika, Arushi
 
 Started idk sometime in september
 */
