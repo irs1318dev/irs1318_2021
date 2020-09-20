@@ -19,12 +19,12 @@ public class HardwareConstants
     public static final double CAMERA_YAW = 0.0; // in degrees
 
     //================================================== DriveTrain ==============================================================
-    
-    public static final boolean ANGLE_MOTOR_INVERT_OUTPUT = false;
-    public static final boolean ANGLE_MOTOR_INVERT_SENSOR = false;
-    public static final boolean DRIVE_MOTOR_INVERT_OUTPUT = false;
-    public static final boolean DRIVE_MOTOR_INVERT_SENSOR = false;
-    public static final double ANGLE_MOTOR_TICKS_TO_DEGREES = 1024.0/360.0; // 1024 ticks to 360 degrees
+    public static final int DRIVETRAIN_ENCODER_DEGREES_PER_VOLT = 72;
+    public static final boolean DRIVETRAIN_ANGLE_MOTOR_INVERT_OUTPUT = false;
+    public static final boolean DRIVETRAIN_ANGLE_MOTOR_INVERT_SENSOR = false;
+    public static final boolean DRIVETRAIN_DRIVE_MOTOR_INVERT_OUTPUT = false;
+    public static final boolean DRIVETRAIN_DRIVE_MOTOR_INVERT_SENSOR = false;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_TICKS_TO_DEGREES = 1024.0/360.0; // 1024 ticks to 360 degrees
 
     public static final double DRIVETRAIN_DRIVE_ENCODER_PULSES_PER_REVOLUTION = 0.0;
     public static final double DRIVETRAIN_DRIVE_GEAR_RATIO = 18.0; //set correctly 

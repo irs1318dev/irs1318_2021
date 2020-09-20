@@ -1,6 +1,13 @@
-package frc.robot.mechanisms;
 
-import java.lang.invoke.InjectedProfile;
+/*
+DriveTrainModuleMechanism
+
+authors: Vanshika, Arushi
+
+Started idk sometime in september
+*/
+
+package frc.robot.mechanisms;
 
 import javax.inject.Singleton;
 
@@ -12,17 +19,10 @@ import frc.robot.driver.common.Driver;
 
 import com.google.inject.Inject;
 
-/*
-DriveTrainMechanism
-
-authors: Vanshika, Arushi
-
-Started idk sometime in september
-*/
 
 
 @Singleton
-public class DriveTrainMechanism implements IMechanism {
+public class DriveTrainModuleMechanism implements IMechanism {
 
     private static final int pidSlotId = 0;
     private static final int FRAME_PERIOD_MS = 5;
@@ -39,9 +39,6 @@ public class DriveTrainMechanism implements IMechanism {
 
     private Driver driver;
 
-    private PIDHandler drivePID;
-    private PIDHandler anglePID;
-
     private boolean usePID;
     private boolean useBrakeMode;
 
@@ -57,7 +54,7 @@ public class DriveTrainMechanism implements IMechanism {
 
 
     @Inject
-    public DriveTrainMechanism(
+    public DriveTrainModuleMechanism(
     LoggingManager logger,
     IRobotProvider provider,
     ITimer timer) {
@@ -69,30 +66,29 @@ public class DriveTrainMechanism implements IMechanism {
         this.angleMotor.setInvertOutput(HardwareConstants.ANGLE_MOTOR_INVERT_OUTPUT);
         this.angleMotor.setInvertSensor(HardwareConstants.ANGLE_MOTOR_INVERT_SENSOR);
         this.angleMotor.setNeutralMode(MotorNeutralMode.Brake);
-        //this.angleMotor.setSensorType();
+        setSensorType(TalonXFeedbackDevice.IntergratedSensor);
         this.angleMotor.setPosition((int)this.encoderAngle); //would this work?
-        this.angleMotor.setControlMode(TalonSRXControlMode.Position);
         this.angleMotor.setPIDF(
             TuningConstants.ANGLE_MOTOR_POSITION_PID_KP,
             TuningConstants.ANGLE_MOTOR_POSITION_PID_KI,
             TuningConstants.ANGLE_MOTOR_POSITION_PID_KD,
             TuningConstants.ANGLE_MOTOR_POSITION_PID_KF,
-            DriveTrainMechanism.pidSlotId);
+            DriveTrainModuleMechanism.pidSlotId);
 
         this.driveMotor = provider.getTalonFX(ElectronicsConstants.DRIVE_MOTOR_CAN_ID);
         this.driveMotor.setNeutralMode(MotorNeutralMode.Brake);
         this.driveMotor.setInvertOutput(HardwareConstants.DRIVE_MOTOR_INVERT_OUTPUT);
         this.driveMotor.setInvertSensor(HardwareConstants.DRIVE_MOTOR_INVERT_SENSOR);
         this.driveMotor.setSensorType(TalonXFeedbackDevice.IntegratedSensor);
-        this.driveMotor.setFeedbackFramePeriod(DriveTrainMechanism.FRAME_PERIOD_MS);
-        this.driveMotor.setPIDFFramePeriod(DriveTrainMechanism.FRAME_PERIOD_MS);
+        this.driveMotor.setFeedbackFramePeriod(DriveTrainModuleMechanism.FRAME_PERIOD_MS);
+        this.driveMotor.setPIDFFramePeriod(DriveTrainModuleMechanism.FRAME_PERIOD_MS);
         this.driveMotor.configureVelocityMeasurements(10, 32);
         this.driveMotor.setPIDF(
             TuningConstants.DRIVE_MOTOR_VELOCITY_PID_KP,
             TuningConstants.DRIVE_MOTOR_VELOCITY_PID_KI,
             TuningConstants.DRIVE_MOTOR_VELOCITY_PID_KD,
             TuningConstants.DRIVE_MOTOR_VELOCITY_PID_KF,
-            DriveTrainMechanism.pidSlotId);
+            DriveTrainModuleMechanism.pidSlotId);
         this.driveMotor.setVoltageCompensation(
             TuningConstants.DRIVETRAIN_VOLTAGE_COMPENSATION_ENABLED,
             TuningConstants.DRIVETRAIN_VOLTAGE_COMPENSATION);
@@ -101,6 +97,20 @@ public class DriveTrainMechanism implements IMechanism {
             TuningConstants.DRIVETRAIN_SUPPLY_CURRENT_MAX,
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_CURRENT,
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_DURATION);
+
+        this.usePID = TuningConstants.DRIVETRAIN_USE_PID;
+
+        if(this.usePID == true)
+        {
+            this.angleMotor.setControlMode(TalonSRXControlMode.Position);
+            this.driveMotor.setControlMode(TalonSRXControlMode.Position);
+        }
+        else
+        {
+            this.angleMotor.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.driveMotor.setControlMode(TalonSRXControlMode.PercentOutput);
+            
+        }
 
         this.absoluteEncoder = provider.getAnalogInput(ElectronicsConstants.ABSOLUTE_ENCODER);
 
@@ -165,7 +175,7 @@ public class DriveTrainMechanism implements IMechanism {
     public void readSensors()
     {
         this.encoderVoltage = this.absoluteEncoder.getVoltage();
-        this.encoderAngle = this.encoderVoltage * 72;
+        this.encoderAngle = this.encoderVoltage * HardwareConstants.DRIVETRAIN_ENCODER_DEGREES_PER_VOLT;
         
         this.driveVelocity = this.driveMotor.getVelocity();
         this.angleVelocity = this.angleMotor.getVelocity();
@@ -186,8 +196,14 @@ public class DriveTrainMechanism implements IMechanism {
 
     public void update()
     {
-        Setpoint setpoint = this.calculateSetpoint();
-
+        if(this.usePID)
+        {
+            Setpoint setpoint = this.calculateSetpoint();
+        }
+        else
+        {
+            Setpoint setpoint = this.calculateNonPIDSetpoint();   
+        }
         double driveSetpoint = setpoint.getDrive();
         double angleSetpoint = setpoint.getAngle();
 
@@ -197,6 +213,12 @@ public class DriveTrainMechanism implements IMechanism {
         // apply the setpoints to the motors
         this.driveMotor.set(driveSetpoint);
         this.angleMotor.set(angleSetpoint);
+
+        if(this.driver.getDigital(DigitalOperation.DriveTrainReset))
+        {
+            this.angleMotor.reset();
+            this.driveMotor.reset();
+        }
     }
 
     public void stop()
@@ -204,8 +226,6 @@ public class DriveTrainMechanism implements IMechanism {
         this.driveMotor.stop();
         this.angleMotor.stop();
 
-        this.driveMotor.reset();
-        this.angleMotor.reset();
 
         this.drivePID.reset();
         this.anglePID.reset();
@@ -227,24 +247,70 @@ public class DriveTrainMechanism implements IMechanism {
         double turnY = this.driver.getAnalog(AnalogOperation.DriveTrainTurnY);
         double forwardVelocity = this.driver.getAnalog(AnalogOperation.DriveTrainMoveForward);
 
-        driveVelocityGoal = forwardVelocity * TuningConstants.DRIVETRAIN_K1;
+        driveVelocityGoal = forwardVelocity;
         anglePositionGoal = (Math.atan2(turnX, turnY)/Math.PI) * 180;
 
         driveVelocityGoal = driveVelocityGoal * TuningConstants.DRIVETRAIN_MAX_POWER_LEVEL;
 
         driveVelocityGoal = this.applyPowerLevelRange(driveVelocityGoal);
+        anglePositionGoal = this.applyPowerLevelRange(anglePositionGoal);
 
-        this.assertPowerLevelRange(drive, "drive");
+        this.assertPowerLevelRange(anglePositionGoal, "angle");
+        this.assertPowerLevelRange(driveVelocityGoal, "drive");
 
         // if we are using PID, then we base the setpoint on the max velocity
-        if (this.usePID)
-        {
-            drive *= TuningConstants.DRIVE_MOTOR_VELOCITY_PID_KS;
-        }
-
         return new Setpoint(driveVelocityGoal, anglePositionGoal);
     }
 
+    private Setpoint calculateNonPIDSetpoint()
+    {
+        double driveOutput = 0.0;
+        double angleOutput = 0.0;
+
+        double turnX = this.driver.getAnalog(AnalogOperation.DriveTrainTurnX);
+        double turnY = this.driver.getAnalog(AnalogOperation.DriveTrainTurnY);
+        double forwardVelocity = this.driver.getAnalog(AnalogOperation.DriveTrainMoveForward);
+
+        driveOutput = forwardVelocity;
+        angleOutput = turnX;
+
+        driveOutput = this.applyPowerLevelRange(driveOutput);
+        angleOutput = this.applyPowerLevelRange(angleOutput);
+        
+        this.assertPowerLevelRange(angleOutput , "angle");
+        this.assertPowerLevelRange(driveOutput, "drive");
+
+
+        return new Setpoint(driveOutput, angleOutput);
+    }
+
+    private void assertPowerLevelRange(double powerLevel, String side)
+    {
+        if (powerLevel < DriveTrainMechanism.POWERLEVEL_MIN)
+        {
+            if (TuningConstants.THROW_EXCEPTIONS)
+            {
+                throw new RuntimeException(side + " power level too low!");
+            }
+
+            return;
+        }
+
+        if (powerLevel > DriveTrainMechanism.POWERLEVEL_MAX)
+        {
+            if (TuningConstants.THROW_EXCEPTIONS)
+            {
+                throw new RuntimeException(side + " power level too high!");
+            }
+
+            return;
+        }
+    }
+
+    private double applyPowerLevelRange(double powerLevel)
+    {
+        return Helpers.EnforceRange(powerLevel, DriveTrainModuleMechanism.POWERLEVEL_MIN, DriveTrainModuleMechanism.POWERLEVEL_MAX);
+    }
     private class Setpoint
     {
         private double angle;

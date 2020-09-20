@@ -51,6 +51,14 @@ public class ButtonMap implements IButtonMap
 
     public static DigitalOperationDescription[] DigitalOperationSchema = new DigitalOperationDescription[]
     {
+        new DigitalOperationDescription(
+            DigitalOperation.DriveTrainReset,
+            UserInputDevice.Driver,
+            UserInputDeviceButton.XBONE_A_BUTTON,
+            Shift.DriverDebug,
+            Shift.None,
+            ButtonType.Click
+        )
     };
 
     public static MacroOperationDescription[] MacroSchema = new MacroOperationDescription[]
