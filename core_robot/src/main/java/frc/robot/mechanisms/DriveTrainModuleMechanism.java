@@ -66,8 +66,8 @@ public class DriveTrainModuleMechanism implements IMechanism {
         this.angleMotor.setInvertOutput(HardwareConstants.ANGLE_MOTOR_INVERT_OUTPUT);
         this.angleMotor.setInvertSensor(HardwareConstants.ANGLE_MOTOR_INVERT_SENSOR);
         this.angleMotor.setNeutralMode(MotorNeutralMode.Brake);
-        setSensorType(TalonXFeedbackDevice.IntergratedSensor);
-        this.angleMotor.setPosition((int)this.encoderAngle); //would this work?
+        this.angleMotor.setSensorType(TalonXFeedbackDevice.IntergratedSensor);
+        //this.angleMotor.setPosition((int)this.encoderAngle); //would this work?
         this.angleMotor.setPIDF(
             TuningConstants.ANGLE_MOTOR_POSITION_PID_KP,
             TuningConstants.ANGLE_MOTOR_POSITION_PID_KI,
@@ -103,7 +103,7 @@ public class DriveTrainModuleMechanism implements IMechanism {
         if(this.usePID == true)
         {
             this.angleMotor.setControlMode(TalonSRXControlMode.Position);
-            this.driveMotor.setControlMode(TalonSRXControlMode.Position);
+            this.driveMotor.setControlMode(TalonSRXControlMode.Velocity);
         }
         else
         {
@@ -112,7 +112,7 @@ public class DriveTrainModuleMechanism implements IMechanism {
             
         }
 
-        this.absoluteEncoder = provider.getAnalogInput(ElectronicsConstants.ABSOLUTE_ENCODER);
+        this.absoluteEncoder = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_ANALOG_INPUT);
 
     }
     public double getDriveVelocity()
@@ -226,10 +226,6 @@ public class DriveTrainModuleMechanism implements IMechanism {
         this.driveMotor.stop();
         this.angleMotor.stop();
 
-
-        this.drivePID.reset();
-        this.anglePID.reset();
-
         this.driveVelocity = 0.0;
         this.driveError = 0.0;
         this.drivePosition = 0;
@@ -248,15 +244,15 @@ public class DriveTrainModuleMechanism implements IMechanism {
         double forwardVelocity = this.driver.getAnalog(AnalogOperation.DriveTrainMoveForward);
 
         driveVelocityGoal = forwardVelocity;
-        anglePositionGoal = (Math.atan2(turnX, turnY)/Math.PI) * 180;
+        anglePositionGoal = (Math.atan2(turnX, turnY) * Helpers.RADIANS_TO_DEGREES);
 
-        driveVelocityGoal = driveVelocityGoal * TuningConstants.DRIVETRAIN_MAX_POWER_LEVEL;
 
         driveVelocityGoal = this.applyPowerLevelRange(driveVelocityGoal);
-        anglePositionGoal = this.applyPowerLevelRange(anglePositionGoal);
-
-        this.assertPowerLevelRange(anglePositionGoal, "angle");
+        
+        Helpers.EnforceRange(anglePositionGoal, -180.0, 180.0);
         this.assertPowerLevelRange(driveVelocityGoal, "drive");
+
+        driveVelocityGoal = driveVelocityGoal * TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS;
 
         // if we are using PID, then we base the setpoint on the max velocity
         return new Setpoint(driveVelocityGoal, anglePositionGoal);
