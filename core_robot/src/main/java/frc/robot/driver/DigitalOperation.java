@@ -12,6 +12,5 @@ public enum DigitalOperation implements IOperation
     CompressorForceDisable,
 
     // DriveTrain operations:
-
     DriveTrainReset,
 }

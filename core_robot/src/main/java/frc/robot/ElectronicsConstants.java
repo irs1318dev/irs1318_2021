@@ -39,10 +39,7 @@ public class ElectronicsConstants
     //================================================== DriveTrain ==============================================================
 
     public static final int DRIVETRAIN_ANGLE_MOTOR_CAN_ID = 1;
-    public static final int DRIVETRAIN_DRIVE_MOTOR_CAN_ID = 1;
+    public static final int DRIVETRAIN_DRIVE_MOTOR_CAN_ID = 2;
 
-    public static final int DRIVETRAIN_ABSOLUTE_ENCODER_ANALOG_INPUT = 2;
-
-    //public static final int 
-
+    public static final int DRIVETRAIN_ABSOLUTE_ENCODER_ANALOG_INPUT = 1;
 }

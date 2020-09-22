@@ -40,7 +40,8 @@ public abstract class FauxbotTalonXBase extends FauxbotAdvancedMotorBase impleme
 
     public void setSensorType(TalonXFeedbackDevice feedbackDevice)
     {
-        if (feedbackDevice == TalonXFeedbackDevice.QuadEncoder)
+        if (feedbackDevice == TalonXFeedbackDevice.QuadEncoder ||
+            feedbackDevice == TalonXFeedbackDevice.IntegratedSensor)
         {
             this.innerEncoder = new FauxbotEncoder(new FauxbotSensorConnection(FauxbotSensorConnection.SensorConnector.CAN, this.connection.getPort()));
         }

@@ -8,5 +8,4 @@ public enum AnalogOperation implements IOperation
     DriveTrainMoveForward,
     DriveTrainTurnX,
     DriveTrainTurnY;
-
 }

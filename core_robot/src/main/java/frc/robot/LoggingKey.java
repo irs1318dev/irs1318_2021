@@ -33,7 +33,6 @@ public enum LoggingKey
     DriveTrainAnglePosition("dt.angle_pos"),
     DriveTrainAngleError("dt.angle_err"),
     DriveTrainAnglePositionGoal("dt.angle_goal");
-    
 
     public final String value;
     public final boolean shouldLog;
