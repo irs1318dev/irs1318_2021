@@ -260,19 +260,61 @@ public class TuningConstants
     //================================================== DriveTrain ==============================================================
 
     public static final boolean DRIVETRAIN_USE_PID = false;
+    // Drive PID (drive) module 1
+    public static final double DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KP = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KI = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KD = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KF = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_1_VELOCITY_PID_KS = 0.0; 
 
-    public static final double DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KP = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KI = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KD = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KF = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_VELOCITY_PID_KS = 0.0; 
+    // Velocity PID (drive) module 1
+    public static final double DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KP = 0.0;
+    public static final double DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KI = 0.0;
+    public static final double DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KD = 0.0;
+    public static final double DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KF = 0.0; 
+    public static final double DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KS = 0.0; 
 
-    // Velocity PID (drive)
-    public static final double DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KP = 0.0;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KI = 0.0;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KD = 0.0;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KF = 0.0; 
-    public static final double DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS = 0.0; 
+    // Drive PID (drive) module 2
+    public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KP = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KI = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KD = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KF = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_2_VELOCITY_PID_KS = 0.0; 
+
+    // Velocity PID (drive) module 2
+    public static final double DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KP = 0.0;
+    public static final double DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KI = 0.0;
+    public static final double DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KD = 0.0;
+    public static final double DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KF = 0.0; 
+    public static final double DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KS = 0.0; 
+
+    // Drive PID (drive) module 3
+    public static final double DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KP = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KI = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KD = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KF = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_3_VELOCITY_PID_KS = 0.0; 
+
+    // Velocity PID (drive) module 3
+    public static final double DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KP = 0.0;
+    public static final double DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KI = 0.0;
+    public static final double DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KD = 0.0;
+    public static final double DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KF = 0.0; 
+    public static final double DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KS = 0.0; 
+
+    // Drive PID (drive) module 4
+    public static final double DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KP = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KI = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KD = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KF = 0.0;
+    public static final double DRIVETRAIN_ANGLE_MOTOR_4_VELOCITY_PID_KS = 0.0; 
+
+    // Velocity PID (drive) module 4
+    public static final double DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KP = 0.0;
+    public static final double DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KI = 0.0;
+    public static final double DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KD = 0.0;
+    public static final double DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KF = 0.0; 
+    public static final double DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KS = 0.0; 
 
     public static final double DRIVETRAIN_MAX_POWER_LEVEL = 0.0;
 
