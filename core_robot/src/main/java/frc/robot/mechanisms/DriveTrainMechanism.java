@@ -27,6 +27,9 @@ public class DriveTrainMechanism implements IMechanism
     private static final double POWERLEVEL_MIN = -1.0;
     private static final double POWERLEVEL_MAX = 1.0;
 
+    private final double length = 10.0;
+    private final double width = 10.0;
+
     private final ILogger logger;
     private final IAnalogInput absoluteEncoder;
 
@@ -136,5 +139,72 @@ public class DriveTrainMechanism implements IMechanism
         }
 
         this.absoluteEncoder = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_ANALOG_INPUT);
+    }
+
+
+    private class Setpoint
+    {
+        private double angle;
+        private double drive;
+
+        /**
+         * Initializes a new Setpoint
+         * @param drive value to apply
+         * @param angle value to apply
+         */
+        public Setpoint(double drive, double angle)
+        {
+            this.drive = drive;
+            this.angle = angle;
+        }
+
+        /**
+         * gets the drive setpoint
+         * @return drive setpoint value
+         */
+        public double getDrive()
+        {
+            return this.drive;
+        }
+
+        /**
+         * gets the angle setpoint
+         * @return angle setpoint value
+         */
+        public double getAngle()
+        {
+            return this.angle;
+        }   
+    }
+
+    private Setpoint calculateSetpoint(int module)
+    {
+        double a = 0.0;
+        double b = 0.0;
+
+        a1 = a - this.width/2;
+        a2 = a + this.width/2;
+        b1 = b - this.length/2;
+        b2 = b + this.length/2;
+
+        int[] Rx = {a1, a2, a2, a1};
+        int[] Ry = {b1, b1, b2, b2};
+
+        double driveVelocityGoal = 0.0;
+        double anglePositionGoal = 0.0;
+
+        double turnX = this.driver.getAnalog(AnalogOperation.DriveTrainTurnX);
+        double turnY = this.driver.getAnalog(AnalogOperation.DriveTrainTurnY);
+        double forwardVelocity = this.driver.getAnalog(AnalogOperation.DriveTrainMoveForward);
+
+        driveVelocityGoal = forwardVelocity;
+        anglePositionGoal = (Math.atan2(turnX, turnY) * Helpers.RADIANS_TO_DEGREES);
+
+        /*
+        Vwx = Vcx - omega*Ry[i]
+            Vwy = Vcy + omega*Rx[i]
+            self.raw_wheel_ang.append(atan2(-Vwx,Vwy))  
+            self.raw_wheel_vel.append(sqrt(Vwx*Vwx+Vwy*Vwy))*/
+
     }
 }
