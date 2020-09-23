@@ -132,11 +132,23 @@ public class DriveTrainMechanism implements IMechanism
         {
             this.angleMotor1.setControlMode(TalonSRXControlMode.Position);
             this.driveMotor1.setControlMode(TalonSRXControlMode.Velocity);
+            this.angleMotor2.setControlMode(TalonSRXControlMode.Position);
+            this.driveMotor2.setControlMode(TalonSRXControlMode.Velocity);
+            this.angleMotor3.setControlMode(TalonSRXControlMode.Position);
+            this.driveMotor3.setControlMode(TalonSRXControlMode.Velocity);
+            this.angleMotor4.setControlMode(TalonSRXControlMode.Position);
+            this.driveMotor4.setControlMode(TalonSRXControlMode.Velocity);
         }
         else
         {
             this.angleMotor1.setControlMode(TalonSRXControlMode.PercentOutput);
             this.driveMotor1.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.angleMotor2.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.driveMotor2.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.angleMotor3.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.driveMotor3.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.angleMotor4.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.driveMotor4.setControlMode(TalonSRXControlMode.PercentOutput);
         }
 
         this.absoluteEncoder1 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_1_ANALOG_INPUT);
@@ -180,20 +192,9 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_CURRENT,
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_DURATION);
 
-        if (TuningConstants.DRIVETRAIN_USE_PID)
-        {
-            this.angleMotor2.setControlMode(TalonSRXControlMode.Position);
-            this.driveMotor2.setControlMode(TalonSRXControlMode.Velocity);
-        }
-        else
-        {
-            this.angleMotor2.setControlMode(TalonSRXControlMode.PercentOutput);
-            this.driveMotor2.setControlMode(TalonSRXControlMode.PercentOutput);
-        }
-
         this.absoluteEncoder2 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_2_ANALOG_INPUT);
 
-        
+
 
         //MODULE 3
         this.angleMotor3 = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_ANGLE_MOTOR_2_CAN_ID);
@@ -232,20 +233,7 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_CURRENT,
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_DURATION);
 
-        if (TuningConstants.DRIVETRAIN_USE_PID)
-        {
-            this.angleMotor3.setControlMode(TalonSRXControlMode.Position);
-            this.driveMotor3.setControlMode(TalonSRXControlMode.Velocity);
-        }
-        else
-        {
-            this.angleMotor3.setControlMode(TalonSRXControlMode.PercentOutput);
-            this.driveMotor3.setControlMode(TalonSRXControlMode.PercentOutput);
-        }
-
         this.absoluteEncoder3 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_3_ANALOG_INPUT);
-
-    
 
 
         //MODULE 4
@@ -284,17 +272,6 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_SUPPLY_CURRENT_MAX,
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_CURRENT,
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_DURATION);
-
-        if (TuningConstants.DRIVETRAIN_USE_PID)
-        {
-            this.angleMotor4.setControlMode(TalonSRXControlMode.Position);
-            this.driveMotor4.setControlMode(TalonSRXControlMode.Velocity);
-        }
-        else
-        {
-            this.angleMotor4.setControlMode(TalonSRXControlMode.PercentOutput);
-            this.driveMotor4.setControlMode(TalonSRXControlMode.PercentOutput);
-        }
 
         this.absoluteEncoder4 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_4_ANALOG_INPUT);
     }
