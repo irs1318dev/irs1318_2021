@@ -10,11 +10,11 @@ public class ElectronicsConstants
 {
     // change INVERT_X_AXIS to true if positive on the joystick isn't to the right, and negative isn't to the left
     public static final boolean INVERT_XBONE_LEFT_X_AXIS = false;
-    public static final boolean INVERT_XBONE_RIGHT_X_AXIS = false;
+    public static final boolean INVERT_XBONE_RIGHT_X_AXIS = true;
 
     // change INVERT_Y_AXIS to true if positive on the joystick isn't forward, and negative isn't backwards.
-    public static final boolean INVERT_XBONE_LEFT_Y_AXIS = false;
-    public static final boolean INVERT_XBONE_RIGHT_Y_AXIS = false;
+    public static final boolean INVERT_XBONE_LEFT_Y_AXIS = true;
+    public static final boolean INVERT_XBONE_RIGHT_Y_AXIS = true;
 
     // change INVERT_THROTTLE_AXIS to true if positive on the joystick isn't forward, and negative isn't backwards.
     public static final boolean INVERT_THROTTLE_AXIS = true;
@@ -47,8 +47,8 @@ public class ElectronicsConstants
     public static final int DRIVETRAIN_ANGLE_MOTOR_4_CAN_ID = 7;
     public static final int DRIVETRAIN_DRIVE_MOTOR_4_CAN_ID = 8;
 
-    public static final int DRIVETRAIN_ABSOLUTE_ENCODER_1_ANALOG_INPUT = 1;
-    public static final int DRIVETRAIN_ABSOLUTE_ENCODER_2_ANALOG_INPUT = 2;
-    public static final int DRIVETRAIN_ABSOLUTE_ENCODER_3_ANALOG_INPUT = 3;
-    public static final int DRIVETRAIN_ABSOLUTE_ENCODER_4_ANALOG_INPUT = 4;
+    public static final int DRIVETRAIN_ABSOLUTE_ENCODER_1_ANALOG_INPUT = 0;
+    public static final int DRIVETRAIN_ABSOLUTE_ENCODER_2_ANALOG_INPUT = 1;
+    public static final int DRIVETRAIN_ABSOLUTE_ENCODER_3_ANALOG_INPUT = 2;
+    public static final int DRIVETRAIN_ABSOLUTE_ENCODER_4_ANALOG_INPUT = 3;
 }

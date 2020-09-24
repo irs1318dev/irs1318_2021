@@ -25,6 +25,7 @@ public enum LoggingKey
     PositionNavxY("pos.navx_y"),
     PositionNavxZ("pos.navx_z"),
     PositionStartingAngle("pos.startingAngle"),
+    DriveTrainAbsoluteEncoderPosition("dt.absenc_pos"),
     DriveTrainDriveVelocity("dt.drive_vel"),
     DriveTrainDrivePosition("dt.drive_pos"),
     DriveTrainDriveError("dt.drive_err"),

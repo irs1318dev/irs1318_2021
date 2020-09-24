@@ -179,10 +179,11 @@ public class DriveTrainModuleMechanism implements IMechanism
 
         this.logger.logNumber(LoggingKey.DriveTrainDriveVelocity, this.driveVelocity);
         this.logger.logNumber(LoggingKey.DriveTrainDriveError, this.driveError);
-        this.logger.logNumber(LoggingKey.DriveTrainAnglePosition, this.drivePosition);
+        this.logger.logNumber(LoggingKey.DriveTrainDrivePosition, this.drivePosition);
         this.logger.logNumber(LoggingKey.DriveTrainAngleVelocity, this.angleVelocity);
         this.logger.logNumber(LoggingKey.DriveTrainAngleError, this.angleError);
         this.logger.logNumber(LoggingKey.DriveTrainAnglePosition, this.anglePosition);
+        this.logger.logNumber(LoggingKey.DriveTrainAbsoluteEncoderPosition, this.encoderAngle);
     }
 
     public void update()
@@ -244,7 +245,8 @@ public class DriveTrainModuleMechanism implements IMechanism
         Helpers.EnforceRange(anglePositionGoal, -180.0, 180.0);
         this.assertPowerLevelRange(driveVelocityGoal, "drive");
 
-        driveVelocityGoal = driveVelocityGoal * TuningConstants.DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KS;
+        driveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KS;
+        anglePositionGoal *= TuningConstants.DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KS;
 
         // if we are using PID, then we base the setpoint on the max velocity
         return new Setpoint(driveVelocityGoal, anglePositionGoal);

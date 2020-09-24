@@ -5,7 +5,7 @@
  * 
  * Started idk sometime in september
 */
-
+/*
 package frc.robot.mechanisms;
 
 import javax.inject.Singleton;
@@ -289,7 +289,7 @@ public class DriveTrainMechanism implements IMechanism
          * Initializes a new Setpoint
          * @param drive value to apply
          * @param angle value to apply
-         */
+         * /
         public Setpoint(double drive, double angle)
         {
             this.drive = drive;
@@ -299,7 +299,7 @@ public class DriveTrainMechanism implements IMechanism
         /**
          * gets the drive setpoint
          * @return drive setpoint value
-         */
+        * /
         public double getDrive()
         {
             return this.drive;
@@ -308,7 +308,7 @@ public class DriveTrainMechanism implements IMechanism
         /**
          * gets the angle setpoint
          * @return angle setpoint value
-         */
+         * /
         public double getAngle()
         {
             return this.angle;
@@ -342,7 +342,7 @@ public class DriveTrainMechanism implements IMechanism
         Vwx = Vcx - omega*Ry[i]
             Vwy = Vcy + omega*Rx[i]
             self.raw_wheel_ang.append(atan2(-Vwx,Vwy))  
-            self.raw_wheel_vel.append(sqrt(Vwx*Vwx+Vwy*Vwy))*/
+            self.raw_wheel_vel.append(sqrt(Vwx*Vwx+Vwy*Vwy)) * /
 
     }
-}
+}*/
