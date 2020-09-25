@@ -386,8 +386,8 @@ public class DriveTrainMechanism implements IMechanism
         ITalonFX[] angleMotors = {this.angleMotor1, this.angleMotor2, this.angleMotor3, this.angleMotor4};
         ITalonFX[] driveMotors = {this.driveMotor1, this.driveMotor2, this.driveMotor3, this.driveMotor4};
         
-        LoggingKey[] angleLogs = {LoggingKey.DriveTrainDriveVelocityGoal1, LoggingKey.DriveTrainDriveVelocityGoal2, LoggingKey.DriveTrainDriveVelocityGoal3, LoggingKey.DriveTrainDriveVelocityGoal4};
-        LoggingKey[] driveLogs = {LoggingKey.DriveTrainAnglePositionGoal1, LoggingKey.DriveTrainAnglePositionGoal2, LoggingKey.DriveTrainAnglePositionGoal3, LoggingKey.DriveTrainAnglePositionGoal4};
+        LoggingKey[] driveLogs = {LoggingKey.DriveTrainDriveVelocityGoal1, LoggingKey.DriveTrainDriveVelocityGoal2, LoggingKey.DriveTrainDriveVelocityGoal3, LoggingKey.DriveTrainDriveVelocityGoal4};
+        LoggingKey[] angleLogs = {LoggingKey.DriveTrainAnglePositionGoal1, LoggingKey.DriveTrainAnglePositionGoal2, LoggingKey.DriveTrainAnglePositionGoal3, LoggingKey.DriveTrainAnglePositionGoal4};
 
         for(int i = 0; i < 4; i++)
         {
@@ -395,7 +395,7 @@ public class DriveTrainMechanism implements IMechanism
             double angleSetpoint = getClosestAngleInRange(
                 current.getAngle(), 
                 angleMotors[i].getPosition(), 
-                -180.0, 
+                -180.0, // wasn't too sure what these were supposed to be
                 180.0);
             double driveSetpoint = current.getDrive();
 
@@ -443,7 +443,7 @@ public class DriveTrainMechanism implements IMechanism
             }
         }
         return best;
-        }
+    }
 
     public void stop()
     {
@@ -540,8 +540,8 @@ public class DriveTrainMechanism implements IMechanism
             Helpers.EnforceRange(anglePositionGoal, -180.0, 180.0);
             this.assertPowerLevelRange(driveVelocityGoal, "drive");
 
-            driveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KS;
-            anglePositionGoal *= TuningConstants.DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KS;
+            driveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KS; // only uses KS from module 1 but it shouldn't
+            anglePositionGoal *= TuningConstants.DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KS; // matter rn cuz theyre all the same
 
             result.add(new Setpoint(driveVelocityGoal, anglePositionGoal));
         }
