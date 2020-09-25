@@ -4,11 +4,16 @@
  * authors: Will, Vanshika, Arushi
  * 
  * Started idk sometime in september
+ * 
+ * dO yOu ReMeMbEr 
+ * tHe 21sT nIgHt oF sEpTeMbEr
 */
 
 package frc.robot.mechanisms;
 
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
 
 import javax.inject.Singleton;
 
@@ -18,6 +23,7 @@ import frc.robot.common.robotprovider.*;
 import frc.robot.driver.*;
 import frc.robot.driver.common.Driver;
 
+import com.google.common.collect.Range;
 import com.google.inject.Inject;
 
 @Singleton
@@ -29,15 +35,11 @@ public class DriveTrainMechanism implements IMechanism
     private static final double POWERLEVEL_MIN = -1.0;
     private static final double POWERLEVEL_MAX = 1.0;
 
-<<<<<<< HEAD
-    private final double length = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPARATION_DISTANCE;
-    private final double width = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPARATION_DISTANCE;
-=======
     private final double length = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE;
     private final double width = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE;
->>>>>>> 431d6cefc2039bca0f385b03d8e3885737bf8b48
 
     private final ILogger logger;
+
     private final IAnalogInput absoluteEncoder1;
     private final IAnalogInput absoluteEncoder2;
     private final IAnalogInput absoluteEncoder3;
@@ -138,32 +140,6 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_CURRENT,
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_DURATION);
 
-        if (TuningConstants.DRIVETRAIN_USE_PID)
-        {
-            this.angleMotor1.setControlMode(TalonSRXControlMode.Position);
-            this.driveMotor1.setControlMode(TalonSRXControlMode.Velocity);
-            this.angleMotor2.setControlMode(TalonSRXControlMode.Position);
-            this.driveMotor2.setControlMode(TalonSRXControlMode.Velocity);
-            this.angleMotor3.setControlMode(TalonSRXControlMode.Position);
-            this.driveMotor3.setControlMode(TalonSRXControlMode.Velocity);
-            this.angleMotor4.setControlMode(TalonSRXControlMode.Position);
-            this.driveMotor4.setControlMode(TalonSRXControlMode.Velocity);
-        }
-        else
-        {
-            this.angleMotor1.setControlMode(TalonSRXControlMode.PercentOutput);
-            this.driveMotor1.setControlMode(TalonSRXControlMode.PercentOutput);
-            this.angleMotor2.setControlMode(TalonSRXControlMode.PercentOutput);
-            this.driveMotor2.setControlMode(TalonSRXControlMode.PercentOutput);
-            this.angleMotor3.setControlMode(TalonSRXControlMode.PercentOutput);
-            this.driveMotor3.setControlMode(TalonSRXControlMode.PercentOutput);
-            this.angleMotor4.setControlMode(TalonSRXControlMode.PercentOutput);
-            this.driveMotor4.setControlMode(TalonSRXControlMode.PercentOutput);
-        }
-
-        this.absoluteEncoder1 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_1_ANALOG_INPUT);
-
-
 
         //MODULE 2
         this.angleMotor2 = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_ANGLE_MOTOR_2_CAN_ID);
@@ -201,9 +177,6 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_SUPPLY_CURRENT_MAX,
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_CURRENT,
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_DURATION);
-
-        this.absoluteEncoder2 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_2_ANALOG_INPUT);
-
 
 
         //MODULE 3
@@ -243,7 +216,6 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_CURRENT,
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_DURATION);
 
-        this.absoluteEncoder3 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_3_ANALOG_INPUT);
 
 
         //MODULE 4
@@ -283,7 +255,36 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_CURRENT,
             TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_DURATION);
 
+
+        this.absoluteEncoder1 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_1_ANALOG_INPUT);        
+        this.absoluteEncoder2 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_2_ANALOG_INPUT);
+        this.absoluteEncoder3 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_3_ANALOG_INPUT);
         this.absoluteEncoder4 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_4_ANALOG_INPUT);
+        
+
+        if (TuningConstants.DRIVETRAIN_USE_PID)
+        {
+            this.angleMotor1.setControlMode(TalonSRXControlMode.Position);
+            this.driveMotor1.setControlMode(TalonSRXControlMode.Velocity);
+            this.angleMotor2.setControlMode(TalonSRXControlMode.Position);
+            this.driveMotor2.setControlMode(TalonSRXControlMode.Velocity);
+            this.angleMotor3.setControlMode(TalonSRXControlMode.Position);
+            this.driveMotor3.setControlMode(TalonSRXControlMode.Velocity);
+            this.angleMotor4.setControlMode(TalonSRXControlMode.Position);
+            this.driveMotor4.setControlMode(TalonSRXControlMode.Velocity);
+        }
+        else
+        {
+            this.angleMotor1.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.driveMotor1.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.angleMotor2.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.driveMotor2.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.angleMotor3.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.driveMotor3.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.angleMotor4.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.driveMotor4.setControlMode(TalonSRXControlMode.PercentOutput);
+        }
+
     }
 
     @Override
@@ -381,54 +382,37 @@ public class DriveTrainMechanism implements IMechanism
 
     public void update()
     {
-        Setpoint setpoint1 = this.calculateSetpoint(1);
-        Setpoint setpoint2 = this.calculateSetpoint(2);
-        Setpoint setpoint3 = this.calculateSetpoint(3);
-        Setpoint setpoint4 = this.calculateSetpoint(4);
+        List<Setpoint> setpoint = this.calculateSetpoint();
+        ITalonFX[] angleMotors = {this.angleMotor1, this.angleMotor2, this.angleMotor3, this.angleMotor4};
+        ITalonFX[] driveMotors = {this.driveMotor1, this.driveMotor2, this.driveMotor3, this.driveMotor4};
+        
+        LoggingKey[] angleLogs = {LoggingKey.DriveTrainDriveVelocityGoal1, LoggingKey.DriveTrainDriveVelocityGoal2, LoggingKey.DriveTrainDriveVelocityGoal3, LoggingKey.DriveTrainDriveVelocityGoal4};
+        LoggingKey[] driveLogs = {LoggingKey.DriveTrainAnglePositionGoal1, LoggingKey.DriveTrainAnglePositionGoal2, LoggingKey.DriveTrainAnglePositionGoal3, LoggingKey.DriveTrainAnglePositionGoal4};
 
-        double driveSetpoint1 = setpoint1.getDrive();
-        double angleSetpoint1 = setpoint1.getAngle();
+        for(int i = 0; i < 4; i++)
+        {
+            Setpoint current = setpoint.get(i);
+            double angleSetpoint = getClosestAngleInRange(
+                current.getAngle(), 
+                angleMotors[i].getPosition(), 
+                -180.0, 
+                180.0);
+            double driveSetpoint = current.getDrive();
 
-        double driveSetpoint2 = setpoint2.getDrive();
-        double angleSetpoint2 = setpoint2.getAngle();
+            this.logger.logNumber(angleLogs[i], angleSetpoint);
+            this.logger.logNumber(driveLogs[i], driveSetpoint);
 
-        double driveSetpoint3 = setpoint3.getDrive();
-        double angleSetpoint3 = setpoint3.getAngle();
-
-        double driveSetpoint4 = setpoint4.getDrive();
-        double angleSetpoint4 = setpoint4.getAngle();
-
-        double bestAngle1 = getClosestAngleInRange(angleSetpoint1, this.angleMotor1.getPosition(), -Math.pi, Math.pi);
-        double bestAngle2 = getClosestAngleInRange(angleSetpoint2, this.angleMotor2.getPosition(), -Math.pi, Math.pi);
-        double bestAngle3 = getClosestAngleInRange(angleSetpoint3, this.angleMotor3.getPosition(), -Math.pi, Math.pi);
-        double bestAngle4 = getClosestAngleInRange(angleSetpoint4, this.angleMotor4.getPosition(), -Math.pi, Math.pi);
-        this.logger.logNumber(LoggingKey.DriveTrainDriveVelocityGoal, driveSetpoint);
-        this.logger.logNumber(LoggingKey.DriveTrainAnglePositionGoal, angleSetpoint);
-
-        // apply the setpoints to the motors
-        this.driveMotor1.set(driveSetpoint1);
-        this.angleMotor1.set(bestAngle1);
-
-        this.driveMotor2.set(driveSetpoint2);
-        this.angleMotor2.set(bestAngle2);
-
-        this.driveMotor3.set(driveSetpoint3);
-        this.angleMotor3.set(bestAngle3);
-
-        this.driveMotor4.set(driveSetpoint4);
-        this.angleMotor4.set(bestAngle4);
-
+            driveMotors[i].set(driveSetpoint);
+            angleMotors[i].set(angleSetpoint);
+        }
 
         if (this.driver.getDigital(DigitalOperation.DriveTrainReset))
         {
-            this.angleMotor1.reset();
-            this.driveMotor1.reset();
-            this.angleMotor2.reset();
-            this.driveMotor2.reset();
-            this.angleMotor3.reset();
-            this.driveMotor3.reset();
-            this.angleMotor4.reset();
-            this.driveMotor4.reset();
+            for(int i = 0; i < 4; i++)
+            {
+                driveMotors[i].reset();
+                angleMotors[i].reset();
+            }
         }
     }
 
@@ -463,15 +447,25 @@ public class DriveTrainMechanism implements IMechanism
 
     public void stop()
     {
-        this.driveMotor.stop();
-        this.angleMotor.stop();
+        ITalonFX[] angleMotors = {this.angleMotor1, this.angleMotor2, this.angleMotor3, this.angleMotor4};
+        ITalonFX[] driveMotors = {this.driveMotor1, this.driveMotor2, this.driveMotor3, this.driveMotor4};
+        double[] doubleFields = {this.driveVelocity1, this.driveVelocity2, this.driveVelocity3, this.driveVelocity4, this.driveError1, this.driveError2, this.driveError3, this.driveError4, this.angleVelocity1, this.angleVelocity2, this.angleVelocity3, this.angleVelocity4, this.angleError1, this.angleError2, this.angleError3, this.angleError4};
+        int[] intFields = {this.drivePosition1, this.drivePosition2, this.drivePosition3, this.drivePosition4, this.anglePosition1, this.anglePosition2, this.anglePosition3, this.anglePosition4};
 
-        this.driveVelocity = 0.0;
-        this.driveError = 0.0;
-        this.drivePosition = 0;
-        this.angleVelocity = 0.0;
-        this.angleError = 0.0;
-        this.anglePosition = 0;
+        for(int i = 0; i < 4; i++)
+        {
+            driveMotors[i].stop();
+            angleMotors[i].stop();
+        }
+
+        for (int i = 0; i < intFields.length; i++) 
+        { 
+            intFields[i] = 0; 
+        } 
+        for (int i = 0; i < doubleFields.length; i++) 
+        { 
+            doubleFields[i] = 0.0; 
+        } 
     }
 
 
@@ -511,11 +505,13 @@ public class DriveTrainMechanism implements IMechanism
     }
 
 
-    private Setpoint calculateSetpoint(int module)
+    private List<Setpoint> calculateSetpoint()
     {
         double a = 0.0; // center of rotation set to center of robot for now
         double b = 0.0;
 
+        List<Setpoint> result = new ArrayList<>();
+        
         double a1 = a - this.width/2;
         double a2 = a + this.width/2;
         double b1 = b - this.length/2;
@@ -530,22 +526,27 @@ public class DriveTrainMechanism implements IMechanism
         double Vcx = this.driver.getAnalog(AnalogOperation.DriveTrainMoveSide);
 
         double omega = (Math.atan2(turnX, turnY) * Helpers.RADIANS_TO_DEGREES);
+        
+        for(int i = 0; i < 4; i++)
+        {
+            double Vx = Vcx - omega * Ry[i];
+            double Vy = Vcy + omega * Rx[i]; // quik mafs
 
-        double Vx = Vcx - omega * Ry[module-1];
-        double Vy = Vcy + omega * Rx[module-1]; // quik mafs
+            double anglePositionGoal = Math.atan2(-Vx, Vy);
+            double driveVelocityGoal = Math.sqrt(Vx * Vx + Vy * Vy);
 
-        double anglePositionGoal = Math.atan2(-Vx, Vy);
-        double driveVelocityGoal = Math.sqrt(Vx * Vx + Vy * Vy);
+            driveVelocityGoal = this.applyPowerLevelRange(driveVelocityGoal);
 
-        driveVelocityGoal = this.applyPowerLevelRange(driveVelocityGoal);
+            Helpers.EnforceRange(anglePositionGoal, -180.0, 180.0);
+            this.assertPowerLevelRange(driveVelocityGoal, "drive");
 
-        Helpers.EnforceRange(anglePositionGoal, -180.0, 180.0);
-        this.assertPowerLevelRange(driveVelocityGoal, "drive");
+            driveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KS;
+            anglePositionGoal *= TuningConstants.DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KS;
 
-        driveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KS;
-        anglePositionGoal *= TuningConstants.DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KS;
+            result.add(new Setpoint(driveVelocityGoal, anglePositionGoal));
+        }
 
-        return new Setpoint(driveVelocityGoal, anglePositionGoal);
+        return result;
     }
 
     private void assertPowerLevelRange(double powerLevel, String side)
