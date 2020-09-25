@@ -87,7 +87,7 @@ public class DriveTrainMechanism implements IMechanism
     private double encoderAngle4;
 
 
-     @Inject
+    @Inject
     public DriveTrainMechanism(
         LoggingManager logger,
         IRobotProvider provider)
@@ -317,7 +317,7 @@ public class DriveTrainMechanism implements IMechanism
 
     private Setpoint calculateSetpoint(int module)
     {
-        double a = 0.0;
+        double a = 0.0; // center of rotation set to center of robot for now
         double b = 0.0;
 
         double a1 = a - this.width/2;
@@ -325,7 +325,7 @@ public class DriveTrainMechanism implements IMechanism
         double b1 = b - this.length/2;
         double b2 = b + this.length/2;
 
-        double[] Rx = {a1, a2, a2, a1};
+        double[] Rx = {a1, a2, a2, a1}; // quik mafs
         double[] Ry = {b1, b1, b2, b2};
 
         double driveVelocityGoal = 0.0;
