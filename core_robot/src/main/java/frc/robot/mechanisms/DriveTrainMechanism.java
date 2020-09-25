@@ -27,8 +27,8 @@ public class DriveTrainMechanism implements IMechanism
     private static final double POWERLEVEL_MIN = -1.0;
     private static final double POWERLEVEL_MAX = 1.0;
 
-    private final double length = 10.0;
-    private final double width = 10.0;
+    private final double length = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPARATION_DISTANCE;
+    private final double width = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPARATION_DISTANCE;
 
     private final ILogger logger;
     private final IAnalogInput absoluteEncoder1;
@@ -325,24 +325,56 @@ public class DriveTrainMechanism implements IMechanism
         double b1 = b - this.length/2;
         double b2 = b + this.length/2;
 
-        double[] Rx = {a1, a2, a2, a1}; // quik mafs
+        double[] Rx = {a1, a2, a2, a1}; 
         double[] Ry = {b1, b1, b2, b2};
-
-        double driveVelocityGoal = 0.0;
-        double anglePositionGoal = 0.0;
 
         double turnX = this.driver.getAnalog(AnalogOperation.DriveTrainTurnX);
         double turnY = this.driver.getAnalog(AnalogOperation.DriveTrainTurnY);
-        double forwardVelocity = this.driver.getAnalog(AnalogOperation.DriveTrainMoveForward);
+        double Vcy = this.driver.getAnalog(AnalogOperation.DriveTrainMoveForward);
+        double Vcx = this.driver.getAnalog(AnalogOperation.DriveTrainMoveSide);
 
-        driveVelocityGoal = forwardVelocity;
-        anglePositionGoal = (Math.atan2(turnX, turnY) * Helpers.RADIANS_TO_DEGREES);
+        double omega = (Math.atan2(turnX, turnY) * Helpers.RADIANS_TO_DEGREES);
 
-        /*
-        Vwx = Vcx - omega*Ry[i]
-            Vwy = Vcy + omega*Rx[i]
-            self.raw_wheel_ang.append(atan2(-Vwx,Vwy))  
-            self.raw_wheel_vel.append(sqrt(Vwx*Vwx+Vwy*Vwy)) */
+        double Vx = Vcx - omega * Ry[module];
+        double Vy = Vcy + omega * Rx[module]; // quik mafs
 
+        double anglePositionGoal = Math.atan2(-Vx, Vy);
+        double driveVelocityGoal = Math.sqrt(Vx * Vx + Vy * Vy);
+
+        driveVelocityGoal = this.applyPowerLevelRange(driveVelocityGoal);
+
+        Helpers.EnforceRange(anglePositionGoal, -180.0, 180.0);
+        this.assertPowerLevelRange(driveVelocityGoal, "drive");
+
+        driveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KS;
+        anglePositionGoal *= TuningConstants.DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KS;
+    }
+
+    private void assertPowerLevelRange(double powerLevel, String side)
+    {
+        if (powerLevel < DriveTrainMechanism.POWERLEVEL_MIN)
+        {
+            if (TuningConstants.THROW_EXCEPTIONS)
+            {
+                throw new RuntimeException(side + " power level too low!");
+            }
+
+            return;
+        }
+
+        if (powerLevel > DriveTrainMechanism.POWERLEVEL_MAX)
+        {
+            if (TuningConstants.THROW_EXCEPTIONS)
+            {
+                throw new RuntimeException(side + " power level too high!");
+            }
+
+            return;
+        }
+    }
+
+    private double applyPowerLevelRange(double powerLevel)
+    {
+        return Helpers.EnforceRange(powerLevel, DriveTrainMechanism.POWERLEVEL_MIN, DriveTrainMechanism.POWERLEVEL_MAX);
     }
 }

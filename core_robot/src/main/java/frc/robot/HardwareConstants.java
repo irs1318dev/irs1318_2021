@@ -8,6 +8,7 @@ package frc.robot;
  */
 public class HardwareConstants
 {
+    public static final boolean ROBOT_EXISTS = true;
     //================================================= Vision ======================================================
 
     // Vision Alignment 
