@@ -5,7 +5,7 @@
  * 
  * Started idk sometime in september
 */
-/*
+
 package frc.robot.mechanisms;
 
 import javax.inject.Singleton;
@@ -87,7 +87,7 @@ public class DriveTrainMechanism implements IMechanism
     private double encoderAngle4;
 
 
-     @Inject
+    @Inject
     public DriveTrainMechanism(
         LoggingManager logger,
         IRobotProvider provider)
@@ -289,7 +289,7 @@ public class DriveTrainMechanism implements IMechanism
          * Initializes a new Setpoint
          * @param drive value to apply
          * @param angle value to apply
-         * /
+         */
         public Setpoint(double drive, double angle)
         {
             this.drive = drive;
@@ -299,7 +299,7 @@ public class DriveTrainMechanism implements IMechanism
         /**
          * gets the drive setpoint
          * @return drive setpoint value
-        * /
+        */
         public double getDrive()
         {
             return this.drive;
@@ -308,7 +308,7 @@ public class DriveTrainMechanism implements IMechanism
         /**
          * gets the angle setpoint
          * @return angle setpoint value
-         * /
+         */
         public double getAngle()
         {
             return this.angle;
@@ -317,16 +317,16 @@ public class DriveTrainMechanism implements IMechanism
 
     private Setpoint calculateSetpoint(int module)
     {
-        double a = 0.0;
+        double a = 0.0; // center of rotation set to center of robot for now
         double b = 0.0;
 
-        a1 = a - this.width/2;
-        a2 = a + this.width/2;
-        b1 = b - this.length/2;
-        b2 = b + this.length/2;
+        double a1 = a - this.width/2;
+        double a2 = a + this.width/2;
+        double b1 = b - this.length/2;
+        double b2 = b + this.length/2;
 
-        int[] Rx = {a1, a2, a2, a1};
-        int[] Ry = {b1, b1, b2, b2};
+        double[] Rx = {a1, a2, a2, a1}; // quik mafs
+        double[] Ry = {b1, b1, b2, b2};
 
         double driveVelocityGoal = 0.0;
         double anglePositionGoal = 0.0;
@@ -342,7 +342,7 @@ public class DriveTrainMechanism implements IMechanism
         Vwx = Vcx - omega*Ry[i]
             Vwy = Vcy + omega*Rx[i]
             self.raw_wheel_ang.append(atan2(-Vwx,Vwy))  
-            self.raw_wheel_vel.append(sqrt(Vwx*Vwx+Vwy*Vwy)) * /
+            self.raw_wheel_vel.append(sqrt(Vwx*Vwx+Vwy*Vwy)) */
 
     }
-}*/
+}
