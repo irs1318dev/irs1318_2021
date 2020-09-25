@@ -41,9 +41,9 @@ public class HardwareConstants
     public static final boolean DRIVETRAIN_DRIVE_MOTOR_4_INVERT_OUTPUT = false;
     public static final boolean DRIVETRAIN_DRIVE_MOTOR_4_INVERT_SENSOR = false;
 
-    public static final double DRIVETRAIN_ANGLE_MOTOR_TICKS_TO_DEGREES = 1024.0/360.0; // 1024 ticks to 360 degree
-    public static final double DRIVETRAIN_ANGLE_ENCODERULSES_PER_REVOLUTION = 2048.0;
-    public static final double DRIVETRAIN_ANGLE_GEAR_RAO = 18.0; // set correctly    public static final double DRIVETRAIN_ANGLE_DEGREES = 360.0;
+    public static final double DRIVETRAIN_ANGLE_ENCODER_PULSES_PER_REVOLUTION = 2048.0;
+    public static final double DRIVETRAIN_ANGLE_GEAR_RATIO = 18.0; // set correctly    
+    public static final double DRIVETRAIN_ANGLE_DEGREES = 360.0;
     public static final double DRIVETRAIN_ANGLE_PULSE_DISTANCE = HardwareConstants.DRIVETRAIN_ANGLE_DEGREES / (HardwareConstants.DRIVETRAIN_ANGLE_GEAR_RATIO * HardwareConstants.DRIVETRAIN_ANGLE_ENCODER_PULSES_PER_REVOLUTION);
     public static final double DRIVETRAIN_ANGLE_TICKS_PER_DEGREE = (HardwareConstants.DRIVETRAIN_ANGLE_GEAR_RATIO * HardwareConstants.DRIVETRAIN_ANGLE_ENCODER_PULSES_PER_REVOLUTION) / HardwareConstants.DRIVETRAIN_ANGLE_DEGREES;
 
@@ -53,4 +53,5 @@ public class HardwareConstants
     public static final double DRIVETRAIN_DRIVE_WHEEL_CIRCUMFERENCE = Math.PI * HardwareConstants.DRIVETRAIN_DRIVE_WHEEL_DIAMETER;
     public static final double DRIVETRAIN_DRIVE_PULSE_DISTANCE = HardwareConstants.DRIVETRAIN_DRIVE_WHEEL_CIRCUMFERENCE / (HardwareConstants.DRIVETRAIN_DRIVE_GEAR_RATIO * HardwareConstants.DRIVETRAIN_DRIVE_ENCODER_PULSES_PER_REVOLUTION);
     public static final double DRIVETRAIN_DRIVE_TICKS_PER_INCH = (HardwareConstants.DRIVETRAIN_DRIVE_GEAR_RATIO * HardwareConstants.DRIVETRAIN_DRIVE_ENCODER_PULSES_PER_REVOLUTION) / HardwareConstants.DRIVETRAIN_DRIVE_WHEEL_CIRCUMFERENCE;
+
 }
