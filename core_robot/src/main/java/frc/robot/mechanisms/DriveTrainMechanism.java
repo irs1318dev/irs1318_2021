@@ -8,6 +8,8 @@
 
 package frc.robot.mechanisms;
 
+import java.util.BitSet;
+
 import javax.inject.Singleton;
 
 import frc.robot.*;
@@ -27,8 +29,13 @@ public class DriveTrainMechanism implements IMechanism
     private static final double POWERLEVEL_MIN = -1.0;
     private static final double POWERLEVEL_MAX = 1.0;
 
+<<<<<<< HEAD
     private final double length = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPARATION_DISTANCE;
     private final double width = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPARATION_DISTANCE;
+=======
+    private final double length = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE;
+    private final double width = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE;
+>>>>>>> 431d6cefc2039bca0f385b03d8e3885737bf8b48
 
     private final ILogger logger;
     private final IAnalogInput absoluteEncoder1;
@@ -279,6 +286,194 @@ public class DriveTrainMechanism implements IMechanism
         this.absoluteEncoder4 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_4_ANALOG_INPUT);
     }
 
+    @Override
+    public void setDriver(Driver driver)
+    {
+        this.driver = driver;
+    }
+
+    @Override
+    public void readSensors()
+    {
+        this.encoderVoltage1 = this.absoluteEncoder1.getVoltage();
+        this.encoderVoltage2 = this.absoluteEncoder2.getVoltage();
+        this.encoderVoltage3 = this.absoluteEncoder3.getVoltage();
+        this.encoderVoltage4 = this.absoluteEncoder4.getVoltage();
+        this.encoderAngle1 = this.encoderVoltage1 * HardwareConstants.DRIVETRAIN_ENCODER_DEGREES_PER_VOLT;
+        this.encoderAngle2 = this.encoderVoltage2 * HardwareConstants.DRIVETRAIN_ENCODER_DEGREES_PER_VOLT;
+        this.encoderAngle3 = this.encoderVoltage3 * HardwareConstants.DRIVETRAIN_ENCODER_DEGREES_PER_VOLT;
+        this.encoderAngle4 = this.encoderVoltage4 * HardwareConstants.DRIVETRAIN_ENCODER_DEGREES_PER_VOLT;
+    
+        //NUMBER 1
+        this.driveVelocity1 = this.driveMotor1.getVelocity();
+        this.angleVelocity1 = this.angleMotor1.getVelocity();
+
+        this.drivePosition1 = this.driveMotor1.getPosition();
+        this.anglePosition1 = this.angleMotor1.getPosition();
+
+        this.driveError1 = this.driveMotor1.getError();
+        this.angleError1 = this.angleMotor1.getError();
+        
+        //NUMBER 2
+        this.driveVelocity2 = this.driveMotor2.getVelocity();
+        this.angleVelocity2 = this.angleMotor2.getVelocity();
+
+        this.drivePosition2 = this.driveMotor2.getPosition();
+        this.anglePosition2 = this.angleMotor2.getPosition();
+
+        this.driveError2 = this.driveMotor2.getError();
+        this.angleError2 = this.angleMotor2.getError();
+
+        //NUMBER 3
+        this.driveVelocity3 = this.driveMotor3.getVelocity();
+        this.angleVelocity3 = this.angleMotor3.getVelocity();
+
+        this.drivePosition3 = this.driveMotor3.getPosition();
+        this.anglePosition3 = this.angleMotor3.getPosition();
+
+        this.driveError3 = this.driveMotor3.getError();
+        this.angleError3 = this.angleMotor3.getError();
+
+        //NUMBER 4
+        this.driveVelocity4 = this.driveMotor4.getVelocity();
+        this.angleVelocity4 = this.angleMotor4.getVelocity();
+
+        this.drivePosition4 = this.driveMotor4.getPosition();
+        this.anglePosition4 = this.angleMotor4.getPosition();
+
+        this.driveError4 = this.driveMotor4.getError();
+        this.angleError4 = this.angleMotor4.getError();
+        
+
+        //LOGGING KEYS
+        this.logger.logNumber(LoggingKey.DriveTrainDriveVelocity1, this.driveVelocity1);
+        this.logger.logNumber(LoggingKey.DriveTrainDriveError1, this.driveError1);
+        this.logger.logNumber(LoggingKey.DriveTrainDrivePosition1, this.drivePosition1);
+        this.logger.logNumber(LoggingKey.DriveTrainAngleVelocity1, this.angleVelocity1);
+        this.logger.logNumber(LoggingKey.DriveTrainAngleError1, this.angleError1);
+        this.logger.logNumber(LoggingKey.DriveTrainAnglePosition1, this.anglePosition1);
+        this.logger.logNumber(LoggingKey.DriveTrainAbsoluteEncoderPosition1, this.encoderAngle1);
+
+        this.logger.logNumber(LoggingKey.DriveTrainDriveVelocity2, this.driveVelocity2);
+        this.logger.logNumber(LoggingKey.DriveTrainDriveError2, this.driveError2);
+        this.logger.logNumber(LoggingKey.DriveTrainDrivePosition2, this.drivePosition2);
+        this.logger.logNumber(LoggingKey.DriveTrainAngleVelocity2, this.angleVelocity2);
+        this.logger.logNumber(LoggingKey.DriveTrainAngleError2, this.angleError2);
+        this.logger.logNumber(LoggingKey.DriveTrainAnglePosition2, this.anglePosition2);
+        this.logger.logNumber(LoggingKey.DriveTrainAbsoluteEncoderPosition2, this.encoderAngle2);
+
+        this.logger.logNumber(LoggingKey.DriveTrainDriveVelocity3, this.driveVelocity3);
+        this.logger.logNumber(LoggingKey.DriveTrainDriveError3, this.driveError3);
+        this.logger.logNumber(LoggingKey.DriveTrainDrivePosition3, this.drivePosition3);
+        this.logger.logNumber(LoggingKey.DriveTrainAngleVelocity3, this.angleVelocity3);
+        this.logger.logNumber(LoggingKey.DriveTrainAngleError3, this.angleError3);
+        this.logger.logNumber(LoggingKey.DriveTrainAnglePosition3, this.anglePosition3);
+        this.logger.logNumber(LoggingKey.DriveTrainAbsoluteEncoderPosition3, this.encoderAngle3);
+
+        this.logger.logNumber(LoggingKey.DriveTrainDriveVelocity4, this.driveVelocity4);
+        this.logger.logNumber(LoggingKey.DriveTrainDriveError4, this.driveError4);
+        this.logger.logNumber(LoggingKey.DriveTrainDrivePosition4, this.drivePosition4);
+        this.logger.logNumber(LoggingKey.DriveTrainAngleVelocity4, this.angleVelocity4);
+        this.logger.logNumber(LoggingKey.DriveTrainAngleError4, this.angleError4);
+        this.logger.logNumber(LoggingKey.DriveTrainAnglePosition4, this.anglePosition4);
+        this.logger.logNumber(LoggingKey.DriveTrainAbsoluteEncoderPosition4, this.encoderAngle4);
+    }
+
+    public void update()
+    {
+        Setpoint setpoint1 = this.calculateSetpoint(1);
+        Setpoint setpoint2 = this.calculateSetpoint(2);
+        Setpoint setpoint3 = this.calculateSetpoint(3);
+        Setpoint setpoint4 = this.calculateSetpoint(4);
+
+        double driveSetpoint1 = setpoint1.getDrive();
+        double angleSetpoint1 = setpoint1.getAngle();
+
+        double driveSetpoint2 = setpoint2.getDrive();
+        double angleSetpoint2 = setpoint2.getAngle();
+
+        double driveSetpoint3 = setpoint3.getDrive();
+        double angleSetpoint3 = setpoint3.getAngle();
+
+        double driveSetpoint4 = setpoint4.getDrive();
+        double angleSetpoint4 = setpoint4.getAngle();
+
+        double bestAngle1 = getClosestAngleInRange(angleSetpoint1, this.angleMotor1.getPosition(), -Math.pi, Math.pi);
+        double bestAngle2 = getClosestAngleInRange(angleSetpoint2, this.angleMotor2.getPosition(), -Math.pi, Math.pi);
+        double bestAngle3 = getClosestAngleInRange(angleSetpoint3, this.angleMotor3.getPosition(), -Math.pi, Math.pi);
+        double bestAngle4 = getClosestAngleInRange(angleSetpoint4, this.angleMotor4.getPosition(), -Math.pi, Math.pi);
+        this.logger.logNumber(LoggingKey.DriveTrainDriveVelocityGoal, driveSetpoint);
+        this.logger.logNumber(LoggingKey.DriveTrainAnglePositionGoal, angleSetpoint);
+
+        // apply the setpoints to the motors
+        this.driveMotor1.set(driveSetpoint1);
+        this.angleMotor1.set(bestAngle1);
+
+        this.driveMotor2.set(driveSetpoint2);
+        this.angleMotor2.set(bestAngle2);
+
+        this.driveMotor3.set(driveSetpoint3);
+        this.angleMotor3.set(bestAngle3);
+
+        this.driveMotor4.set(driveSetpoint4);
+        this.angleMotor4.set(bestAngle4);
+
+
+        if (this.driver.getDigital(DigitalOperation.DriveTrainReset))
+        {
+            this.angleMotor1.reset();
+            this.driveMotor1.reset();
+            this.angleMotor2.reset();
+            this.driveMotor2.reset();
+            this.angleMotor3.reset();
+            this.driveMotor3.reset();
+            this.angleMotor4.reset();
+            this.driveMotor4.reset();
+        }
+    }
+
+    private double getClosestAngleInRange(double desiredAngle, double currentAngle, double minRangeValue, double maxRangeValue)
+    {
+        double multiplicand = Math.floor(currentAngle / 360.0);
+
+        double[] closeRotations =
+        {
+            (desiredAngle + 360.0 * (multiplicand - 1.0)),
+            (desiredAngle + 360.0 * multiplicand),
+            (desiredAngle + 360.0 * (multiplicand + 1.0)),
+        };
+
+        double best = currentAngle;
+        double bestDistance = Double.POSITIVE_INFINITY;
+        for (int i = 0; i < 3; i++)
+        {
+            double angle = closeRotations[i];
+            if (Helpers.WithinRange(angle, minRangeValue, maxRangeValue))
+            {
+                double angleDistance = Math.abs(currentAngle - angle);
+                if (angleDistance < bestDistance)
+                {
+                    best = angle;
+                    bestDistance = angleDistance;
+                }
+            }
+        }
+        return best;
+        }
+
+    public void stop()
+    {
+        this.driveMotor.stop();
+        this.angleMotor.stop();
+
+        this.driveVelocity = 0.0;
+        this.driveError = 0.0;
+        this.drivePosition = 0;
+        this.angleVelocity = 0.0;
+        this.angleError = 0.0;
+        this.anglePosition = 0;
+    }
+
 
     private class Setpoint
     {
@@ -315,6 +510,7 @@ public class DriveTrainMechanism implements IMechanism
         }   
     }
 
+
     private Setpoint calculateSetpoint(int module)
     {
         double a = 0.0; // center of rotation set to center of robot for now
@@ -335,8 +531,8 @@ public class DriveTrainMechanism implements IMechanism
 
         double omega = (Math.atan2(turnX, turnY) * Helpers.RADIANS_TO_DEGREES);
 
-        double Vx = Vcx - omega * Ry[module];
-        double Vy = Vcy + omega * Rx[module]; // quik mafs
+        double Vx = Vcx - omega * Ry[module-1];
+        double Vy = Vcy + omega * Rx[module-1]; // quik mafs
 
         double anglePositionGoal = Math.atan2(-Vx, Vy);
         double driveVelocityGoal = Math.sqrt(Vx * Vx + Vy * Vy);
@@ -348,6 +544,8 @@ public class DriveTrainMechanism implements IMechanism
 
         driveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KS;
         anglePositionGoal *= TuningConstants.DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KS;
+
+        return new Setpoint(driveVelocityGoal, anglePositionGoal);
     }
 
     private void assertPowerLevelRange(double powerLevel, String side)
