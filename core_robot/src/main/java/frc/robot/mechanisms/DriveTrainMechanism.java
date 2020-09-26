@@ -132,7 +132,7 @@ public class DriveTrainMechanism implements IMechanism
                 TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_CURRENT,
                 TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_DURATION);
 
-            this.angleMotorS[i].setControlMode(TalonSRXControlMode.Position);
+            this.angleMotors[i].setControlMode(TalonSRXControlMode.Position);
             this.driveMotors[i].setControlMode(TalonSRXControlMode.Velocity);
 
         }
@@ -142,12 +142,22 @@ public class DriveTrainMechanism implements IMechanism
         this.angleMotor1.setInvertSensor(HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_1_INVERT_SENSOR);
         this.angleMotor1.setNeutralMode(MotorNeutralMode.Brake);
         this.angleMotor1.setSensorType(TalonXFeedbackDevice.IntegratedSensor);
-        //this.angleMotor.setPosition((int)this.encoderAngle); //would this work?
         this.angleMotor1.setPIDF(
             TuningConstants.DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KP,
             TuningConstants.DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KI,
             TuningConstants.DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KD,
             TuningConstants.DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KF,
+            DriveTrainMechanism.pidSlotId);
+
+        this.driveMotor1 = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_1_CAN_ID);
+        this.driveMotor1.setInvertOutput(HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_1_INVERT_OUTPUT);
+        this.driveMotor1.setInvertSensor(HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_1_INVERT_SENSOR);
+        this.driveMotor1.configureVelocityMeasurements(10, 31); //
+        this.driveMotor1.setPIDF(
+            TuningConstants.DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KP,
+            TuningConstants.DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KI,
+            TuningConstants.DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KD,
+            TuningConstants.DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KF,
             DriveTrainMechanism.pidSlotId);
 
         //MODULE 2
