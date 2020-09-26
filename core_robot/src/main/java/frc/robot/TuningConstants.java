@@ -39,7 +39,7 @@ public class TuningConstants
     public static List<IMechanism> GetActiveMechanisms(Injector injector)
     {
         List<IMechanism> mechanismList = new ArrayList<IMechanism>();
-        mechanismList.add(injector.getInstance(DriveTrainModuleMechanism.class));
+        mechanismList.add(injector.getInstance(DriveTrainMechanism.class));
         // mechanismList.add(injector.getInstance(PowerManager.class));
         // mechanismList.add(injector.getInstance(PositionManager.class));
         // mechanismList.add(injector.getInstance(CompressorMechanism.class));
@@ -280,7 +280,7 @@ public class TuningConstants
     public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KI = 0.0;
     public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KD = 0.0;
     public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KF = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KS = HardwareConstants.DRIVETRAIN_ANGLE_TICKS_PER_DEGREE;2
+    public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KS = HardwareConstants.DRIVETRAIN_ANGLE_TICKS_PER_DEGREE;
 
     // Velocity PID (drive) module 2
     public static final double DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KP = 0.09;

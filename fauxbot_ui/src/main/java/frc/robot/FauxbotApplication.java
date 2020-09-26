@@ -1,6 +1,7 @@
 package frc.robot;
 
 import java.io.IOException;
+import java.util.Set;
 
 import frc.robot.common.robotprovider.*;
 import frc.robot.driver.common.*;
@@ -277,7 +278,13 @@ public class FauxbotApplication extends Application
         }
 
         boolean firstSensor = true;
-        for (FauxbotSensorConnection connection : FauxbotSensorManager.sensorMap.keySet())
+        FauxbotSensorConnection[] sensors = this.simulator.getSensors();
+        if (sensors == null)
+        {
+            sensors = (FauxbotSensorConnection[])FauxbotSensorManager.sensorMap.keySet().toArray();
+        }
+
+        for (FauxbotSensorConnection connection : sensors)
         {
             FauxbotSensorBase sensor = FauxbotSensorManager.get(connection);
             if (sensor != null)
@@ -340,7 +347,13 @@ public class FauxbotApplication extends Application
         }
 
         boolean firstActuator = true;
-        for (FauxbotActuatorConnection connection : FauxbotActuatorManager.actuatorMap.keySet())
+        FauxbotActuatorConnection[] actuators = this.simulator.getActuators();
+        if (actuators == null)
+        {
+            actuators = (FauxbotActuatorConnection[])FauxbotActuatorManager.actuatorMap.keySet().toArray();
+        }
+
+        for (FauxbotActuatorConnection connection : actuators)
         {
             FauxbotActuatorBase actuator = FauxbotActuatorManager.get(connection);
             if (actuator != null)

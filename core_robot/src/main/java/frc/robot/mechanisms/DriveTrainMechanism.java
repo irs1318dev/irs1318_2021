@@ -180,9 +180,9 @@ public class DriveTrainMechanism implements IMechanism
 
 
         //MODULE 3
-        this.angleMotor3 = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_ANGLE_MOTOR_2_CAN_ID);
-        this.angleMotor3.setInvertOutput(HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_2_INVERT_OUTPUT);
-        this.angleMotor3.setInvertSensor(HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_2_INVERT_SENSOR);
+        this.angleMotor3 = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_ANGLE_MOTOR_3_CAN_ID);
+        this.angleMotor3.setInvertOutput(HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_3_INVERT_OUTPUT);
+        this.angleMotor3.setInvertSensor(HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_3_INVERT_SENSOR);
         this.angleMotor3.setNeutralMode(MotorNeutralMode.Brake);
         this.angleMotor3.setSensorType(TalonXFeedbackDevice.IntegratedSensor);
         //this.angleMotor.setPosition((int)this.encoderAngle); //would this work?
@@ -366,12 +366,16 @@ public class DriveTrainMechanism implements IMechanism
         int[] driveTrainInts = {this.drivePosition1, this.anglePosition1, this.drivePosition2, this.anglePosition2,
                                 this.drivePosition3, this.anglePosition3, this.drivePosition4, this.anglePosition4};
 
-        for(int i = 0; i<=19; i++);{
+        for(int i = 0; i<=19; i++)
+        {
             this.logger.logNumber(driveTrainLoggingDoubles[i], driveTrainDoubles[i]);
         }
-        for(int v = 0; v<=7; v++);{
+
+        for(int v = 0; v<=7; v++)
+        {
             this.logger.logNumber(driveTrainLoggingInts[v], driveTrainInts[v]);
         }
+
         /*
         this.logger.logNumber(LoggingKey.DriveTrainDriveVelocity1, this.driveVelocity1);
         this.logger.logNumber(LoggingKey.DriveTrainDriveError1, this.driveError1);
