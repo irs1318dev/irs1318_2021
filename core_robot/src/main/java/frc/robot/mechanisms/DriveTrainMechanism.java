@@ -296,6 +296,7 @@ public class DriveTrainMechanism implements IMechanism
     @Override
     public void readSensors()
     {
+
         this.encoderVoltage1 = this.absoluteEncoder1.getVoltage();
         this.encoderVoltage2 = this.absoluteEncoder2.getVoltage();
         this.encoderVoltage3 = this.absoluteEncoder3.getVoltage();
@@ -347,12 +348,37 @@ public class DriveTrainMechanism implements IMechanism
         
 
         //LOGGING KEYS
+        LoggingKey[] driveTrainLoggingDoubles = {LoggingKey.DriveTrainDriveVelocity1, LoggingKey.DriveTrainDriveError1, LoggingKey.DriveTrainAngleVelocity1, LoggingKey.DriveTrainAngleError1, LoggingKey.DriveTrainAbsoluteEncoderPosition1,
+                                              LoggingKey.DriveTrainDriveVelocity2, LoggingKey.DriveTrainDriveError2, LoggingKey.DriveTrainAngleVelocity2, LoggingKey.DriveTrainAngleError2, LoggingKey.DriveTrainAbsoluteEncoderPosition2,
+                                              LoggingKey.DriveTrainDriveVelocity3, LoggingKey.DriveTrainDriveError3, LoggingKey.DriveTrainAngleVelocity3, LoggingKey.DriveTrainAngleError3, LoggingKey.DriveTrainAbsoluteEncoderPosition3,
+                                              LoggingKey.DriveTrainDriveVelocity4, LoggingKey.DriveTrainDriveError4, LoggingKey.DriveTrainAngleVelocity4, LoggingKey.DriveTrainAngleError4, LoggingKey.DriveTrainAbsoluteEncoderPosition4
+                                            };
+
+        LoggingKey[] driveTrainLoggingInts = {LoggingKey.DriveTrainDrivePosition1, LoggingKey.DriveTrainAnglePosition1, LoggingKey.DriveTrainDrivePosition2, LoggingKey.DriveTrainAnglePosition2,
+                                                 LoggingKey.DriveTrainDrivePosition3, LoggingKey.DriveTrainAnglePosition3, LoggingKey.DriveTrainDrivePosition4, LoggingKey.DriveTrainAnglePosition4};
+        
+        double[] driveTrainDoubles = {this.driveVelocity1, this.driveError1, this.angleVelocity1, this.angleError1, this.encoderAngle1,
+                                      this.driveVelocity2, this.driveError2, this.angleVelocity2, this.angleError2, this.encoderAngle2,
+                                      this.driveVelocity3, this.driveError3, this.angleVelocity3, this.angleError3, this.encoderAngle3,
+                                      this.driveVelocity4, this.driveError4, this.angleVelocity4, this.angleError4, this.encoderAngle4
+                                    };
+
+        int[] driveTrainInts = {this.drivePosition1, this.anglePosition1, this.drivePosition2, this.anglePosition2,
+                                this.drivePosition3, this.anglePosition3, this.drivePosition4, this.anglePosition4};
+
+        for(int i = 0; i<=19; i++);{
+            this.logger.logNumber(driveTrainLoggingDoubles[i], driveTrainDoubles[i]);
+        }
+        for(int v = 0; v<=7; v++);{
+            this.logger.logNumber(driveTrainLoggingInts[v], driveTrainInts[v]);
+        }
+        /*
         this.logger.logNumber(LoggingKey.DriveTrainDriveVelocity1, this.driveVelocity1);
         this.logger.logNumber(LoggingKey.DriveTrainDriveError1, this.driveError1);
-        this.logger.logNumber(LoggingKey.DriveTrainDrivePosition1, this.drivePosition1);
+        this.logger.logNumber(LoggingKey.DriveTrainDrivePosition1, this.drivePosition1); //
         this.logger.logNumber(LoggingKey.DriveTrainAngleVelocity1, this.angleVelocity1);
         this.logger.logNumber(LoggingKey.DriveTrainAngleError1, this.angleError1);
-        this.logger.logNumber(LoggingKey.DriveTrainAnglePosition1, this.anglePosition1);
+        this.logger.logNumber(LoggingKey.DriveTrainAnglePosition1, this.anglePosition1); //
         this.logger.logNumber(LoggingKey.DriveTrainAbsoluteEncoderPosition1, this.encoderAngle1);
 
         this.logger.logNumber(LoggingKey.DriveTrainDriveVelocity2, this.driveVelocity2);
@@ -378,6 +404,7 @@ public class DriveTrainMechanism implements IMechanism
         this.logger.logNumber(LoggingKey.DriveTrainAngleError4, this.angleError4);
         this.logger.logNumber(LoggingKey.DriveTrainAnglePosition4, this.anglePosition4);
         this.logger.logNumber(LoggingKey.DriveTrainAbsoluteEncoderPosition4, this.encoderAngle4);
+        */
     }
 
     public void update()
