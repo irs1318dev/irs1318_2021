@@ -326,7 +326,8 @@ public class TuningConstants
     public static final double DRIVETRAIN_SUPPLY_TRIGGER_CURRENT = 0.0;
     public static final double DRIVETRAIN_SUPPLY_TRIGGER_DURATION = 0.0;
 
-    public static final double DRIVETRAIN_DEAD_ZONE = 0.40;
+    public static final double DRIVETRAIN_DEAD_ZONE_TURN = 0.05;
+    public static final double DRIVETRAIN_DEAD_ZONE_VELOCITY = 0.05;
 
 
     
