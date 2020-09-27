@@ -100,14 +100,16 @@ public class DriveTrainMechanism implements IMechanism
     private double[] angleErrors = {this.angleError1, this.angleError2, this.angleError3, this.angleError4};
     private IAnalogInput[] absoluteEncoders = {this.absoluteEncoder1, this.absoluteEncoder2, this.absoluteEncoder3, this.absoluteEncoder4};
 
-    private LoggingKey[] encoderAnglesLK = {LoggingKey.DriveTrainAbsoluteEncoderPosition1, LoggingKey.DriveTrainAbsoluteEncoderPosition2, LoggingKey.DriveTrainAbsoluteEncoderPosition3, LoggingKey.DriveTrainAbsoluteEncoderPosition4};
-    private LoggingKey[] driveVelocitiesLK = {LoggingKey.DriveTrainDriveVelocity1, LoggingKey.DriveTrainDriveVelocity2, LoggingKey.DriveTrainDriveVelocity3, LoggingKey.DriveTrainDriveVelocity};
-    private LoggingKey[] drivePositionsLK = {LoggingKey.DriveTrainDrivePosition1, LoggingKey.DriveTrainAnglePosition1, LoggingKey.DriveTrainDrivePosition2, LoggingKey.DriveTrainAnglePosition2};
-    private LoggingKey[] driveErrorsLK = {LoggingKey.DriveTrainDriveError1, LoggingKey.DriveTrainDriveError2, LoggingKey.DriveTrainDriveError3, LoggingKey.DriveTrainDriveError4,};
-    private LoggingKey[] angleVelocitiesLK = {LoggingKey.DriveTrainAngleVelocity1, LoggingKey.DriveTrainAngleVelocity2, LoggingKey.DriveTrainAngleVelocity3, LoggingKey.DriveTrainAngleVelocity4,};
-    private LoggingKey[] anglePositionsLK = {LoggingKey.DriveTrainDrivePosition3, LoggingKey.DriveTrainAnglePosition3, LoggingKey.DriveTrainDrivePosition4, LoggingKey.DriveTrainAnglePosition4};;
-    private LoggingKey[] angleErrorsLK = {LoggingKey.DriveTrainAngleError1, LoggingKey.DriveTrainAngleError2, LoggingKey.DriveTrainAngleError3, LoggingKey.DriveTrainAngleError4,};
-
+    private final LoggingKey[] encoderAnglesLK = {LoggingKey.DriveTrainAbsoluteEncoderPosition1, LoggingKey.DriveTrainAbsoluteEncoderPosition2, LoggingKey.DriveTrainAbsoluteEncoderPosition3, LoggingKey.DriveTrainAbsoluteEncoderPosition4};
+    private final LoggingKey[] driveVelocitiesLK = {LoggingKey.DriveTrainDriveVelocity1, LoggingKey.DriveTrainDriveVelocity2, LoggingKey.DriveTrainDriveVelocity3, LoggingKey.DriveTrainDriveVelocity};
+    private final LoggingKey[] drivePositionsLK = {LoggingKey.DriveTrainDrivePosition1, LoggingKey.DriveTrainAnglePosition1, LoggingKey.DriveTrainDrivePosition2, LoggingKey.DriveTrainAnglePosition2};
+    private final LoggingKey[] driveErrorsLK = {LoggingKey.DriveTrainDriveError1, LoggingKey.DriveTrainDriveError2, LoggingKey.DriveTrainDriveError3, LoggingKey.DriveTrainDriveError4,};
+    private final LoggingKey[] angleVelocitiesLK = {LoggingKey.DriveTrainAngleVelocity1, LoggingKey.DriveTrainAngleVelocity2, LoggingKey.DriveTrainAngleVelocity3, LoggingKey.DriveTrainAngleVelocity4,};
+    private final LoggingKey[] anglePositionsLK = {LoggingKey.DriveTrainDrivePosition3, LoggingKey.DriveTrainAnglePosition3, LoggingKey.DriveTrainDrivePosition4, LoggingKey.DriveTrainAnglePosition4};;
+    private final LoggingKey[] angleErrorsLK = {LoggingKey.DriveTrainAngleError1, LoggingKey.DriveTrainAngleError2, LoggingKey.DriveTrainAngleError3, LoggingKey.DriveTrainAngleError4,};
+    private final LoggingKey[] driveVelocityGoalsLK = {LoggingKey.DriveTrainDriveVelocityGoal1, LoggingKey.DriveTrainDriveVelocityGoal2, LoggingKey.DriveTrainDriveVelocityGoal3, LoggingKey.DriveTrainDriveVelocityGoal4};
+    private final LoggingKey[] anglePOositionGoalsLK = {LoggingKey.DriveTrainAnglePositionGoal1, LoggingKey.DriveTrainAnglePositionGoal2, LoggingKey.DriveTrainAnglePositionGoal3, LoggingKey.DriveTrainAnglePositionGoal4};
+    
     @Inject
     public DriveTrainMechanism(
         LoggingManager logger,
@@ -135,9 +137,13 @@ public class DriveTrainMechanism implements IMechanism
             this.angleMotors[i].setControlMode(TalonSRXControlMode.Position);
             this.driveMotors[i].setControlMode(TalonSRXControlMode.Velocity);
 
+            this.angleMotors[i] = provider.getTalonFX(ElectronicsConstants.ANGLE_CANS[i]);
+
+            this.absoluteEncoders[i] = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_ANALOG_INPUTS[i]);
+
+
         }
         //MODULE 1
-        this.angleMotor1 = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_ANGLE_MOTOR_1_CAN_ID);
         this.angleMotor1.setInvertOutput(HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_1_INVERT_OUTPUT);
         this.angleMotor1.setInvertSensor(HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_1_INVERT_SENSOR);
         this.angleMotor1.setNeutralMode(MotorNeutralMode.Brake);
@@ -161,7 +167,6 @@ public class DriveTrainMechanism implements IMechanism
             DriveTrainMechanism.pidSlotId);
 
         //MODULE 2
-        this.angleMotor2 = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_ANGLE_MOTOR_2_CAN_ID);
         this.angleMotor2.setInvertOutput(HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_2_INVERT_OUTPUT);
         this.angleMotor2.setInvertSensor(HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_2_INVERT_SENSOR);
         this.angleMotor2.setNeutralMode(MotorNeutralMode.Brake);
@@ -186,7 +191,6 @@ public class DriveTrainMechanism implements IMechanism
 
 
         //MODULE 3
-        this.angleMotor3 = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_ANGLE_MOTOR_3_CAN_ID);
         this.angleMotor3.setInvertOutput(HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_3_INVERT_OUTPUT);
         this.angleMotor3.setInvertSensor(HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_3_INVERT_SENSOR);
         this.angleMotor3.setNeutralMode(MotorNeutralMode.Brake);
@@ -210,7 +214,6 @@ public class DriveTrainMechanism implements IMechanism
             DriveTrainMechanism.pidSlotId);
 
         //MODULE 4
-        this.angleMotor4 = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_ANGLE_MOTOR_4_CAN_ID);
         this.angleMotor4.setInvertOutput(HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_4_INVERT_OUTPUT);
         this.angleMotor4.setInvertSensor(HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_4_INVERT_SENSOR);
         this.angleMotor4.setNeutralMode(MotorNeutralMode.Brake);
@@ -233,12 +236,6 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KD,
             TuningConstants.DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KF,
             DriveTrainMechanism.pidSlotId);
-
-        this.absoluteEncoder1 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_1_ANALOG_INPUT);        
-        this.absoluteEncoder2 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_2_ANALOG_INPUT);
-        this.absoluteEncoder3 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_3_ANALOG_INPUT);
-        this.absoluteEncoder4 = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_4_ANALOG_INPUT);
-
     }
 
     @Override
@@ -272,33 +269,28 @@ public class DriveTrainMechanism implements IMechanism
     public void update()
     {
         List<Setpoint> setpoint = this.calculateSetpoint();
-        ITalonFX[] angleMotors = {this.angleMotor1, this.angleMotor2, this.angleMotor3, this.angleMotor4};
-        ITalonFX[] driveMotors = {this.driveMotor1, this.driveMotor2, this.driveMotor3, this.driveMotor4};
-        
-        LoggingKey[] driveLogs = {LoggingKey.DriveTrainDriveVelocityGoal1, LoggingKey.DriveTrainDriveVelocityGoal2, LoggingKey.DriveTrainDriveVelocityGoal3, LoggingKey.DriveTrainDriveVelocityGoal4};
-        LoggingKey[] angleLogs = {LoggingKey.DriveTrainAnglePositionGoal1, LoggingKey.DriveTrainAnglePositionGoal2, LoggingKey.DriveTrainAnglePositionGoal3, LoggingKey.DriveTrainAnglePositionGoal4};
 
         for(int i = 0; i < 4; i++)
         {
             Setpoint current = setpoint.get(i);
             double angleSetpoint = getClosestAngleInRange(
                 current.getAngle(), 
-                angleMotors[i].getPosition());
+                this.angleMotors[i].getPosition());
             double driveSetpoint = current.getDrive();
 
-            this.logger.logNumber(angleLogs[i], angleSetpoint);
-            this.logger.logNumber(driveLogs[i], driveSetpoint);
+            this.logger.logNumber(this.anglePOositionGoalsLK[i], angleSetpoint);
+            this.logger.logNumber(this.driveVelocityGoalsLK[i], driveSetpoint);
 
-            driveMotors[i].set(driveSetpoint);
-            angleMotors[i].set(angleSetpoint);
+            this.driveMotors[i].set(driveSetpoint);
+            this.angleMotors[i].set(angleSetpoint);
         }
 
         if (this.driver.getDigital(DigitalOperation.DriveTrainReset))
         {
             for(int i = 0; i < 4; i++)
             {
-                driveMotors[i].reset();
-                angleMotors[i].reset();
+                this.driveMotors[i].reset();
+                this.angleMotors[i].reset();
             }
         }
     }
@@ -383,7 +375,7 @@ public class DriveTrainMechanism implements IMechanism
         double a = 0.0; // center of rotation set to center of robot for now
         double b = 0.0;
 
-        List<Setpoint> result = new ArrayList<>();
+        Setpoint[] result = new Setpoint[4];
         
         double a1 = a - HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE/2;
         double a2 = a + HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE/2;
@@ -398,15 +390,16 @@ public class DriveTrainMechanism implements IMechanism
         double Vcy = this.driver.getAnalog(AnalogOperation.DriveTrainMoveForward);
         double Vcx = this.driver.getAnalog(AnalogOperation.DriveTrainMoveSide);
 
-        double omega = (Math.atan2(turnX, turnY) * Helpers.RADIANS_TO_DEGREES);
+        //double omega = (Math.atan2(turnX, turnY) * Helpers.RADIANS_TO_DEGREES);
         
         for(int i = 0; i < 4; i++)
         {
             double Vx = Vcx - omega * Ry[i];
             double Vy = Vcy + omega * Rx[i]; // quik mafs
 
-            double anglePositionGoal = Math.atan2(-Vx, Vy) * Helpers.RADIANS_TO_DEGREES;
-            double driveVelocityGoal = Math.sqrt(Vx * Vx + Vy * Vy);
+            //double anglePositionGoal = Math.atan2(-Vx, Vy) * Helpers.RADIANS_TO_DEGREES;
+            //double driveVelocityGoal = Math.sqrt(Vx * Vx + Vy * Vy);
+            double omega = turnX * TuningConstants.OMEGA_ANGLE_VELOCITY;
 
             driveVelocityGoal = this.applyPowerLevelRange(driveVelocityGoal);
 
@@ -416,7 +409,7 @@ public class DriveTrainMechanism implements IMechanism
             driveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KS; // only uses KS from module 1 but it shouldn't
             anglePositionGoal *= TuningConstants.DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KS; // matter rn cuz theyre all the same
 
-            result.add(new Setpoint(driveVelocityGoal, anglePositionGoal));
+            result[i] = new Setpoint(driveTrainVelocityGoal, anglePositionGoal);
         }
 
         return result;

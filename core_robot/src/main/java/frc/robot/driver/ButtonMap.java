@@ -31,28 +31,32 @@ public class ButtonMap implements IButtonMap
             UserInputDevice.Driver,
             AnalogAxis.XBONE_LSY,
             ElectronicsConstants.INVERT_XBONE_LEFT_Y_AXIS,
-            TuningConstants.DRIVETRAIN_DEAD_ZONE
+            TuningConstants.DRIVETRAIN_DEAD_ZONE_VELOCITY,
+            TuningConstants.TuningConstatns.DRIVETRAIN_DEAD_ZONE_TURN
         ),
         new AnalogOperationDescription(
             AnalogOperation.DriveTrainMoveSide,
             UserInputDevice.Driver,
             AnalogAxis.XBONE_LSX,
             ElectronicsConstants.INVERT_XBONE_LEFT_X_AXIS,
-            TuningConstants.DRIVETRAIN_DEAD_ZONE
+            TuningConstants.DRIVETRAIN_DEAD_ZONE_VELOCITY,
+            TuningConstants.TuningConstatns.DRIVETRAIN_DEAD_ZONE_TURN
         ),
         new AnalogOperationDescription(
             AnalogOperation.DriveTrainTurnX,
             UserInputDevice.Driver,
             AnalogAxis.XBONE_RSX,
             ElectronicsConstants.INVERT_XBONE_RIGHT_X_AXIS,
-            TuningConstants.DRIVETRAIN_DEAD_ZONE
+            TuningConstants.DRIVETRAIN_DEAD_ZONE_VELOCITY,
+            TuningConstants.TuningConstatns.DRIVETRAIN_DEAD_ZONE_TURN
         ),
         new AnalogOperationDescription(
             AnalogOperation.DriveTrainTurnY,
             UserInputDevice.Driver,
             AnalogAxis.XBONE_RSY,
             ElectronicsConstants.INVERT_XBONE_RIGHT_Y_AXIS,
-            TuningConstants.DRIVETRAIN_DEAD_ZONE
+            TuningConstants.DRIVETRAIN_DEAD_ZONE_VELOCITY,
+            TuningConstants.TuningConstatns.DRIVETRAIN_DEAD_ZONE_TURN
         ),
 
     };
