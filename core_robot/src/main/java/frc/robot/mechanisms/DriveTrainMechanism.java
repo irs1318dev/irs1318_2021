@@ -243,12 +243,13 @@ public class DriveTrainMechanism implements IMechanism
             double anglePositionGoal = Helpers.atan2d(-Vx, Vy);
             double driveVelocityGoal = Math.sqrt(Vx * Vx + Vy * Vy);
 
+            anglePositionGoal = Helpers.EnforceRange(anglePositionGoal, -180.0, 180.0);
+
             double currentAngle = this.anglePositions[i] / TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS;
             anglePositionGoal = DriveTrainMechanism.getClosestAngle(anglePositionGoal, currentAngle);
 
             driveVelocityGoal = this.applyPowerLevelRange(driveVelocityGoal);
 
-            Helpers.EnforceRange(anglePositionGoal, -180.0, 180.0);
             this.assertPowerLevelRange(driveVelocityGoal, "drive");
 
             driveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS;
