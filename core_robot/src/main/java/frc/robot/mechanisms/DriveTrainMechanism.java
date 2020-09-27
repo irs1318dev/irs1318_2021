@@ -88,10 +88,10 @@ public class DriveTrainMechanism implements IMechanism
     private int anglePosition3;
     private int anglePosition4;
 
-    private ITalonFX[] angleMotors = {this.angleMotor1, this.angleMotor2, this.angleMotor3, this.angleMotor4};
-    private ITalonFX[] driveMotors = {this.driveMotor1, this.driveMotor2, this.driveMotor3, this.driveMotor4};
+    private ITalonFX[] angleMotors;
+    private ITalonFX[] driveMotors;
     private double[] encoderVoltages;
-    private double[] encoderAngles = {this.encoderAngle1, this.encoderAngle2, this.encoderAngle3, this.encoderAngle4};
+    private double[] encoderAngles;
     private double[] driveVelocities = {this.driveVelocity1, this.driveVelocity2, this.driveVelocity3, this.encoderAngle4};
     private int[] drivePositions = {this.drivePosition1, this.drivePosition2, this.drivePosition3, this.drivePosition4};
     private double[] driveErrors = {this.driveError1, this.driveError2, this.driveError3, this.driveError4};
@@ -116,15 +116,20 @@ public class DriveTrainMechanism implements IMechanism
         IRobotProvider provider)
     {
         this.logger = logger;
-        
+        this.encoderAngles = new double[4];
+        this.encoderVoltages = new double[4]; 
+        this.angleMotors = new ITalonFX[4];
+        this.driveMotors = new ITalonFX[4];
         //MODULE 1
 
         for(i = 0; i <=3; i++){
+            this.angleMotors[i] = provider.getTalonFX(ElectronicsConstants.ANGLE_CANS[i]);
+            this.driveMotors[i] = provider.getTalonFX(ElectronicsConstants.DRIVE_CANS[i]);
+
             this.driveMotors[i].setNeutralMode(MotorNeutralMode.Brake); //
             this.driveMotors[i].setSensorType(TalonXFeedbackDevice.IntegratedSensor); //
             this.driveMotors[i].setFeedbackFramePeriod(DriveTrainMechanism.FRAME_PERIOD_MS); //
             this.driveMotors[i].setPIDFFramePeriod(DriveTrainMechanism.FRAME_PERIOD_MS); //
-
             this.driveMotors[i].setVoltageCompensation(
                 TuningConstants.DRIVETRAIN_VOLTAGE_COMPENSATION_ENABLED,
                 TuningConstants.DRIVETRAIN_VOLTAGE_COMPENSATION);
@@ -155,7 +160,6 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KF,
             DriveTrainMechanism.pidSlotId);
 
-        this.driveMotor1 = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_1_CAN_ID);
         this.driveMotor1.setInvertOutput(HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_1_INVERT_OUTPUT);
         this.driveMotor1.setInvertSensor(HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_1_INVERT_SENSOR);
         this.driveMotor1.configureVelocityMeasurements(10, 31); //
@@ -178,7 +182,6 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KF,
             DriveTrainMechanism.pidSlotId);
 
-        this.driveMotor2 = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_2_CAN_ID);
         this.driveMotor2.setInvertOutput(HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_2_INVERT_OUTPUT);
         this.driveMotor2.setInvertSensor(HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_2_INVERT_SENSOR);
         this.driveMotor2.configureVelocityMeasurements(10, 32); //
@@ -202,7 +205,6 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KF,
             DriveTrainMechanism.pidSlotId);
 
-        this.driveMotor3 = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_3_CAN_ID);
         this.driveMotor3.setInvertOutput(HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_3_INVERT_OUTPUT);
         this.driveMotor3.setInvertSensor(HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_3_INVERT_SENSOR);
         this.driveMotor3.configureVelocityMeasurements(10, 32); //
@@ -226,7 +228,6 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KF,
             DriveTrainMechanism.pidSlotId);
 
-        this.driveMotor4 = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_4_CAN_ID);
         this.driveMotor4.setInvertOutput(HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_4_INVERT_OUTPUT);
         this.driveMotor4.setInvertSensor(HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_4_INVERT_SENSOR);
         this.driveMotor4.configureVelocityMeasurements(10, 32); //WHAT IS THIS?
@@ -243,11 +244,11 @@ public class DriveTrainMechanism implements IMechanism
     {
         this.driver = driver;
     }
-
+    
     @Override
     public void readSensors()
     {
-        this.encoderVoltages = new double[4]; 
+        
         for(int i = 0; i <=3; i++){
             this.encoderVoltages[i] = this.absoluteEncoders[i].getVoltage();
             this.encoderAngles[i] = this.encoderVoltages[i] * HardwareConstants.DRIVETRAIN_ENCODER_DEGREES_PER_VOLT;
@@ -275,7 +276,7 @@ public class DriveTrainMechanism implements IMechanism
             Setpoint current = setpoint.get(i);
             double angleSetpoint = getClosestAngleInRange(
                 current.getAngle(), 
-                this.angleMotors[i].getPosition());
+                this.anglePositions[i]/TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS[i]);
             double driveSetpoint = current.getDrive();
 
             this.logger.logNumber(this.anglePOositionGoalsLK[i], angleSetpoint);
@@ -311,15 +312,14 @@ public class DriveTrainMechanism implements IMechanism
         for (int i = 0; i < 3; i++)
         {
             double angle = closeRotations[i];
-            if (Helpers.WithinRange(angle, minRangeValue, maxRangeValue))
+
+            double angleDistance = Math.abs(currentAngle - angle);
+            if (angleDistance < bestDistance)
             {
-                double angleDistance = Math.abs(currentAngle - angle);
-                if (angleDistance < bestDistance)
-                {
-                    best = angle;
-                    bestDistance = angleDistance;
-                }
+                best = angle;
+                bestDistance = angleDistance;
             }
+            
         }
         return best;
     }
