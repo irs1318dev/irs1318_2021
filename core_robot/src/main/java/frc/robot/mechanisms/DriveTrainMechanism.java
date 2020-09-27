@@ -157,14 +157,17 @@ public class DriveTrainMechanism implements IMechanism
         for (int i = 0; i < 4; i++)
         {
             Setpoint current = setpoints[i];
-            double angleSetpoint = current.getAngle();
+            Double angleSetpoint = current.getAngle();
             double driveSetpoint = current.getDrive();
 
-            this.logger.logNumber(this.angleGoalLK[i], angleSetpoint);
             this.logger.logNumber(this.driveGoalLK[i], driveSetpoint);
-
             this.driveMotors[i].set(driveSetpoint);
-            this.angleMotors[i].set(angleSetpoint);
+
+            if (angleSetpoint != null)
+            {
+                this.logger.logNumber(this.angleGoalLK[i], angleSetpoint);
+                this.angleMotors[i].set(angleSetpoint);
+            }
         }
 
         if (this.driver.getDigital(DigitalOperation.DriveTrainReset))
@@ -240,20 +243,27 @@ public class DriveTrainMechanism implements IMechanism
             double Vx = Vcx - omega * Ry[i];
             double Vy = Vcy + omega * Rx[i]; // quik mafs
 
-            double anglePositionGoal = Helpers.atan2d(-Vx, Vy);
+            Double anglePositionGoal;
             double driveVelocityGoal = Math.sqrt(Vx * Vx + Vy * Vy);
-
-            anglePositionGoal = Helpers.EnforceRange(anglePositionGoal, -180.0, 180.0);
-
-            double currentAngle = this.anglePositions[i] / TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS;
-            anglePositionGoal = DriveTrainMechanism.getClosestAngle(anglePositionGoal, currentAngle);
+            if (TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY &&
+                Helpers.WithinDelta(Vx, 0.0, TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA) &&
+                Helpers.WithinDelta(Vy, 0.0, TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA))
+            {
+                anglePositionGoal = null;
+            }
+            else
+            {
+                anglePositionGoal = Helpers.EnforceRange(Helpers.atan2d(-Vx, Vy), -180.0, 180.0);
+                double currentAngle = this.anglePositions[i] / TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS;
+                anglePositionGoal = DriveTrainMechanism.getClosestAngle(anglePositionGoal, currentAngle);    
+                anglePositionGoal *= TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS;
+            }
 
             driveVelocityGoal = this.applyPowerLevelRange(driveVelocityGoal);
 
             this.assertPowerLevelRange(driveVelocityGoal, "drive");
 
             driveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS;
-            anglePositionGoal *= TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS;
 
             result[i] = new Setpoint(driveVelocityGoal, anglePositionGoal);
         }
@@ -291,7 +301,7 @@ public class DriveTrainMechanism implements IMechanism
 
     private class Setpoint
     {
-        private double angle;
+        private Double angle;
         private double drive;
 
         /**
@@ -299,7 +309,7 @@ public class DriveTrainMechanism implements IMechanism
          * @param drive value to apply
          * @param angle value to apply
          */
-        public Setpoint(double drive, double angle)
+        public Setpoint(double drive, Double angle)
         {
             this.drive = drive;
             this.angle = angle;
@@ -318,7 +328,7 @@ public class DriveTrainMechanism implements IMechanism
          * gets the angle setpoint
          * @return angle setpoint value
          */
-        public double getAngle()
+        public Double getAngle()
         {
             return this.angle;
         }

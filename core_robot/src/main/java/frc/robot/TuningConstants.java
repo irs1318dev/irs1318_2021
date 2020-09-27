@@ -41,7 +41,7 @@ public class TuningConstants
         List<IMechanism> mechanismList = new ArrayList<IMechanism>();
         mechanismList.add(injector.getInstance(DriveTrainMechanism.class));
         // mechanismList.add(injector.getInstance(PowerManager.class));
-        // mechanismList.add(injector.getInstance(PositionManager.class));
+        mechanismList.add(injector.getInstance(PositionManager.class));
         // mechanismList.add(injector.getInstance(CompressorMechanism.class));
         // mechanismList.add(injector.getInstance(OffboardVisionManager.class));
         // mechanismList.add(injector.getInstance(IndicatorLightManager.class));
@@ -282,8 +282,11 @@ public class TuningConstants
     public static final double DRIVETRAIN_SUPPLY_TRIGGER_CURRENT = 0.0;
     public static final double DRIVETRAIN_SUPPLY_TRIGGER_DURATION = 0.0;
 
-    public static final double DRIVETRAIN_DEAD_ZONE_TURN = 0.05;
-    public static final double DRIVETRAIN_DEAD_ZONE_VELOCITY = 0.05;
+    public static final boolean DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY = true;
+    public static final double DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA = 0.001;
 
-    public static final double DRIVETRAIN_TURN_VELOCITY = 1.0;
+    public static final double DRIVETRAIN_DEAD_ZONE_TURN = 0.15;
+    public static final double DRIVETRAIN_DEAD_ZONE_VELOCITY = 0.15;
+
+    public static final double DRIVETRAIN_TURN_VELOCITY = 1.0 / 15.0; // convert from inches to percentage
 }
