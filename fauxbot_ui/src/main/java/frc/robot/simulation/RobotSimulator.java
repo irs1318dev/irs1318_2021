@@ -168,6 +168,24 @@ public class RobotSimulator implements IRealWorldSimulator
     }
 
     @Override
+    public boolean getSensorTextBox(FauxbotSensorConnection connection)
+    {
+        if (connection == RobotSimulator.AngleEncoder1Connection ||
+            connection == RobotSimulator.AngleEncoder2Connection ||
+            connection == RobotSimulator.AngleEncoder3Connection ||
+            connection == RobotSimulator.AngleEncoder4Connection ||
+            connection == RobotSimulator.DriveEncoder1Connection ||
+            connection == RobotSimulator.DriveEncoder2Connection ||
+            connection == RobotSimulator.DriveEncoder3Connection ||
+            connection == RobotSimulator.DriveEncoder4Connection)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public String getSensorName(FauxbotSensorConnection connection)
     {
         if (this.sensorNameMap.containsKey(connection))
@@ -246,6 +264,12 @@ public class RobotSimulator implements IRealWorldSimulator
     }
 
     @Override
+    public boolean shouldSimulatePID()
+    {
+        return false;
+    }
+
+    @Override
     public void update()
     {
         double currTime = Calendar.getInstance().getTime().getTime() / 1000.0;
@@ -270,11 +294,11 @@ public class RobotSimulator implements IRealWorldSimulator
             this.prevPosition[i] = currPosition;
             this.prevVelocity[i] = currVelocity;
 
-            FauxbotSensorBase driveSensor = FauxbotSensorManager.get(RobotSimulator.DriveEncoders[0]);
+            FauxbotSensorBase driveSensor = FauxbotSensorManager.get(RobotSimulator.DriveEncoders[i]);
             if (driveSensor != null && driveSensor instanceof FauxbotEncoder)
             {
                 FauxbotEncoder encoder = (FauxbotEncoder)driveSensor;
-                encoder.set((int)this.prevVelocity[i]);
+                encoder.set(this.prevPosition[i] + this.prevVelocity[i] * dt);
             }
 
             double angleMotorSetpoint = 0.0;
@@ -289,7 +313,7 @@ public class RobotSimulator implements IRealWorldSimulator
 
             this.prevAngle[i] = currAngle;
 
-            FauxbotSensorBase angleSensor = FauxbotSensorManager.get(RobotSimulator.AngleEncoders[0]);
+            FauxbotSensorBase angleSensor = FauxbotSensorManager.get(RobotSimulator.AngleEncoders[i]);
             if (angleSensor != null && angleSensor instanceof FauxbotEncoder)
             {
                 FauxbotEncoder encoder = (FauxbotEncoder)angleSensor;

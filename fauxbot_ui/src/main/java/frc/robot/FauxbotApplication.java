@@ -1,7 +1,6 @@
 package frc.robot;
 
 import java.io.IOException;
-import java.util.Set;
 
 import frc.robot.common.robotprovider.*;
 import frc.robot.driver.common.*;
@@ -11,6 +10,8 @@ import frc.robot.simulation.*;
 
 import javafx.application.*;
 import javafx.beans.binding.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.*;
 import javafx.geometry.*;
 import javafx.scene.*;
@@ -20,6 +21,8 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.*;
+import javafx.util.converter.BooleanStringConverter;
+import javafx.util.converter.NumberStringConverter;
 
 public class FauxbotApplication extends Application
 {
@@ -289,6 +292,7 @@ public class FauxbotApplication extends Application
             FauxbotSensorBase sensor = FauxbotSensorManager.get(connection);
             if (sensor != null)
             {
+                boolean useTextBox = this.simulator.getSensorTextBox(connection);
                 if (firstSensor)
                 {
                     Text sensorsTitle = new Text("Sensors");
@@ -307,35 +311,65 @@ public class FauxbotApplication extends Application
 
                 if (sensor instanceof FauxbotDigitalInput)
                 {
-                    CheckBox sensorCheckBox = new CheckBox();
-                    grid.add(sensorCheckBox, 1, thisRowIndex);
-                    Bindings.bindBidirectional(((FauxbotDigitalInput)sensor).getProperty(), sensorCheckBox.selectedProperty());
+                    BooleanProperty sensorProperty = ((FauxbotDigitalInput)sensor).getProperty();
+                    if (useTextBox)
+                    {
+                        TextField sensorTextBox = new TextField();
+                        grid.add(sensorTextBox, 1, thisRowIndex);
+                        Bindings.bindBidirectional(sensorTextBox.textProperty(), sensorProperty, new BooleanStringConverter());
+                    }
+                    else
+                    {
+                        CheckBox sensorCheckBox = new CheckBox();
+                        grid.add(sensorCheckBox, 1, thisRowIndex);
+                        Bindings.bindBidirectional(sensorCheckBox.selectedProperty(), sensorProperty);
+                    }
                 }
                 else if (sensor instanceof FauxbotAnalogInput)
                 {
-                    double min = this.simulator.getSensorMin(connection);
-                    double max = this.simulator.getSensorMax(connection);
-                    Slider sensorSlider = new Slider();
-                    sensorSlider.setMin(min);
-                    sensorSlider.setMax(max);
-                    sensorSlider.setBlockIncrement(0.1);
-                    sensorSlider.setShowTickMarks(true);
+                    DoubleProperty sensorProperty = ((FauxbotAnalogInput)sensor).getProperty();
+                    if (useTextBox)
+                    {
+                        TextField sensorTextBox = new TextField();
+                        grid.add(sensorTextBox, 1, thisRowIndex);
+                        Bindings.bindBidirectional(sensorTextBox.textProperty(), sensorProperty, new NumberStringConverter());
+                    }
+                    else
+                    {
+                        double min = this.simulator.getSensorMin(connection);
+                        double max = this.simulator.getSensorMax(connection);
+                        Slider sensorSlider = new Slider();
+                        sensorSlider.setMin(min);
+                        sensorSlider.setMax(max);
+                        sensorSlider.setBlockIncrement(0.1);
+                        sensorSlider.setShowTickMarks(true);
 
-                    grid.add(sensorSlider, 1, thisRowIndex);
-                    Bindings.bindBidirectional(((FauxbotAnalogInput)sensor).getProperty(), sensorSlider.valueProperty());
+                        grid.add(sensorSlider, 1, thisRowIndex);
+                        Bindings.bindBidirectional(sensorSlider.valueProperty(), sensorProperty);
+                    }
                 }
                 else if (sensor instanceof FauxbotEncoder)
                 {
-                    double min = this.simulator.getSensorMin(connection);
-                    double max = this.simulator.getSensorMax(connection);
-                    Slider sensorSlider = new Slider();
-                    sensorSlider.setMin(min);
-                    sensorSlider.setMax(max);
-                    sensorSlider.setBlockIncrement(0.1);
-                    sensorSlider.setShowTickMarks(true);
+                    DoubleProperty sensorProperty = ((FauxbotEncoder)sensor).getProperty();
+                    if (useTextBox)
+                    {
+                        TextField sensorTextBox = new TextField();
+                        grid.add(sensorTextBox, 1, thisRowIndex);
+                        Bindings.bindBidirectional(sensorTextBox.textProperty(), sensorProperty, new NumberStringConverter());
+                    }
+                    else
+                    {
+                        double min = this.simulator.getSensorMin(connection);
+                        double max = this.simulator.getSensorMax(connection);
+                        Slider sensorSlider = new Slider();
+                        sensorSlider.setMin(min);
+                        sensorSlider.setMax(max);
+                        sensorSlider.setBlockIncrement(0.1);
+                        sensorSlider.setShowTickMarks(true);
 
-                    grid.add(sensorSlider, 1, thisRowIndex);
-                    Bindings.bindBidirectional(((FauxbotEncoder)sensor).getProperty(), sensorSlider.valueProperty());
+                        grid.add(sensorSlider, 1, thisRowIndex);
+                        Bindings.bindBidirectional(sensorSlider.valueProperty(), sensorProperty);
+                    }
                 }
             }
         }
