@@ -22,31 +22,11 @@ public class HardwareConstants
     //================================================== DriveTrain ==============================================================
 
     public static final double DRIVETRAIN_ENCODER_DEGREES_PER_VOLT = 72.0;
-    public static final boolean DRIVETRAIN_ANGLE_MOTOR_1_INVERT_OUTPUT = false;
-    public static final boolean DRIVETRAIN_ANGLE_MOTOR_1_INVERT_SENSOR = false;
-    public static final boolean DRIVETRAIN_DRIVE_MOTOR_1_INVERT_OUTPUT = false;
-    public static final boolean DRIVETRAIN_DRIVE_MOTOR_1_INVERT_SENSOR = false;
 
-    public static final boolean DRIVETRAIN_ANGLE_MOTOR_2_INVERT_OUTPUT = false;
-    public static final boolean DRIVETRAIN_ANGLE_MOTOR_2_INVERT_SENSOR = false;
-    public static final boolean DRIVETRAIN_DRIVE_MOTOR_2_INVERT_OUTPUT = false;
-    public static final boolean DRIVETRAIN_DRIVE_MOTOR_2_INVERT_SENSOR = false;
-
-    public static final boolean DRIVETRAIN_ANGLE_MOTOR_3_INVERT_OUTPUT = false;
-    public static final boolean DRIVETRAIN_ANGLE_MOTOR_3_INVERT_SENSOR = false;
-    public static final boolean DRIVETRAIN_DRIVE_MOTOR_3_INVERT_OUTPUT = false;
-    public static final boolean DRIVETRAIN_DRIVE_MOTOR_3_INVERT_SENSOR = false;
-
-    public static final boolean DRIVETRAIN_ANGLE_MOTOR_4_INVERT_OUTPUT = false;
-    public static final boolean DRIVETRAIN_ANGLE_MOTOR_4_INVERT_SENSOR = false;
-    public static final boolean DRIVETRAIN_DRIVE_MOTOR_4_INVERT_OUTPUT = false;
-    public static final boolean DRIVETRAIN_DRIVE_MOTOR_4_INVERT_SENSOR = false;
-
-    public static final boolean[] driveInvertSensors = {DRIVETRAIN_DRIVE_MOTOR_1_INVERT_SENSOR, DRIVETRAIN_DRIVE_MOTOR_2_INVERT_SENSOR, DRIVETRAIN_DRIVE_MOTOR_3_INVERT_SENSOR, DRIVETRAIN_DRIVE_MOTOR_4_INVERT_SENSOR};
-    public static final boolean[] driveInvertOutput = {DRIVETRAIN_DRIVE_MOTOR_1_INVERT_OUTPUT, DRIVETRAIN_DRIVE_MOTOR_2_INVERT_OUTPUT, DRIVETRAIN_DRIVE_MOTOR_3_INVERT_OUTPUT, DRIVETRAIN_DRIVE_MOTOR_4_INVERT_OUTPUT};
-    public static final boolean[] angleInvertSensors = {DRIVETRAIN_ANGLE_MOTOR_1_INVERT_SENSOR, DRIVETRAIN_ANGLE_MOTOR_2_INVERT_SENSOR, DRIVETRAIN_ANGLE_MOTOR_3_INVERT_SENSOR, DRIVETRAIN_ANGLE_MOTOR_4_INVERT_SENSOR};
-    public static final boolean[] angleInvertOutput = {DRIVETRAIN_ANGLE_MOTOR_1_INVERT_OUTPUT, DRIVETRAIN_ANGLE_MOTOR_2_INVERT_OUTPUT, DRIVETRAIN_ANGLE_MOTOR_3_INVERT_OUTPUT, DRIVETRAIN_ANGLE_MOTOR_4_INVERT_OUTPUT};
-
+    public static final boolean[] DRIVETRAIN_ANGLE_MOTOR_INVERT_OUTPUT = new boolean[] { false, false, false, false };
+    public static final boolean[] DRIVETRAIN_ANGLE_MOTOR_INVERT_SENSOR = new boolean[] { false, false, false, false };
+    public static final boolean[] DRIVETRAIN_DRIVE_MOTOR_INVERT_OUTPUT = new boolean[] { false, false, false, false };
+    public static final boolean[] DRIVETRAIN_DRIVE_MOTOR_INVERT_SENSOR = new boolean[] { false, false, false, false };
 
     public static final double DRIVETRAIN_ANGLE_ENCODER_PULSES_PER_REVOLUTION = 2048.0;
     public static final double DRIVETRAIN_ANGLE_GEAR_RATIO = 18.0; // set correctly    
@@ -63,6 +43,4 @@ public class HardwareConstants
 
     public static final double DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE = 21.5;
     public static final double DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE = 25.5;
-
-
 }

@@ -261,72 +261,19 @@ public class TuningConstants
 
     public static final boolean DRIVETRAIN_USE_PID = true;
 
-    // Position PID (angle) module 1
-    public static final double DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KP = 1.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KI = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KD = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KF = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KS = HardwareConstants.DRIVETRAIN_ANGLE_TICKS_PER_DEGREE;
+    // Position PID (angle) per-module
+    public static final double[] DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KP = new double[] { 1.0, 1.0, 1.0, 1.0 };
+    public static final double[] DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KI = new double[] { 0.0, 0.0, 0.0, 0.0 };
+    public static final double[] DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KD = new double[] { 0.0, 0.0, 0.0, 0.0 };
+    public static final double[] DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KF = new double[] { 0.0, 0.0, 0.0, 0.0 };
+    public static final double DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS = HardwareConstants.DRIVETRAIN_ANGLE_TICKS_PER_DEGREE;
 
-    // Velocity PID (drive) module 1
-    public static final double DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KP = 0.09;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KI = 0.0;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KD = 0.0;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KF = 0.0478; // .0478 ==> ~ 1023 / 21400 (100% control authority)
-    public static final double DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KS = 17000.0; // 21400 was highest speed at full throttle FF on blocks
-
-    // Position PID (angle) module 2
-    public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KP = 1.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KI = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KD = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KF = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KS = HardwareConstants.DRIVETRAIN_ANGLE_TICKS_PER_DEGREE;
-
-    // Velocity PID (drive) module 2
-    public static final double DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KP = 0.09;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KI = 0.0;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KD = 0.0;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KF = 0.0478; // .0478 ==> ~ 1023 / 21400 (100% control authority)
-    public static final double DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KS = 17000.0; // 21400 was highest speed at full throttle FF on blocks
-
-    // Position PID (angle) module 3
-    public static final double DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KP = 1.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KI = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KD = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KF = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KS = HardwareConstants.DRIVETRAIN_ANGLE_TICKS_PER_DEGREE;
-
-    // Velocity PID (drive) module 3
-    public static final double DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KP = 0.09;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KI = 0.0;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KD = 0.0;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KF = 0.0478; // .0478 ==> ~ 1023 / 21400 (100% control authority)
-    public static final double DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KS = 17000.0; // 21400 was highest speed at full throttle FF on blocks
-
-    // Position PID (angle) module 4
-    public static final double DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KP = 1.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KI = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KD = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KF = 0.0;
-    public static final double DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KS = HardwareConstants.DRIVETRAIN_ANGLE_TICKS_PER_DEGREE;
-
-    // Velocity PID (drive) module 4
-    public static final double DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KP = 0.09;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KI = 0.0;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KD = 0.0;
-    public static final double DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KF = 0.0478; // .0478 ==> ~ 1023 / 21400 (100% control authority)
-    public static final double DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KS = 17000.0; // 21400 was highest speed at full throttle FF on blocks
-
-    public static final double[] driveVelocityKPs = {DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KP, DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KP, DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KP, DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KP};
-    public static final double[] driveVelocityKIs = {DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KI, DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KI, DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KI, DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KI};
-    public static final double[] driveVelocityKDs = {DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KD, DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KD, DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KD, DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KD};
-    public static final double[] driveVelocityKFs = {DRIVETRAIN_DRIVE_MOTOR_1_VELOCITY_PID_KF, DRIVETRAIN_DRIVE_MOTOR_2_VELOCITY_PID_KF, DRIVETRAIN_DRIVE_MOTOR_3_VELOCITY_PID_KF, DRIVETRAIN_DRIVE_MOTOR_4_VELOCITY_PID_KF};
-    public static final double[] anglePositionKPs = {DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KP, DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KP, DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KP, DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KP};
-    public static final double[] anglePositionKIs = {DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KI, DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KI, DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KI, DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KI};
-    public static final double[] anglePositionKDs = {DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KD, DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KD, DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KD, DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KD};
-    public static final double[] anglePositionKFs = {DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KF, DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KF, DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KF, DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KF};
-
-    public static final double DRIVETRAIN_MAX_POWER_LEVEL = 0.0;
+    // Velocity PID (drive) per-module
+    public static final double[] DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KP = new double[] { 0.09, 0.09, 0.09, 0.09 };
+    public static final double[] DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KI = new double[] { 0.0, 0.0, 0.0, 0.0 };
+    public static final double[] DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KD = new double[] { 0.0, 0.0, 0.0, 0.0 };
+    public static final double[] DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KF = new double[] { 0.0478, 0.0478, 0.0478, 0.0478 }; // .0478 ==> ~ 1023 / 21400 (100% control authority)
+    public static final double DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS = 17000.0; // 21400 was highest speed at full throttle FF on blocks
 
     public static final boolean DRIVETRAIN_VOLTAGE_COMPENSATION_ENABLED = false;
     public static final double DRIVETRAIN_VOLTAGE_COMPENSATION = 0.0;
@@ -338,10 +285,5 @@ public class TuningConstants
     public static final double DRIVETRAIN_DEAD_ZONE_TURN = 0.05;
     public static final double DRIVETRAIN_DEAD_ZONE_VELOCITY = 0.05;
 
-    public static final double OMEGA_ANGLE_VELOCITY = 1.0;
-
-    public static double[] DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS = {DRIVETRAIN_ANGLE_MOTOR_1_POSITION_PID_KS, DRIVETRAIN_ANGLE_MOTOR_2_POSITION_PID_KS, DRIVETRAIN_ANGLE_MOTOR_3_POSITION_PID_KS, DRIVETRAIN_ANGLE_MOTOR_4_POSITION_PID_KS};
-
-
-    
+    public static final double DRIVETRAIN_TURN_VELOCITY = 1.0;
 }

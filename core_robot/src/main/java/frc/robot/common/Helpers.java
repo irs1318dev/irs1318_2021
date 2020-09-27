@@ -51,6 +51,17 @@ public class Helpers
     }
 
     /**
+     * Returns the trigonometric arctangent.
+     * @param opposite side
+     * @param adjacent side
+     * @return the arctangent angle in degrees between -180 and 180
+     */
+    public static double atan2d(double opposite, double adjacent)
+    {
+        return Math.atan2(opposite, adjacent) * Helpers.RADIANS_TO_DEGREES;
+    }
+
+    /**
      * Returns the trigonometric sine of an angle.
      * @param angle in degrees.
      * @return the sine of the argument (opposite length over hypotenuse length).
