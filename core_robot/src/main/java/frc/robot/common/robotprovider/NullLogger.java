@@ -3,9 +3,9 @@ package frc.robot.common.robotprovider;
 import frc.robot.LoggingKey;
 
 /**
- * Logger that logs current values to a dashboard.
+ * Logger that skips logging.
  */
-public class ConsoleDashboardLogger extends StringLogger
+public class NullLogger extends StringLogger
 {
     /**
      * Write a string to the log
@@ -15,6 +15,5 @@ public class ConsoleDashboardLogger extends StringLogger
     @Override
     public void logString(LoggingKey key, String value)
     {
-        System.out.println(key.value + ": " + value);
     }
 }

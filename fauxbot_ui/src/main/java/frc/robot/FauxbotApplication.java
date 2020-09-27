@@ -574,10 +574,10 @@ public class FauxbotApplication extends Application
 
     public void refresh()
     {
-        this.simulator.update();
         Platform.runLater(
             () ->
             {
+                this.simulator.update();
                 this.simulator.draw(this.canvas);
             });
     }
