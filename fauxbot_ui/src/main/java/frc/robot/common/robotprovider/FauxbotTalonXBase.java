@@ -1,9 +1,12 @@
 package frc.robot.common.robotprovider;
 
+import frc.robot.IRealWorldSimulator;
 import frc.robot.common.PIDHandler;
 
 public abstract class FauxbotTalonXBase extends FauxbotAdvancedMotorBase implements ITalonSRX
 {
+    private final IRealWorldSimulator simulator;
+
     private FauxbotEncoder innerEncoder;
     private PIDHandler pidHandler;
 
@@ -13,10 +16,11 @@ public abstract class FauxbotTalonXBase extends FauxbotAdvancedMotorBase impleme
     private double kd;
     private double kf;
 
-    FauxbotTalonXBase(int deviceNumber)
+    FauxbotTalonXBase(int deviceNumber, IRealWorldSimulator simulator)
     {
         super(deviceNumber);
 
+        this.simulator = simulator;
         this.currentMode = TalonSRXControlMode.PercentOutput;
     }
 
@@ -106,11 +110,11 @@ public abstract class FauxbotTalonXBase extends FauxbotAdvancedMotorBase impleme
                 throw new RuntimeException("expected a different actuator type " + actuator == null ? "null" : actuator.toString());
             }
         }
-        else if (this.currentMode == TalonSRXControlMode.Velocity)
+        else if (this.currentMode == TalonSRXControlMode.Velocity && this.pidHandler != null)
         {
             super.set(this.pidHandler.calculateVelocity(newValue, innerEncoder.getRate()));
         }
-        else if (this.currentMode == TalonSRXControlMode.Position)
+        else if (this.currentMode == TalonSRXControlMode.Position && this.pidHandler != null)
         {
             super.set(this.pidHandler.calculatePosition(newValue, innerEncoder.get()));
         }
@@ -178,8 +182,8 @@ public abstract class FauxbotTalonXBase extends FauxbotAdvancedMotorBase impleme
 
     private void resetPID()
     {
-        if (this.currentMode == TalonSRXControlMode.Position ||
-            this.currentMode == TalonSRXControlMode.Velocity)
+        if (this.simulator.shouldSimulatePID() &&
+            (this.currentMode == TalonSRXControlMode.Position || this.currentMode == TalonSRXControlMode.Velocity))
         {
             ITimer timer = new FauxbotTimer();
             timer.start();

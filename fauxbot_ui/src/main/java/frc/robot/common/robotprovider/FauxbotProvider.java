@@ -3,13 +3,18 @@ package frc.robot.common.robotprovider;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import frc.robot.IRealWorldSimulator;
+
 @Singleton
 public class FauxbotProvider implements IRobotProvider
 {
+    private final IRealWorldSimulator simulator;
+
     @Inject
-    public FauxbotProvider()
+    public FauxbotProvider(IRealWorldSimulator simulator)
     {
         nu.pattern.OpenCV.loadShared();
+        this.simulator = simulator;
     }
 
     @Override
@@ -39,13 +44,13 @@ public class FauxbotProvider implements IRobotProvider
     @Override
     public ITalonSRX getTalonSRX(int deviceNumber)
     {
-        return new FauxbotTalonSRX(deviceNumber);
+        return new FauxbotTalonSRX(deviceNumber, this.simulator);
     }
 
     @Override
     public ITalonFX getTalonFX(int deviceNumber)
     {
-        return new FauxbotTalonFX(deviceNumber);
+        return new FauxbotTalonFX(deviceNumber, this.simulator);
     }
 
     @Override
