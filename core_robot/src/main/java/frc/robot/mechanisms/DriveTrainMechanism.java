@@ -30,6 +30,8 @@ public class DriveTrainMechanism implements IMechanism
     private static final double POWERLEVEL_MIN = -1.0;
     private static final double POWERLEVEL_MAX = 1.0;
 
+    public boolean fieldOriented;
+
     private final ILogger logger;
 
     private Driver driver;
@@ -177,6 +179,14 @@ public class DriveTrainMechanism implements IMechanism
                 this.driveMotors[i].reset();
                 this.angleMotors[i].reset();
             }
+        }
+        if (this.driver.getDigital(DigitalOperation.EnableFieldOrientation))
+        {
+            this.fieldOriented = true;
+        }
+        if (this.driver.getDigital(DigitalOperation.DisableFieldOrientation))
+        {
+            this.fieldOriented = false;
         }
     }
 

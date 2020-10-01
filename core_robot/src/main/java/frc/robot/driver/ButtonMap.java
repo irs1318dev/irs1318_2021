@@ -66,7 +66,23 @@ public class ButtonMap implements IButtonMap
             Shift.DriverDebug,
             Shift.None,
             ButtonType.Click
-        )
+        ),
+        new DigitalOperationDescription(
+            DigitalOperation.EnableFieldOrientation,
+            UserInputDevice.Driver,
+            UserInputDeviceButton.XBONE_B_BUTTON,
+            Shift.DriverDebug,
+            Shift.None,
+            ButtonType.Click
+        ),
+        new DigitalOperationDescription(
+            DigitalOperation.DisableFieldOrientation,
+            UserInputDevice.Driver,
+            UserInputDeviceButton.XBONE_X_BUTTON,
+            Shift.DriverDebug,
+            Shift.None,
+            ButtonType.Click
+        ),
     };
 
     public static MacroOperationDescription[] MacroSchema = new MacroOperationDescription[]
