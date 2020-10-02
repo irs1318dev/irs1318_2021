@@ -32,10 +32,11 @@ public class DriveTrainMechanism implements IMechanism
 
     public boolean fieldOriented;
     public double robotYaw;
+    public PIDHandler omegaPID;
 
     private final PositionManager positionManager;
     private final ILogger logger;
-
+    private final ITimer timer;
     private Driver driver;
 
     private ITalonFX[] angleMotors;
@@ -65,8 +66,10 @@ public class DriveTrainMechanism implements IMechanism
     public DriveTrainMechanism(
         LoggingManager logger,
         IRobotProvider provider,
-        PositionManager positionManager)
+        PositionManager positionManager,
+        ITimer timer)
     {
+        this.timer = timer;
         this.logger = logger;
         this.positionManager = positionManager;
 
@@ -124,6 +127,16 @@ public class DriveTrainMechanism implements IMechanism
         this.angleErrors = new double[4];
         this.encoderVoltages = new double[4];
         this.encoderAngles = new double[4];
+
+        this.omegaPID = new PIDHandler(
+            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KP, 
+            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KI, 
+            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KD, 
+            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KF, 
+            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KS, 
+            TuningConstants.DRIVETRAIN_OMEGA_MIN_OUTPUT, 
+            TuningConstants.DRIVETRAIN_OMEGA_MAX_OUTPUT, 
+            this.timer);
     }
 
     @Override
@@ -261,13 +274,19 @@ public class DriveTrainMechanism implements IMechanism
         {
             Vcy = Math.sin(robotYaw) * Vcx_raw + Math.cos(robotYaw) * Vcy_raw;
             Vcx = Math.cos(robotYaw) * Vcx_raw - Math.sin(robotYaw) * Vcy_raw;
-            omega = 0.0; // incomplete
+            omega = Math.atan2(turnX, turnY) * Helpers.RADIANS_TO_DEGREES;
         } 
         else 
         {
             Vcy = Vcy_raw;
             Vcx = Vcx_raw;
             omega = turnX * TuningConstants.DRIVETRAIN_TURN_VELOCITY;
+        }
+
+        if (TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY
+            && Helpers.WithinDelta(omega, 0.0, TuningConstants.DRIVETRAIN_SKIP_OMEGA_ON_ZERO_DELTA))
+        {
+            double omegaGoal = this.omegaPID.calculatePosition(omega, this.robotYaw);
         }
 
         for (int i = 0; i < 4; i++) 
