@@ -28,6 +28,9 @@ public class HardwareConstants
     public static final boolean[] DRIVETRAIN_DRIVE_MOTOR_INVERT_OUTPUT = new boolean[] { false, false, false, false };
     public static final boolean[] DRIVETRAIN_DRIVE_MOTOR_INVERT_SENSOR = new boolean[] { false, false, false, false };
 
+    public static final int[] DRIVETRAIN_ANGLE_FORWARD_TICKS = {0, 0, 0, 0};
+    public static final int[] DRIVETRAIN_DRIVE_FORWARD_TICKS = {0, 0, 0, 0};
+
     public static final double[] DRIVETRAIN_ANGLE_MOTOR_ABSOLUTE_OFFSET = new double[] { 104.0, 292.0, 151.0, 98.0 };
 
     public static final double DRIVETRAIN_ANGLE_ENCODER_PULSES_PER_REVOLUTION = 2048.0;
