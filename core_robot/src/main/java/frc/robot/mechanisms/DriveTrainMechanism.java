@@ -219,68 +219,6 @@ public class DriveTrainMechanism implements IMechanism
       
     }
 
-    public static AnglePair getClosestAngle(double desiredAngle, double currentAngle)
-    {
-        double multiplicand = Math.floor(currentAngle / 360.0);
-
-        AnglePair[] closeRotations =
-        {
-            new AnglePair(desiredAngle + 360 * multiplicand - 180, true),
-            new AnglePair(desiredAngle + 360 * multiplicand, false),
-            new AnglePair(desiredAngle + 360 * multiplicand + 180, true)
-        };
-
-        AnglePair best = new AnglePair(currentAngle, false);
-        double bestDistance = Double.POSITIVE_INFINITY;
-        for (int i = 0; i < 3; i++)
-        {
-            double angle = closeRotations[i].getAngle();
-            double angleDistance = Math.abs(currentAngle - angle);
-            if (angleDistance < bestDistance)
-            {
-                best = closeRotations[i];
-                bestDistance = angleDistance;
-            }
-        }
-
-        return best;
-    }
-
-    private static class AnglePair
-    {
-        private double angle;
-        private boolean swapDirection;
-
-        /**
-         * Initializes a new Setpoint
-         * @param angle value to apply
-         * @param swapDirection value to apply
-         */
-        public AnglePair(double angle, boolean swapDirection)
-        {
-            this.angle = angle;
-            this.swapDirection = swapDirection;
-        }
-
-        /**
-         * gets the angle value
-         * @return angle value
-         */
-        public double getAngle()
-        {
-            return this.angle;
-        }
-
-        /**
-         * gets the direction
-         * @return if direction is swapped
-         */
-        public boolean getDirection()
-        {
-            return this.swapDirection;
-        }
-    }
-
     public void stop()
     {
         for (int i = 0; i < 4; i++)
@@ -333,8 +271,6 @@ public class DriveTrainMechanism implements IMechanism
             omega = turnX * TuningConstants.DRIVETRAIN_TURN_VELOCITY;
         }
 
-        
-
         for (int i = 0; i < 4; i++) 
         {
             double Vx = Vcx - omega * Ry[i]; // quik mafs
@@ -352,9 +288,9 @@ public class DriveTrainMechanism implements IMechanism
             {
                 anglePositionGoal = Helpers.EnforceRange(Helpers.atan2d(-Vx, Vy), -180.0, 180.0);
                 double currentAngle = this.anglePositions[i] / TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS;
-                AnglePair anglePair = DriveTrainMechanism.getClosestAngle(anglePositionGoal, currentAngle);
+                AnglePair anglePair = AnglePair.getClosestAngle(anglePositionGoal, currentAngle);
                 anglePositionGoal = anglePair.getAngle() * TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS;
-                if (anglePair.getDirection()) 
+                if (anglePair.getSwapDirection()) 
                 {
                     this.isDirectionSwapped[i] = !this.isDirectionSwapped[i];
                 }
