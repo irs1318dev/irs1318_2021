@@ -68,7 +68,7 @@ public class ButtonMap implements IButtonMap
             ButtonType.Click
         ),
         new DigitalOperationDescription(
-            DigitalOperation.EnableFieldOrientation,
+            DigitalOperation.DriveTrainEnableFieldOrientation,
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_B_BUTTON,
             Shift.DriverDebug,
@@ -76,7 +76,7 @@ public class ButtonMap implements IButtonMap
             ButtonType.Click
         ),
         new DigitalOperationDescription(
-            DigitalOperation.DisableFieldOrientation,
+            DigitalOperation.DriveTrainDisableFieldOrientation,
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_X_BUTTON,
             Shift.DriverDebug,

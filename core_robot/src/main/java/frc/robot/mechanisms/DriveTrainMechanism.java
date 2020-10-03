@@ -30,9 +30,10 @@ public class DriveTrainMechanism implements IMechanism
     private static final double POWERLEVEL_MIN = -1.0;
     private static final double POWERLEVEL_MAX = 1.0;
 
-    public boolean fieldOriented;
-    public double robotYaw;
-    public PIDHandler omegaPID;
+    private boolean fieldOriented;
+    private double robotYaw;
+    private double desiredYaw;
+    private PIDHandler omegaPID;
 
     private final PositionManager positionManager;
     private final ILogger logger;
@@ -51,6 +52,8 @@ public class DriveTrainMechanism implements IMechanism
     private double[] angleErrors;
     private double[] encoderVoltages;
     private double[] encoderAngles;
+    private boolean[] isDirectionSwapped;
+    
 
     private final LoggingKey[] encoderAnglesLK = { LoggingKey.DriveTrainAbsoluteEncoderPosition1, LoggingKey.DriveTrainAbsoluteEncoderPosition2, LoggingKey.DriveTrainAbsoluteEncoderPosition3, LoggingKey.DriveTrainAbsoluteEncoderPosition4 };
     private final LoggingKey[] driveVelocitiesLK = { LoggingKey.DriveTrainDriveVelocity1, LoggingKey.DriveTrainDriveVelocity2, LoggingKey.DriveTrainDriveVelocity3, LoggingKey.DriveTrainDriveVelocity4 };
@@ -128,6 +131,8 @@ public class DriveTrainMechanism implements IMechanism
         this.encoderVoltages = new double[4];
         this.encoderAngles = new double[4];
 
+        this.isDirectionSwapped = new boolean[4];
+
         this.omegaPID = new PIDHandler(
             TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KP, 
             TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KI, 
@@ -148,8 +153,6 @@ public class DriveTrainMechanism implements IMechanism
     @Override
     public void readSensors()
     {
-        this.robotYaw = this.positionManager.getNavxAngle();
-
         for (int i = 0; i < 4; i++)
         {
             this.driveVelocities[i] = this.driveMotors[i].getVelocity();
@@ -173,6 +176,19 @@ public class DriveTrainMechanism implements IMechanism
 
     public void update()
     {
+        this.robotYaw = this.positionManager.getNavxAngle();
+
+        if (this.driver.getDigital(DigitalOperation.DriveTrainEnableFieldOrientation))
+        {
+            this.fieldOriented = true;
+            this.desiredYaw = this.robotYaw;
+        }
+
+        if (this.driver.getDigital(DigitalOperation.DriveTrainDisableFieldOrientation))
+        {
+            this.fieldOriented = false;
+        }
+
         Setpoint[] setpoints = this.calculateSetpoints();
 
         for (int i = 0; i < 4; i++)
@@ -195,46 +211,74 @@ public class DriveTrainMechanism implements IMechanism
         {
             for (int i = 0; i < 4; i++)
             {
-                this.driveMotors[i].setPosition(HardwareConstants.DRIVETRAIN_DRIVE_FORWARD_TICKS[i]);
-                this.angleMotors[i].setPosition(HardwareConstants.DRIVETRAIN_ANGLE_FORWARD_TICKS[i]);
+                this.driveMotors[i].setPosition(0);
+                double tickDifference = (this.encoderAngles[i] - HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_ABSOLUTE_OFFSET[i]) * HardwareConstants.DRIVETRAIN_ANGLE_TICKS_PER_DEGREE;
+                this.angleMotors[i].setPosition((int)tickDifference);
             }
         }
-        if (this.driver.getDigital(DigitalOperation.EnableFieldOrientation))
-        {
-            this.fieldOriented = true;
-        }
-
-        if (this.driver.getDigital(DigitalOperation.DisableFieldOrientation))
-        {
-            this.fieldOriented = false;
-        }
+      
     }
 
-    public static double getClosestAngle(double desiredAngle, double currentAngle)
+    public static AnglePair getClosestAngle(double desiredAngle, double currentAngle)
     {
         double multiplicand = Math.floor(currentAngle / 360.0);
 
-        double[] closeRotations =
+        AnglePair[] closeRotations =
         {
-            (desiredAngle + 360.0 * (multiplicand - 1.0)),
-            (desiredAngle + 360.0 * multiplicand),
-            (desiredAngle + 360.0 * (multiplicand + 1.0)),
+            new AnglePair(desiredAngle + 360 * multiplicand - 180, true),
+            new AnglePair(desiredAngle + 360 * multiplicand, false),
+            new AnglePair(desiredAngle + 360 * multiplicand + 180, true)
         };
 
-        double best = currentAngle;
+        AnglePair best = new AnglePair(currentAngle, false);
         double bestDistance = Double.POSITIVE_INFINITY;
         for (int i = 0; i < 3; i++)
         {
-            double angle = closeRotations[i];
+            double angle = closeRotations[i].getAngle();
             double angleDistance = Math.abs(currentAngle - angle);
             if (angleDistance < bestDistance)
             {
-                best = angle;
+                best = closeRotations[i];
                 bestDistance = angleDistance;
             }
         }
 
         return best;
+    }
+
+    private class AnglePair
+    {
+        private double angle;
+        private boolean swapDirection;
+
+        /**
+         * Initializes a new Setpoint
+         * @param drive value to apply
+         * @param angle value to apply
+         */
+        public Setpoint(double angle, boolean swapDirection)
+        {
+            this.angle = angle;
+            this.swapDirection = swapDirection;
+        }
+
+        /**
+         * gets the drive setpoint
+         * @return drive setpoint value
+         */
+        public double getAngle()
+        {
+            return this.angle;
+        }
+
+        /**
+         * gets the angle setpoint
+         * @return angle setpoint value
+         */
+        public boolean getDirection()
+        {
+            return this.swapDirection;
+        }
     }
 
     public void stop()
@@ -274,7 +318,13 @@ public class DriveTrainMechanism implements IMechanism
         {
             Vcy = Math.sin(robotYaw) * Vcx_raw + Math.cos(robotYaw) * Vcy_raw;
             Vcx = Math.cos(robotYaw) * Vcx_raw - Math.sin(robotYaw) * Vcy_raw;
-            omega = Math.atan2(turnX, turnY) * Helpers.RADIANS_TO_DEGREES;
+            
+            if (TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY
+            && Helpers.WithinDelta(Math.sqrt(turnX * turnX + turnY * turnY), 0.0, TuningConstants.DRIVETRAIN_SKIP_OMEGA_ON_ZERO_DELTA))
+            {
+                this.desiredYaw = Math.atan2(turnX, turnY) * Helpers.RADIANS_TO_DEGREES;
+            }
+            omega = this.omegaPID.calculatePosition(this.desiredYaw, this.robotYaw);
         } 
         else 
         {
@@ -283,11 +333,7 @@ public class DriveTrainMechanism implements IMechanism
             omega = turnX * TuningConstants.DRIVETRAIN_TURN_VELOCITY;
         }
 
-        if (TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY
-            && Helpers.WithinDelta(omega, 0.0, TuningConstants.DRIVETRAIN_SKIP_OMEGA_ON_ZERO_DELTA))
-        {
-            double omegaGoal = this.omegaPID.calculatePosition(omega, this.robotYaw);
-        }
+        
 
         for (int i = 0; i < 4; i++) 
         {
@@ -306,8 +352,12 @@ public class DriveTrainMechanism implements IMechanism
             {
                 anglePositionGoal = Helpers.EnforceRange(Helpers.atan2d(-Vx, Vy), -180.0, 180.0);
                 double currentAngle = this.anglePositions[i] / TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS;
-                anglePositionGoal = DriveTrainMechanism.getClosestAngle(anglePositionGoal, currentAngle);
-                anglePositionGoal *= TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS;
+                AnglePair anglePair = DriveTrainMechanism.getClosestAngle(anglePositionGoal, currentAngle);
+                anglePositionGoal = anglePair.getAngle() * TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS;
+                if (anglePair.getDirection()) 
+                {
+                    this.isDirectionSwapped[i] = !this.isDirectionSwapped[i];
+                }
             }
 
             driveVelocityGoal = this.applyPowerLevelRange(driveVelocityGoal);
@@ -315,6 +365,10 @@ public class DriveTrainMechanism implements IMechanism
             this.assertPowerLevelRange(driveVelocityGoal, "drive");
 
             driveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS;
+            if (this.isDirectionSwapped[i])
+            {
+                driveVelocityGoal *= -1.0;
+            }
 
             result[i] = new Setpoint(driveVelocityGoal, anglePositionGoal);
         }
