@@ -246,25 +246,25 @@ public class DriveTrainMechanism implements IMechanism
         return best;
     }
 
-    private class AnglePair
+    private static class AnglePair
     {
         private double angle;
         private boolean swapDirection;
 
         /**
          * Initializes a new Setpoint
-         * @param drive value to apply
          * @param angle value to apply
+         * @param swapDirection value to apply
          */
-        public Setpoint(double angle, boolean swapDirection)
+        public AnglePair(double angle, boolean swapDirection)
         {
             this.angle = angle;
             this.swapDirection = swapDirection;
         }
 
         /**
-         * gets the drive setpoint
-         * @return drive setpoint value
+         * gets the angle value
+         * @return angle value
          */
         public double getAngle()
         {
@@ -272,8 +272,8 @@ public class DriveTrainMechanism implements IMechanism
         }
 
         /**
-         * gets the angle setpoint
-         * @return angle setpoint value
+         * gets the direction
+         * @return if direction is swapped
          */
         public boolean getDirection()
         {
