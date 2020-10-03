@@ -30,20 +30,22 @@ public class DriveTrainMechanism implements IMechanism
     private static final double POWERLEVEL_MIN = -1.0;
     private static final double POWERLEVEL_MAX = 1.0;
 
-    private boolean fieldOriented;
-    private double robotYaw;
-    private double desiredYaw;
-    private PIDHandler omegaPID;
-
     private final PositionManager positionManager;
     private final ILogger logger;
     private final ITimer timer;
+
+    private final ITalonFX[] angleMotors;
+    private final ITalonFX[] driveMotors;
+    private final IAnalogInput[] absoluteEncoders;
+
     private Driver driver;
 
-    private ITalonFX[] angleMotors;
-    private ITalonFX[] driveMotors;
-    private IAnalogInput[] absoluteEncoders;
+    private boolean fieldOriented;
+    private PIDHandler omegaPID;
+    private double desiredYaw;
+    private boolean[] isDirectionSwapped;
 
+    private double robotYaw;
     private double[] driveVelocities;
     private int[] drivePositions;
     private double[] driveErrors;
@@ -52,8 +54,6 @@ public class DriveTrainMechanism implements IMechanism
     private double[] angleErrors;
     private double[] encoderVoltages;
     private double[] encoderAngles;
-    private boolean[] isDirectionSwapped;
-    
 
     private final LoggingKey[] encoderAnglesLK = { LoggingKey.DriveTrainAbsoluteEncoderPosition1, LoggingKey.DriveTrainAbsoluteEncoderPosition2, LoggingKey.DriveTrainAbsoluteEncoderPosition3, LoggingKey.DriveTrainAbsoluteEncoderPosition4 };
     private final LoggingKey[] driveVelocitiesLK = { LoggingKey.DriveTrainDriveVelocity1, LoggingKey.DriveTrainDriveVelocity2, LoggingKey.DriveTrainDriveVelocity3, LoggingKey.DriveTrainDriveVelocity4 };
@@ -184,7 +184,8 @@ public class DriveTrainMechanism implements IMechanism
             this.desiredYaw = this.robotYaw;
         }
 
-        if (this.driver.getDigital(DigitalOperation.DriveTrainDisableFieldOrientation))
+        if (this.driver.getDigital(DigitalOperation.DriveTrainDisableFieldOrientation) ||
+            !this.positionManager.getNavxIsConnected())
         {
             this.fieldOriented = false;
         }
@@ -216,7 +217,6 @@ public class DriveTrainMechanism implements IMechanism
                 this.angleMotors[i].setPosition((int)tickDifference);
             }
         }
-      
     }
 
     public void stop()
@@ -254,23 +254,31 @@ public class DriveTrainMechanism implements IMechanism
 
         if (this.fieldOriented) 
         {
-            Vcy = Math.sin(robotYaw) * Vcx_raw + Math.cos(robotYaw) * Vcy_raw;
-            Vcx = Math.cos(robotYaw) * Vcx_raw - Math.sin(robotYaw) * Vcy_raw;
-            
+            Vcy = Helpers.sind(this.robotYaw) * Vcx_raw + Helpers.cosd(this.robotYaw) * Vcy_raw;
+            Vcx = Helpers.cosd(this.robotYaw) * Vcx_raw - Helpers.sind(this.robotYaw) * Vcy_raw;
+
             if (TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY
-            && Helpers.WithinDelta(Math.sqrt(turnX * turnX + turnY * turnY), 0.0, TuningConstants.DRIVETRAIN_SKIP_OMEGA_ON_ZERO_DELTA))
+                && !Helpers.WithinDelta(Math.sqrt(turnX * turnX + turnY * turnY), 0.0, TuningConstants.DRIVETRAIN_SKIP_OMEGA_ON_ZERO_DELTA))
             {
-                this.desiredYaw = Math.atan2(turnX, turnY) * Helpers.RADIANS_TO_DEGREES;
+                double angleGoal = Helpers.atan2d(-turnX, turnY);
+                System.out.println(String.format("angleGoal: %f", angleGoal));
+                AnglePair anglePair = AnglePair.getClosestAngle(angleGoal, this.robotYaw, false);
+                this.desiredYaw = anglePair.getAngle();
             }
-            omega = this.omegaPID.calculatePosition(this.desiredYaw, this.robotYaw);
+
+            System.out.println(String.format("%f, %f", this.desiredYaw, this.robotYaw));
+
+            omega = -1.0 * this.omegaPID.calculatePosition(this.desiredYaw, this.robotYaw);
+            System.out.println(String.format("omega: %f", omega));
         } 
         else 
         {
             Vcy = Vcy_raw;
             Vcx = Vcx_raw;
-            omega = turnX * TuningConstants.DRIVETRAIN_TURN_VELOCITY;
+            omega = turnX;
         }
 
+        omega *= TuningConstants.DRIVETRAIN_TURN_VELOCITY;
         for (int i = 0; i < 4; i++) 
         {
             double Vx = Vcx - omega * Ry[i]; // quik mafs
@@ -288,12 +296,9 @@ public class DriveTrainMechanism implements IMechanism
             {
                 anglePositionGoal = Helpers.EnforceRange(Helpers.atan2d(-Vx, Vy), -180.0, 180.0);
                 double currentAngle = this.anglePositions[i] / TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS;
-                AnglePair anglePair = AnglePair.getClosestAngle(anglePositionGoal, currentAngle);
+                AnglePair anglePair = AnglePair.getClosestAngle(anglePositionGoal, currentAngle, true);
                 anglePositionGoal = anglePair.getAngle() * TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS;
-                if (anglePair.getSwapDirection()) 
-                {
-                    this.isDirectionSwapped[i] = !this.isDirectionSwapped[i];
-                }
+                this.isDirectionSwapped[i] = anglePair.getSwapDirection();
             }
 
             driveVelocityGoal = this.applyPowerLevelRange(driveVelocityGoal);

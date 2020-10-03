@@ -4,6 +4,7 @@ import frc.robot.*;
 import frc.robot.common.*;
 import frc.robot.common.robotprovider.*;
 import frc.robot.driver.AnalogOperation;
+import frc.robot.driver.DigitalOperation;
 import frc.robot.driver.common.Driver;
 
 import com.google.inject.Inject;
@@ -34,6 +35,7 @@ public class PositionManager implements IMechanism
     // Orientation
     private double navxAngle;
     private double startAngle;
+    private double resetAngle;
 
     /**
      * Initializes a new PositionManager
@@ -57,6 +59,7 @@ public class PositionManager implements IMechanism
 
         this.navxAngle = 0.0;
         this.startAngle = 0.0;
+        this.resetAngle = 0.0;
     }
 
     /**
@@ -82,7 +85,7 @@ public class PositionManager implements IMechanism
     {
         this.navxIsConnected = this.navx.isConnected();
 
-        this.navxAngle = -1.0 * this.navx.getAngle();
+        this.navxAngle = -1.0 * this.navx.getAngle() - this.resetAngle;
         this.navxX = this.navx.getDisplacementX() * 100.0;
         this.navxY = this.navx.getDisplacementY() * 100.0;
         this.navxZ = this.navx.getDisplacementZ() * 100.0;
@@ -107,6 +110,11 @@ public class PositionManager implements IMechanism
         if (angle != 0.0)
         {
             this.startAngle = angle;
+        }
+
+        if (this.driver.getDigital(DigitalOperation.PositionResetFieldOrientation))
+        {
+            this.resetAngle = this.navxAngle;
         }
     }
 
@@ -175,6 +183,7 @@ public class PositionManager implements IMechanism
 
         this.navxAngle = 0.0;
         this.startAngle = 0.0;
+        this.resetAngle = 0.0;
 
         this.navx.reset();
         this.navx.resetDisplacement();

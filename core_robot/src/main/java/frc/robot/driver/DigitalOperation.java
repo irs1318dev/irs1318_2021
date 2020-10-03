@@ -2,6 +2,8 @@ package frc.robot.driver;
 
 public enum DigitalOperation implements IOperation
 {
+    PositionResetFieldOrientation,
+
     // Vision operations:
     VisionForceDisable,
     VisionEnable,

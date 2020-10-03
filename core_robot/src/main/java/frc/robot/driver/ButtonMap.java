@@ -83,6 +83,14 @@ public class ButtonMap implements IButtonMap
             Shift.None,
             ButtonType.Click
         ),
+        new DigitalOperationDescription(
+            DigitalOperation.PositionResetFieldOrientation,
+            UserInputDevice.Driver,
+            UserInputDeviceButton.XBONE_Y_BUTTON,
+            Shift.DriverDebug,
+            Shift.None,
+            ButtonType.Click
+        ),
     };
 
     public static MacroOperationDescription[] MacroSchema = new MacroOperationDescription[]

@@ -275,13 +275,13 @@ public class TuningConstants
     public static final double[] DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KF = new double[] { 0.0478, 0.0478, 0.0478, 0.0478 }; // .0478 ==> ~ 1023 / 21400 (100% control authority)
     public static final double DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS = 17000.0; // 21400 was highest speed at full throttle FF on blocks
 
-    public static final double DRIVETRAIN_OMEGA_POSITION_PID_KP = 0.0;
+    public static final double DRIVETRAIN_OMEGA_POSITION_PID_KP = 0.004;
     public static final double DRIVETRAIN_OMEGA_POSITION_PID_KI = 0.0;
     public static final double DRIVETRAIN_OMEGA_POSITION_PID_KD = 0.0;
     public static final double DRIVETRAIN_OMEGA_POSITION_PID_KF = 0.0;
-    public static final double DRIVETRAIN_OMEGA_POSITION_PID_KS = 0.0;
-    public static final double DRIVETRAIN_OMEGA_MAX_OUTPUT = 0.0;
-    public static final double DRIVETRAIN_OMEGA_MIN_OUTPUT = 0.0;
+    public static final double DRIVETRAIN_OMEGA_POSITION_PID_KS = 1.0;
+    public static final double DRIVETRAIN_OMEGA_MAX_OUTPUT = 1.0;
+    public static final double DRIVETRAIN_OMEGA_MIN_OUTPUT = -1.0;
 
     public static final boolean DRIVETRAIN_VOLTAGE_COMPENSATION_ENABLED = false;
     public static final double DRIVETRAIN_VOLTAGE_COMPENSATION = 0.0;

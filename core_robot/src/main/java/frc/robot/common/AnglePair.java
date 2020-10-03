@@ -25,7 +25,7 @@ public class AnglePair
      * @param currentAngle current angle in degrees (any value)
      * @return pair containing closest angle fitting desired angle from current angle in degrees
      */
-    public static AnglePair getClosestAngle(double desiredAngle, double currentAngle)
+    public static AnglePair getClosestAngle(double desiredAngle, double currentAngle, boolean allowReverse)
     {
         if (TuningConstants.THROW_EXCEPTIONS && 
             !Helpers.WithinRange(desiredAngle, -180.0, 180.0))
@@ -33,38 +33,32 @@ public class AnglePair
             throw new RuntimeException(String.format("expect desiredAngle to be between (-180, 180). actual %f", desiredAngle));
         }
 
-        double difference = ((desiredAngle % 360.0) - (currentAngle % 360.0)) % 360.0;
-        AnglePair[] closeRotations = new AnglePair[3];
-        if (difference >= 0.0)
+        // get the difference in degrees between -360 and 360
+        double difference = (desiredAngle - currentAngle) % 360.0;
+
+        // change the range from -180 to 180
+        if (difference < -180.0)
         {
-            closeRotations[0] = new AnglePair(currentAngle + difference, false);
-            closeRotations[1] = new AnglePair(currentAngle + difference - 360.0, false);
-            closeRotations[2] = new AnglePair(currentAngle + difference - 180.0, true);
+            difference += 360.0;
         }
-        else
+        else if (difference > 180.0)
         {
-            closeRotations[0] = new AnglePair(currentAngle + difference, false);
-            closeRotations[1] = new AnglePair(currentAngle + difference + 360.0, false);
-            closeRotations[2] = new AnglePair(currentAngle + difference + 180.0, true);
+            difference -= 360.0;
         }
 
-        AnglePair best = new AnglePair(currentAngle, false);
-        double bestDistance = Double.POSITIVE_INFINITY;
-        for (int i = 0; i < 3; i++)
+        if (allowReverse)
         {
-            AnglePair pair = closeRotations[i];
-            if (pair != null)
+            if (difference < -90.0)
             {
-                double angleDistance = Math.abs(currentAngle - pair.getAngle());
-                if (angleDistance < bestDistance)
-                {
-                    best = pair;
-                    bestDistance = angleDistance;
-                }
+                return new AnglePair(currentAngle + difference + 180.0, true);
+            }
+            else if (difference > 90.0)
+            {
+                return new AnglePair(currentAngle + difference - 180.0, true);
             }
         }
 
-        return best;
+        return new AnglePair(currentAngle + difference, false);
     }
 
     public double getAngle()
