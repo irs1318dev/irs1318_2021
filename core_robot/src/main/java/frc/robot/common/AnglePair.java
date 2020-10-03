@@ -1,5 +1,7 @@
 package frc.robot.common;
 
+import frc.robot.TuningConstants;
+
 public class AnglePair
 {
     private double angle;
@@ -16,27 +18,49 @@ public class AnglePair
         this.swapDirection = swapDirection;
     }
 
+    /**
+     * Get the closest angle equivalent to desiredAngle from current angle, swapping directions if it is closer
+     * Note: prefers the same direction if equivalent
+     * @param desiredAngle desired angle in degrees (between -180 and 180)
+     * @param currentAngle current angle in degrees (any value)
+     * @return pair containing closest angle fitting desired angle from current angle in degrees
+     */
     public static AnglePair getClosestAngle(double desiredAngle, double currentAngle)
     {
-        double multiplicand = Math.floor(currentAngle / 360.0);
-
-        AnglePair[] closeRotations =
+        if (TuningConstants.THROW_EXCEPTIONS && 
+            !Helpers.WithinRange(desiredAngle, -180.0, 180.0))
         {
-            new AnglePair(desiredAngle + 360.0 * multiplicand, false),
-            new AnglePair(desiredAngle + 360.0 * multiplicand - 180.0, true),
-            new AnglePair(desiredAngle + 360.0 * multiplicand + 180.0, true)
-        };
+            throw new RuntimeException(String.format("expect desiredAngle to be between (-180, 180). actual %f", desiredAngle));
+        }
+
+        double difference = ((desiredAngle % 360.0) - (currentAngle % 360.0)) % 360.0;
+        AnglePair[] closeRotations = new AnglePair[3];
+        if (difference >= 0.0)
+        {
+            closeRotations[0] = new AnglePair(currentAngle + difference, false);
+            closeRotations[1] = new AnglePair(currentAngle + difference - 360.0, false);
+            closeRotations[2] = new AnglePair(currentAngle + difference - 180.0, true);
+        }
+        else
+        {
+            closeRotations[0] = new AnglePair(currentAngle + difference, false);
+            closeRotations[1] = new AnglePair(currentAngle + difference + 360.0, false);
+            closeRotations[2] = new AnglePair(currentAngle + difference + 180.0, true);
+        }
 
         AnglePair best = new AnglePair(currentAngle, false);
         double bestDistance = Double.POSITIVE_INFINITY;
         for (int i = 0; i < 3; i++)
         {
             AnglePair pair = closeRotations[i];
-            double angleDistance = Math.abs(currentAngle - pair.getAngle());
-            if (angleDistance < bestDistance)
+            if (pair != null)
             {
-                best = pair;
-                bestDistance = angleDistance;
+                double angleDistance = Math.abs(currentAngle - pair.getAngle());
+                if (angleDistance < bestDistance)
+                {
+                    best = pair;
+                    bestDistance = angleDistance;
+                }
             }
         }
 

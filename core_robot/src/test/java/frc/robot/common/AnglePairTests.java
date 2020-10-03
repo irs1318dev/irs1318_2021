@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 
 public class AnglePairTests
 {
-    //@Test
+    @Test
     public void checkClosestAngle()
     {
         for (double goal = -180.0; goal <= 180.0; goal += 1.0)
@@ -26,10 +26,7 @@ public class AnglePairTests
 
                         Assertions.assertEquals(true, pair.getSwapDirection());
                     }
-                    else if (offset == -90.0)
-                    {
-                    }
-                    else if (offset < 90.0)
+                    else if (offset <= 90.0)
                     {
                         Assertions.assertEquals(
                             expected,
@@ -37,9 +34,6 @@ public class AnglePairTests
                             String.format("%f %f %f", goal, multiplier, offset));
 
                         Assertions.assertEquals(false, pair.getSwapDirection());
-                    }
-                    else if (offset == 90.0)
-                    {
                     }
                     else
                     {
@@ -53,16 +47,5 @@ public class AnglePairTests
                 }
             }
         }
-    }
-
-    @Test
-    public void checkClosestAngle1()
-    {
-        AnglePair pair = AnglePair.getClosestAngle(270.0, 361.0);
-        Assertions.assertEquals(
-            450.0,
-            pair.getAngle());
-
-        Assertions.assertEquals(true, pair.getSwapDirection());
     }
 }
