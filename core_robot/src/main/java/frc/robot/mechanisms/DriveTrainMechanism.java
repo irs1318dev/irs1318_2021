@@ -254,8 +254,8 @@ public class DriveTrainMechanism implements IMechanism
 
         if (this.fieldOriented) 
         {
-            Vcy = Helpers.sind(this.robotYaw) * Vcx_raw + Helpers.cosd(this.robotYaw) * Vcy_raw;
-            Vcx = Helpers.cosd(this.robotYaw) * Vcx_raw - Helpers.sind(this.robotYaw) * Vcy_raw;
+            Vcx = Helpers.cosd(this.robotYaw) * Vcx_raw + Helpers.sind(this.robotYaw) * Vcy_raw;
+            Vcy = - Helpers.sind(this.robotYaw) * Vcx_raw + Helpers.cosd(this.robotYaw) * Vcy_raw;
 
             if (TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY
                 && !Helpers.WithinDelta(Math.sqrt(turnX * turnX + turnY * turnY), 0.0, TuningConstants.DRIVETRAIN_SKIP_OMEGA_ON_ZERO_DELTA))
