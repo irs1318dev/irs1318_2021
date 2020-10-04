@@ -37,6 +37,8 @@ public class RobotSimulator implements IRealWorldSimulator
     private static final FauxbotSensorConnection AbsoluteEncoder3Connection = new FauxbotSensorConnection(FauxbotSensorConnection.SensorConnector.AnalogInput, 2);
     private static final FauxbotSensorConnection AbsoluteEncoder4Connection = new FauxbotSensorConnection(FauxbotSensorConnection.SensorConnector.AnalogInput, 3);
 
+    private static final FauxbotSensorConnection NavXConnection = new FauxbotSensorConnection(FauxbotSensorConnection.SensorConnector.NavX, 0);
+
     private static final FauxbotActuatorConnection[] DriveMotors =
         new FauxbotActuatorConnection[]
         {
@@ -87,7 +89,8 @@ public class RobotSimulator implements IRealWorldSimulator
             RobotSimulator.AbsoluteEncoder1Connection,
             RobotSimulator.AbsoluteEncoder2Connection,
             RobotSimulator.AbsoluteEncoder3Connection,
-            RobotSimulator.AbsoluteEncoder4Connection
+            RobotSimulator.AbsoluteEncoder4Connection,
+            RobotSimulator.NavXConnection,
         };
 
     private final FauxbotActuatorConnection[] actuators =
@@ -115,6 +118,11 @@ public class RobotSimulator implements IRealWorldSimulator
             this.put(RobotSimulator.DriveEncoder2Connection, "Drive encoder 2");
             this.put(RobotSimulator.DriveEncoder3Connection, "Drive encoder 3");
             this.put(RobotSimulator.DriveEncoder4Connection, "Drive encoder 4");
+            this.put(RobotSimulator.AbsoluteEncoder1Connection, "Absolute encoder 1");
+            this.put(RobotSimulator.AbsoluteEncoder2Connection, "Absolute encoder 2");
+            this.put(RobotSimulator.AbsoluteEncoder3Connection, "Absolute encoder 3");
+            this.put(RobotSimulator.AbsoluteEncoder4Connection, "Absolute encoder 4");
+            this.put(RobotSimulator.NavXConnection, "NavX Yaw");
         }
     };
 
@@ -177,7 +185,8 @@ public class RobotSimulator implements IRealWorldSimulator
             connection == RobotSimulator.DriveEncoder1Connection ||
             connection == RobotSimulator.DriveEncoder2Connection ||
             connection == RobotSimulator.DriveEncoder3Connection ||
-            connection == RobotSimulator.DriveEncoder4Connection)
+            connection == RobotSimulator.DriveEncoder4Connection ||
+            connection == RobotSimulator.NavXConnection)
         {
             return true;
         }
@@ -215,6 +224,14 @@ public class RobotSimulator implements IRealWorldSimulator
             return -17000.0;
         }
 
+        if (connection == RobotSimulator.AbsoluteEncoder1Connection ||
+            connection == RobotSimulator.AbsoluteEncoder2Connection ||
+            connection == RobotSimulator.AbsoluteEncoder3Connection ||
+            connection == RobotSimulator.AbsoluteEncoder4Connection)
+        {
+            return 0.0;
+        }
+
         return 0;
     }
 
@@ -235,6 +252,14 @@ public class RobotSimulator implements IRealWorldSimulator
             connection == RobotSimulator.DriveEncoder4Connection)
         {
             return 17000.0;
+        }
+
+        if (connection == RobotSimulator.AbsoluteEncoder1Connection ||
+            connection == RobotSimulator.AbsoluteEncoder2Connection ||
+            connection == RobotSimulator.AbsoluteEncoder3Connection ||
+            connection == RobotSimulator.AbsoluteEncoder4Connection)
+        {
+            return 359.9;
         }
 
         return 0;

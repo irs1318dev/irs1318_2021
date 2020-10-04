@@ -245,7 +245,6 @@ public class FauxbotApplication extends Application
                                     (MouseEvent event) ->
                                     {
                                         joystick.getButtonProperty(buttonNumber).set(true);
-                                        ;
                                     });
 
                                 grid.add(operationButton, 1, thisRowIndex);
@@ -263,7 +262,6 @@ public class FauxbotApplication extends Application
                                     (MouseEvent event) ->
                                     {
                                         joystick.getButtonProperty(buttonNumber).set(true);
-                                        ;
                                     });
 
                                 grid.add(operationButton, 1, thisRowIndex);
@@ -351,6 +349,29 @@ public class FauxbotApplication extends Application
                 else if (sensor instanceof FauxbotEncoder)
                 {
                     DoubleProperty sensorProperty = ((FauxbotEncoder)sensor).getProperty();
+                    if (useTextBox)
+                    {
+                        TextField sensorTextBox = new TextField();
+                        grid.add(sensorTextBox, 1, thisRowIndex);
+                        Bindings.bindBidirectional(sensorTextBox.textProperty(), sensorProperty, new NumberStringConverter());
+                    }
+                    else
+                    {
+                        double min = this.simulator.getSensorMin(connection);
+                        double max = this.simulator.getSensorMax(connection);
+                        Slider sensorSlider = new Slider();
+                        sensorSlider.setMin(min);
+                        sensorSlider.setMax(max);
+                        sensorSlider.setBlockIncrement(0.1);
+                        sensorSlider.setShowTickMarks(true);
+
+                        grid.add(sensorSlider, 1, thisRowIndex);
+                        Bindings.bindBidirectional(sensorSlider.valueProperty(), sensorProperty);
+                    }
+                }
+                else if (sensor instanceof FauxbotNavx)
+                {
+                    DoubleProperty sensorProperty = ((FauxbotNavx)sensor).getProperty();
                     if (useTextBox)
                     {
                         TextField sensorTextBox = new TextField();
