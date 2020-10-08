@@ -190,8 +190,20 @@ public class DriveTrainMechanism implements IMechanism
             this.fieldOriented = false;
         }
 
-        Setpoint[] setpoints = this.calculateSetpoints();
+        if (this.driver.getDigital(DigitalOperation.DriveTrainReset))
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                this.driveMotors[i].setPosition(0);
+                double tickDifference = (this.encoderAngles[i] - HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_ABSOLUTE_OFFSET[i]) * HardwareConstants.DRIVETRAIN_ANGLE_TICKS_PER_DEGREE;
+                this.angleMotors[i].setPosition((int)tickDifference);
 
+                this.drivePositions[i] = 0;
+                this.anglePositions[i] = (int)tickDifference;
+            }
+        }
+
+        Setpoint[] setpoints = this.calculateSetpoints();
         for (int i = 0; i < 4; i++)
         {
             Setpoint current = setpoints[i];
@@ -205,16 +217,6 @@ public class DriveTrainMechanism implements IMechanism
             {
                 this.logger.logNumber(this.angleGoalLK[i], angleSetpoint);
                 this.angleMotors[i].set(angleSetpoint);
-            }
-        }
-
-        if (this.driver.getDigital(DigitalOperation.DriveTrainReset))
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                this.driveMotors[i].setPosition(0);
-                double tickDifference = (this.encoderAngles[i] - HardwareConstants.DRIVETRAIN_ANGLE_MOTOR_ABSOLUTE_OFFSET[i]) * HardwareConstants.DRIVETRAIN_ANGLE_TICKS_PER_DEGREE;
-                this.angleMotors[i].setPosition((int)tickDifference);
             }
         }
     }
@@ -282,8 +284,8 @@ public class DriveTrainMechanism implements IMechanism
             Double anglePositionGoal;
             double driveVelocityGoal;
             if (TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY
-                && Helpers.WithinDelta(Vx, 0.0, TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA)
-                && Helpers.WithinDelta(Vy, 0.0, TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA))
+                    && Helpers.WithinDelta(Vx, 0.0, TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA)
+                    && Helpers.WithinDelta(Vy, 0.0, TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA))
             {
                 driveVelocityGoal = 0.0;
                 anglePositionGoal = null;
