@@ -134,13 +134,13 @@ public class DriveTrainMechanism implements IMechanism
         this.isDirectionSwapped = new boolean[4];
 
         this.omegaPID = new PIDHandler(
-            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KP, 
-            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KI, 
-            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KD, 
-            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KF, 
-            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KS, 
-            TuningConstants.DRIVETRAIN_OMEGA_MIN_OUTPUT, 
-            TuningConstants.DRIVETRAIN_OMEGA_MAX_OUTPUT, 
+            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KP,
+            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KI,
+            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KD,
+            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KF,
+            TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KS,
+            TuningConstants.DRIVETRAIN_OMEGA_MIN_OUTPUT,
+            TuningConstants.DRIVETRAIN_OMEGA_MAX_OUTPUT,
             this.timer);
     }
 
@@ -228,7 +228,7 @@ public class DriveTrainMechanism implements IMechanism
         }
     }
 
-    private Setpoint[] calculateSetpoints() 
+    private Setpoint[] calculateSetpoints()
     {
         double a = this.driver.getAnalog(AnalogOperation.DriveTrainRotationA); // center of rotation set to center of robot for now
         double b = this.driver.getAnalog(AnalogOperation.DriveTrainRotationB);
@@ -251,7 +251,7 @@ public class DriveTrainMechanism implements IMechanism
         double Vcy;
         double Vcx;
         double omega;
-        if (this.fieldOriented) 
+        if (this.fieldOriented)
         {
             Vcx = Helpers.cosd(this.robotYaw) * Vcx_raw + Helpers.sind(this.robotYaw) * Vcy_raw;
             Vcy = Helpers.cosd(this.robotYaw) * Vcy_raw - Helpers.sind(this.robotYaw) * Vcx_raw;
@@ -274,21 +274,24 @@ public class DriveTrainMechanism implements IMechanism
         }
 
         omega *= TuningConstants.DRIVETRAIN_TURN_VELOCITY;
-        for (int i = 0; i < 4; i++) 
+        for (int i = 0; i < 4; i++)
         {
             double Vx = Vcx - omega * Ry[i]; // quik mafs
             double Vy = Vcy + omega * Rx[i]; // skidy drop pop pop
 
             Double anglePositionGoal;
-            double driveVelocityGoal = Math.sqrt(Vx * Vx + Vy * Vy);
+            double driveVelocityGoal;
             if (TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY
-                    && Helpers.WithinDelta(Vx, 0.0, TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA)
-                    && Helpers.WithinDelta(Vy, 0.0, TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA)) 
+                && Helpers.WithinDelta(Vx, 0.0, TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA)
+                && Helpers.WithinDelta(Vy, 0.0, TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA))
             {
+                driveVelocityGoal = 0.0;
                 anglePositionGoal = null;
-            } 
-            else 
+            }
+            else
             {
+                driveVelocityGoal = Math.sqrt(Vx * Vx + Vy * Vy);
+
                 anglePositionGoal = Helpers.EnforceRange(Helpers.atan2d(-Vx, Vy), -180.0, 180.0);
                 double currentAngle = this.anglePositions[i] / TuningConstants.DRIVETRAIN_ANGLE_MOTOR_POSITION_PID_KS;
                 AnglePair anglePair = AnglePair.getClosestAngle(anglePositionGoal, currentAngle, true);
