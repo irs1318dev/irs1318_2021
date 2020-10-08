@@ -294,9 +294,12 @@ public class TuningConstants
     public static final double DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA = 0.001;
     public static final double DRIVETRAIN_SKIP_OMEGA_ON_ZERO_DELTA = 0.25;
 
-    public static final double DRIVETRAIN_TRIGGER_AB_DEAD_ZONE = 0.15;
     public static final double DRIVETRAIN_DEAD_ZONE_TURN = 0.15;
     public static final double DRIVETRAIN_DEAD_ZONE_VELOCITY = 0.15;
+    public static final double DRIVETRAIN_DEAD_ZONE_TRIGGER_AB = 0.15;
+
+    public static final double DRIVETRAIN_ROTATION_A_MULTIPLIER = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE / 2.0;
+    public static final double DRIVETRAIN_ROTATION_B_MULTIPLIER = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE / 2.0;
 
     public static final double DRIVETRAIN_TURN_VELOCITY = 1.0 / 15.0; // convert from inches to percentage
 }

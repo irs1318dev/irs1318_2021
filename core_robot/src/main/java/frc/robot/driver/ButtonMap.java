@@ -55,13 +55,17 @@ public class ButtonMap implements IButtonMap
             UserInputDevice.Driver,
             AnalogAxis.XBONE_LT,
             ElectronicsConstants.INVERT_XBONE_RIGHT_X_AXIS,
-            TuningConstants.DRIVETRAIN_TRIGGER_AB_DEAD_ZONE),
+            -TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB,
+            TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB,
+            TuningConstants.DRIVETRAIN_ROTATION_A_MULTIPLIER),
         new AnalogOperationDescription(
             AnalogOperation.DriveTrainRotationB,
             UserInputDevice.Driver,
             AnalogAxis.XBONE_RT,
             ElectronicsConstants.INVERT_TRIGGER_AXIS,
-            TuningConstants.DRIVETRAIN_TRIGGER_AB_DEAD_ZONE),
+            -TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB,
+            TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB,
+            TuningConstants.DRIVETRAIN_ROTATION_B_MULTIPLIER),
     };
 
     public static DigitalOperationDescription[] DigitalOperationSchema = new DigitalOperationDescription[]
