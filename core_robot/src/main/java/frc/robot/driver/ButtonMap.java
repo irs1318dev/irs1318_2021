@@ -31,30 +31,37 @@ public class ButtonMap implements IButtonMap
             UserInputDevice.Driver,
             AnalogAxis.XBONE_LSY,
             ElectronicsConstants.INVERT_XBONE_LEFT_Y_AXIS,
-            TuningConstants.DRIVETRAIN_DEAD_ZONE_VELOCITY
-        ),
+            TuningConstants.DRIVETRAIN_DEAD_ZONE_VELOCITY),
         new AnalogOperationDescription(
             AnalogOperation.DriveTrainMoveSide,
             UserInputDevice.Driver,
             AnalogAxis.XBONE_LSX,
             ElectronicsConstants.INVERT_XBONE_LEFT_X_AXIS,
-            TuningConstants.DRIVETRAIN_DEAD_ZONE_VELOCITY
-        ),
+            TuningConstants.DRIVETRAIN_DEAD_ZONE_VELOCITY),
         new AnalogOperationDescription(
             AnalogOperation.DriveTrainTurnX,
             UserInputDevice.Driver,
             AnalogAxis.XBONE_RSX,
             ElectronicsConstants.INVERT_XBONE_RIGHT_X_AXIS,
-            TuningConstants.DRIVETRAIN_DEAD_ZONE_TURN
-        ),
+            TuningConstants.DRIVETRAIN_DEAD_ZONE_TURN),
         new AnalogOperationDescription(
             AnalogOperation.DriveTrainTurnY,
             UserInputDevice.Driver,
             AnalogAxis.XBONE_RSY,
-            ElectronicsConstants.INVERT_XBONE_RIGHT_Y_AXIS,
-            TuningConstants.DRIVETRAIN_DEAD_ZONE_TURN
-        ),
-
+            ElectronicsConstants.INVERT_TRIGGER_AXIS,
+            TuningConstants.DRIVETRAIN_DEAD_ZONE_TURN),
+        new AnalogOperationDescription(
+            AnalogOperation.DriveTrainRotationA,
+            UserInputDevice.Driver,
+            AnalogAxis.XBONE_LT,
+            ElectronicsConstants.INVERT_XBONE_RIGHT_X_AXIS,
+            TuningConstants.DRIVETRAIN_TRIGGER_AB_DEAD_ZONE),
+        new AnalogOperationDescription(
+            AnalogOperation.DriveTrainRotationB,
+            UserInputDevice.Driver,
+            AnalogAxis.XBONE_RT,
+            ElectronicsConstants.INVERT_TRIGGER_AXIS,
+            TuningConstants.DRIVETRAIN_TRIGGER_AB_DEAD_ZONE),
     };
 
     public static DigitalOperationDescription[] DigitalOperationSchema = new DigitalOperationDescription[]
@@ -65,32 +72,28 @@ public class ButtonMap implements IButtonMap
             UserInputDeviceButton.XBONE_A_BUTTON,
             Shift.DriverDebug,
             Shift.None,
-            ButtonType.Click
-        ),
+            ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.DriveTrainEnableFieldOrientation,
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_B_BUTTON,
             Shift.DriverDebug,
             Shift.None,
-            ButtonType.Click
-        ),
+            ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.DriveTrainDisableFieldOrientation,
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_X_BUTTON,
             Shift.DriverDebug,
             Shift.None,
-            ButtonType.Click
-        ),
+            ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.PositionResetFieldOrientation,
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_Y_BUTTON,
             Shift.DriverDebug,
             Shift.None,
-            ButtonType.Click
-        ),
+            ButtonType.Click),
     };
 
     public static MacroOperationDescription[] MacroSchema = new MacroOperationDescription[]
