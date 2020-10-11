@@ -30,11 +30,11 @@ public class HardwareConstants
 
     public static final double[] DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSET = new double[] { 106.0, 292.0, 104.0, 336.0 };
 
-    public static final double DRIVETRAIN_ANGLE_ENCODER_PULSES_PER_REVOLUTION = 2048.0;
-    public static final double DRIVETRAIN_ANGLE_GEAR_RATIO = 18.0; // set correctly    
-    public static final double DRIVETRAIN_ANGLE_DEGREES = 360.0;
-    public static final double DRIVETRAIN_ANGLE_PULSE_DISTANCE = HardwareConstants.DRIVETRAIN_ANGLE_DEGREES / (HardwareConstants.DRIVETRAIN_ANGLE_GEAR_RATIO * HardwareConstants.DRIVETRAIN_ANGLE_ENCODER_PULSES_PER_REVOLUTION);
-    public static final double DRIVETRAIN_ANGLE_TICKS_PER_DEGREE = (HardwareConstants.DRIVETRAIN_ANGLE_GEAR_RATIO * HardwareConstants.DRIVETRAIN_ANGLE_ENCODER_PULSES_PER_REVOLUTION) / HardwareConstants.DRIVETRAIN_ANGLE_DEGREES;
+    public static final double DRIVETRAIN_STEER_ENCODER_PULSES_PER_REVOLUTION = 2048.0;
+    public static final double DRIVETRAIN_STEER_GEAR_RATIO = 18.0; // set correctly    
+    public static final double DRIVETRAIN_STEER_DEGREES = 360.0;
+    public static final double DRIVETRAIN_STEER_PULSE_DISTANCE = HardwareConstants.DRIVETRAIN_STEER_DEGREES / (HardwareConstants.DRIVETRAIN_STEER_GEAR_RATIO * HardwareConstants.DRIVETRAIN_STEER_ENCODER_PULSES_PER_REVOLUTION);
+    public static final double DRIVETRAIN_STEER_TICKS_PER_DEGREE = (HardwareConstants.DRIVETRAIN_STEER_GEAR_RATIO * HardwareConstants.DRIVETRAIN_STEER_ENCODER_PULSES_PER_REVOLUTION) / HardwareConstants.DRIVETRAIN_STEER_DEGREES;
 
     public static final double DRIVETRAIN_DRIVE_ENCODER_PULSES_PER_REVOLUTION = 2048.0;
     public static final double DRIVETRAIN_DRIVE_GEAR_RATIO = 8.33; // confirmed

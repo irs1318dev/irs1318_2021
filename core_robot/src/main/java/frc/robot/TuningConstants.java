@@ -266,7 +266,7 @@ public class TuningConstants
     public static final double[] DRIVETRAIN_STEER_MOTOR_POSITION_PID_KI = new double[] { 0.0, 0.0, 0.0, 0.0 };
     public static final double[] DRIVETRAIN_STEER_MOTOR_POSITION_PID_KD = new double[] { 0.0, 0.0, 0.0, 0.0 };
     public static final double[] DRIVETRAIN_STEER_MOTOR_POSITION_PID_KF = new double[] { 0.0, 0.0, 0.0, 0.0 };
-    public static final double DRIVETRAIN_STEER_MOTOR_POSITION_PID_KS = HardwareConstants.DRIVETRAIN_ANGLE_TICKS_PER_DEGREE;
+    public static final double DRIVETRAIN_STEER_MOTOR_POSITION_PID_KS = HardwareConstants.DRIVETRAIN_STEER_TICKS_PER_DEGREE;
 
     // Velocity PID (drive) per-module
     public static final double[] DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KP = new double[] { 0.09, 0.09, 0.09, 0.09 };
