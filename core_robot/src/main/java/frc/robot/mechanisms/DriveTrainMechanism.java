@@ -163,7 +163,7 @@ public class DriveTrainMechanism implements IMechanism
             this.driveErrors[i] = this.driveMotors[i].getError();
             this.steerVelocities[i] = this.steerMotors[i].getVelocity();
             this.steerPositions[i] = this.steerMotors[i].getPosition();
-            this.steerAngles[i] = this.steerPositions[i] * HardwareConstants.DRIVETRAIN_STEER_PULSE_DISTANCE;
+            this.steerAngles[i] = (this.steerPositions[i] * HardwareConstants.DRIVETRAIN_STEER_PULSE_DISTANCE) % 360.0;
             this.steerErrors[i] = this.steerMotors[i].getError();
             this.encoderVoltages[i] = this.absoluteEncoders[i].getVoltage();
             this.encoderAngles[i] = this.encoderVoltages[i] * HardwareConstants.DRIVETRAIN_ENCODER_DEGREES_PER_VOLT;
@@ -206,7 +206,7 @@ public class DriveTrainMechanism implements IMechanism
 
                 this.drivePositions[i] = 0;
                 this.steerPositions[i] = (int)tickDifference;
-                this.steerAngles[i] = angleDifference;
+                this.steerAngles[i] = angleDifference % 360.0;
             }
         }
 
@@ -302,7 +302,8 @@ public class DriveTrainMechanism implements IMechanism
                 driveVelocityGoal = Math.sqrt(Vx * Vx + Vy * Vy);
 
                 steerPositionGoal = Helpers.EnforceRange(Helpers.atan2d(-Vx, Vy), -180.0, 180.0);
-                AnglePair anglePair = AnglePair.getClosestAngle(steerPositionGoal, this.steerAngles[i], true);
+                double currentAngle = this.steerPositions[i] * HardwareConstants.DRIVETRAIN_STEER_PULSE_DISTANCE;
+                AnglePair anglePair = AnglePair.getClosestAngle(steerPositionGoal, currentAngle, true);
                 steerPositionGoal = anglePair.getAngle() * TuningConstants.DRIVETRAIN_STEER_MOTOR_POSITION_PID_KS;
                 this.isDirectionSwapped[i] = anglePair.getSwapDirection();
             }
