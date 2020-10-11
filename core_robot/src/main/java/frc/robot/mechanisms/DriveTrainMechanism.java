@@ -163,10 +163,10 @@ public class DriveTrainMechanism implements IMechanism
             this.driveErrors[i] = this.driveMotors[i].getError();
             this.steerVelocities[i] = this.steerMotors[i].getVelocity();
             this.steerPositions[i] = this.steerMotors[i].getPosition();
-            this.steerAngles[i] = (this.steerPositions[i] * HardwareConstants.DRIVETRAIN_STEER_PULSE_DISTANCE) % 360.0;
+            this.steerAngles[i] = Helpers.updateAngleRange(this.steerPositions[i] * HardwareConstants.DRIVETRAIN_STEER_PULSE_DISTANCE);
             this.steerErrors[i] = this.steerMotors[i].getError();
             this.encoderVoltages[i] = this.absoluteEncoders[i].getVoltage();
-            this.encoderAngles[i] = this.encoderVoltages[i] * HardwareConstants.DRIVETRAIN_ENCODER_DEGREES_PER_VOLT;
+            this.encoderAngles[i] = Helpers.updateAngleRange(this.encoderVoltages[i] * HardwareConstants.DRIVETRAIN_ENCODER_DEGREES_PER_VOLT);
 
             this.logger.logNumber(this.driveVelocitiesLK[i], this.driveVelocities[i]);
             this.logger.logNumber(this.drivePositionsLK[i], this.drivePositions[i]);
@@ -193,6 +193,11 @@ public class DriveTrainMechanism implements IMechanism
             !this.positionManager.getNavxIsConnected())
         {
             this.fieldOriented = false;
+        }
+
+        if (this.driver.getDigital(DigitalOperation.PositionResetFieldOrientation))
+        {
+            this.desiredYaw = this.robotYaw;
         }
 
         if (this.driver.getDigital(DigitalOperation.DriveTrainReset))
@@ -230,6 +235,7 @@ public class DriveTrainMechanism implements IMechanism
 
     public void stop()
     {
+        this.omegaPID.reset();
         for (int i = 0; i < 4; i++)
         {
             this.driveMotors[i].stop();
@@ -273,6 +279,7 @@ public class DriveTrainMechanism implements IMechanism
                 this.desiredYaw = anglePair.getAngle();
             }
 
+            this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);
             omega = -1.0 * this.omegaPID.calculatePosition(this.desiredYaw, this.robotYaw);
         }
         else

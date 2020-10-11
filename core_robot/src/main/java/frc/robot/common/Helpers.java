@@ -102,6 +102,29 @@ public class Helpers
     }
 
     /**
+     * Returns angle between -180 and 180
+     * @param angle in some large range
+     * @return angle capped between -180 and 180
+     */
+    public static double updateAngleRange(double angle)
+    {
+        // get the difference in degrees between -360 and 360
+        double twoLoopAngle = angle % 360.0;
+
+        // change the range from -180 to 180
+        if (twoLoopAngle < -180.0)
+        {
+            return twoLoopAngle + 360.0;
+        }
+        else if (twoLoopAngle > 180.0)
+        {
+            return twoLoopAngle - 360.0;
+        }
+
+        return twoLoopAngle;
+    }
+
+    /**
      * Convert from cartesian coordinates (x, y) to polar angle (along positive x-axis is 0, increasing counter-clockwise)
      * @param x coordinate
      * @param y coordinate

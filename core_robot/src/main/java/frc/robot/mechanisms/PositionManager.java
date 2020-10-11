@@ -35,7 +35,6 @@ public class PositionManager implements IMechanism
     // Orientation
     private double navxAngle;
     private double startAngle;
-    private double resetAngle;
 
     /**
      * Initializes a new PositionManager
@@ -59,7 +58,6 @@ public class PositionManager implements IMechanism
 
         this.navxAngle = 0.0;
         this.startAngle = 0.0;
-        this.resetAngle = 0.0;
     }
 
     /**
@@ -85,7 +83,7 @@ public class PositionManager implements IMechanism
     {
         this.navxIsConnected = this.navx.isConnected();
 
-        this.navxAngle = -1.0 * this.navx.getAngle() - this.resetAngle;
+        this.navxAngle = -1.0 * this.navx.getAngle();
         this.navxX = this.navx.getDisplacementX() * 100.0;
         this.navxY = this.navx.getDisplacementY() * 100.0;
         this.navxZ = this.navx.getDisplacementZ() * 100.0;
@@ -114,7 +112,7 @@ public class PositionManager implements IMechanism
 
         if (this.driver.getDigital(DigitalOperation.PositionResetFieldOrientation))
         {
-            this.resetAngle = this.navxAngle;
+            this.reset();
         }
     }
 
@@ -182,7 +180,6 @@ public class PositionManager implements IMechanism
 
         this.navxAngle = 0.0;
         this.startAngle = 0.0;
-        this.resetAngle = 0.0;
 
         this.navx.reset();
         this.navx.resetDisplacement();
