@@ -38,16 +38,16 @@ public class ElectronicsConstants
 
     //================================================== DriveTrain ==============================================================
 
-    public static final int DRIVETRAIN_ANGLE_MOTOR_1_CAN_ID = 1;
+    public static final int DRIVETRAIN_STEER_MOTOR_1_CAN_ID = 1;
     public static final int DRIVETRAIN_DRIVE_MOTOR_1_CAN_ID = 2;
-    public static final int DRIVETRAIN_ANGLE_MOTOR_2_CAN_ID = 3;
+    public static final int DRIVETRAIN_STEER_MOTOR_2_CAN_ID = 3;
     public static final int DRIVETRAIN_DRIVE_MOTOR_2_CAN_ID = 4;
-    public static final int DRIVETRAIN_ANGLE_MOTOR_3_CAN_ID = 5;
+    public static final int DRIVETRAIN_STEER_MOTOR_3_CAN_ID = 5;
     public static final int DRIVETRAIN_DRIVE_MOTOR_3_CAN_ID = 6;
-    public static final int DRIVETRAIN_ANGLE_MOTOR_4_CAN_ID = 7;
+    public static final int DRIVETRAIN_STEER_MOTOR_4_CAN_ID = 7;
     public static final int DRIVETRAIN_DRIVE_MOTOR_4_CAN_ID = 8;
 
-    public static final int[] DRIVETRAIN_ANGLE_MOTOR_CAN_ID = new int[] { ElectronicsConstants.DRIVETRAIN_ANGLE_MOTOR_1_CAN_ID, ElectronicsConstants.DRIVETRAIN_ANGLE_MOTOR_2_CAN_ID, ElectronicsConstants.DRIVETRAIN_ANGLE_MOTOR_3_CAN_ID, ElectronicsConstants.DRIVETRAIN_ANGLE_MOTOR_4_CAN_ID};
+    public static final int[] DRIVETRAIN_STEER_MOTOR_CAN_ID = new int[] { ElectronicsConstants.DRIVETRAIN_STEER_MOTOR_1_CAN_ID, ElectronicsConstants.DRIVETRAIN_STEER_MOTOR_2_CAN_ID, ElectronicsConstants.DRIVETRAIN_STEER_MOTOR_3_CAN_ID, ElectronicsConstants.DRIVETRAIN_STEER_MOTOR_4_CAN_ID};
     public static final int[] DRIVETRAIN_DRIVE_MOTOR_CAN_ID = new int[]{ ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_1_CAN_ID, ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_2_CAN_ID, ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_3_CAN_ID, ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_4_CAN_ID };
 
     public static final int DRIVETRAIN_ABSOLUTE_ENCODER_1_ANALOG_INPUT = 0;

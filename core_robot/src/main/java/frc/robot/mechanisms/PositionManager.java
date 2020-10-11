@@ -124,7 +124,6 @@ public class PositionManager implements IMechanism
     @Override
     public void stop()
     {
-        this.reset();
     }
 
     /**

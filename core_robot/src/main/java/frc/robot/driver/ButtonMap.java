@@ -48,7 +48,7 @@ public class ButtonMap implements IButtonMap
             AnalogOperation.DriveTrainTurnY,
             UserInputDevice.Driver,
             AnalogAxis.XBONE_RSY,
-            ElectronicsConstants.INVERT_TRIGGER_AXIS,
+            ElectronicsConstants.INVERT_XBONE_RIGHT_Y_AXIS,
             TuningConstants.DRIVETRAIN_DEAD_ZONE_TURN),
         new AnalogOperationDescription(
             AnalogOperation.DriveTrainRotationA,
