@@ -37,10 +37,10 @@ public class DriveTrainModuleMechanism implements IMechanism
 
     private double driveVelocity;
     private double driveError;
-    private int drivePosition;
+    private double drivePosition;
     private double angleVelocity;
     private double angleError;
-    private int anglePosition;
+    private double anglePosition;
 
     private double encoderVoltage;
     private double encoderAngle;
@@ -142,7 +142,7 @@ public class DriveTrainModuleMechanism implements IMechanism
      * get the ticks from the drive encoder
      * @return a value indicating the number of ticks we are at
      */
-    public int getDrivePosition()
+    public double getDrivePosition()
     {
         return this.drivePosition;
     }
@@ -151,7 +151,7 @@ public class DriveTrainModuleMechanism implements IMechanism
      * get the ticks from the angle encoder
      * @return a value indicating the number of ticks we are at
      */
-    public int getAnglePosition()
+    public double getAnglePosition()
     {
         return this.anglePosition;
     }

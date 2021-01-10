@@ -47,10 +47,10 @@ public class DriveTrainMechanism implements IMechanism
 
     private double robotYaw;
     private double[] driveVelocities;
-    private int[] drivePositions;
+    private double[] drivePositions;
     private double[] driveErrors;
     private double[] steerVelocities;
-    private int[] steerPositions;
+    private double[] steerPositions;
     private double[] steerAngles;
     private double[] steerErrors;
     private double[] encoderVoltages;
@@ -125,10 +125,10 @@ public class DriveTrainMechanism implements IMechanism
         }
 
         this.driveVelocities = new double[4];
-        this.drivePositions = new int[4];
+        this.drivePositions = new double[4];
         this.driveErrors = new double[4];
         this.steerVelocities = new double[4];
-        this.steerPositions = new int[4];
+        this.steerPositions = new double[4];
         this.steerAngles = new double[4];
         this.steerErrors = new double[4];
         this.encoderVoltages = new double[4];
