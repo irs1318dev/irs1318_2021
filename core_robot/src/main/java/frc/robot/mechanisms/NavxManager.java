@@ -11,38 +11,35 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 /**
- * Position manager
- * 
- * This class maintains the approximate current location and orientation of the robot relative to its starting point.
- * This uses Jim's differential odometry algorithm and the NavX independently. In the future we can consider adding other sensors to help correct for error.
+ * Navx manager
  * 
  */
 @Singleton
-public class PositionManager implements IMechanism
+public class NavxManager implements IMechanism
 {
     private final ILogger logger;
     private final INavx navx;
 
     private Driver driver;
 
-    private boolean navxIsConnected;
+    private boolean isConnected;
 
     // Position coordinates
-    private double navxX;
-    private double navxY;
-    private double navxZ;
+    private double x;
+    private double y;
+    private double z;
 
     // Orientation
-    private double navxAngle;
+    private double angle;
     private double startAngle;
 
     /**
-     * Initializes a new PositionManager
+     * Initializes a new NavxManager
      * @param logger to use
      * @param provider for obtaining electronics objects
      */
     @Inject
-    public PositionManager(
+    public NavxManager(
         LoggingManager logger,
         IRobotProvider provider)
     {
@@ -50,13 +47,13 @@ public class PositionManager implements IMechanism
         this.navx = provider.getNavx();
         this.driver = null;
 
-        this.navxIsConnected = false;
+        this.isConnected = false;
 
-        this.navxX = 0.0;
-        this.navxY = 0.0;
-        this.navxZ = 0.0;
+        this.x = 0.0;
+        this.y = 0.0;
+        this.z = 0.0;
 
-        this.navxAngle = 0.0;
+        this.angle = 0.0;
         this.startAngle = 0.0;
     }
 
@@ -81,21 +78,21 @@ public class PositionManager implements IMechanism
     @Override
     public void readSensors()
     {
-        this.navxIsConnected = this.navx.isConnected();
+        this.isConnected = this.navx.isConnected();
 
-        this.navxAngle = -1.0 * this.navx.getAngle();
-        this.navxX = this.navx.getDisplacementX() * 100.0;
-        this.navxY = this.navx.getDisplacementY() * 100.0;
-        this.navxZ = this.navx.getDisplacementZ() * 100.0;
+        this.angle = -1.0 * this.navx.getAngle();
+        this.x = this.navx.getDisplacementX() * 100.0;
+        this.y = this.navx.getDisplacementY() * 100.0;
+        this.z = this.navx.getDisplacementZ() * 100.0;
 
         // log the current position and orientation
-        this.logger.logBoolean(LoggingKey.PositionNavxConnected, this.navxIsConnected);
-        this.logger.logNumber(LoggingKey.PositionNavxAngle, this.navxAngle);
-        this.logger.logNumber(LoggingKey.PositionNavxX, this.navxX);
-        this.logger.logNumber(LoggingKey.PositionNavxY, this.navxY);
-        this.logger.logNumber(LoggingKey.PositionNavxZ, this.navxZ);
+        this.logger.logBoolean(LoggingKey.NavxConnected, this.isConnected);
+        this.logger.logNumber(LoggingKey.NavxAngle, this.angle);
+        this.logger.logNumber(LoggingKey.NavxX, this.x);
+        this.logger.logNumber(LoggingKey.NavxY, this.y);
+        this.logger.logNumber(LoggingKey.NavxZ, this.z);
 
-        this.logger.logNumber(LoggingKey.PositionStartingAngle, this.startAngle);
+        this.logger.logNumber(LoggingKey.NavxStartingAngle, this.startAngle);
     }
 
     /**
@@ -128,45 +125,45 @@ public class PositionManager implements IMechanism
      * Retrieve whether the navx is connected
      * @return whether the navx is connected
      */
-    public boolean getNavxIsConnected()
+    public boolean getIsConnected()
     {
-        return this.navxIsConnected;
+        return this.isConnected;
     }
 
     /**
      * Retrieve the current angle (counter-clockwise) in degrees
      * @return the current angle in degrees
      */
-    public double getNavxAngle()
+    public double getAngle()
     {
-        return this.navxAngle + this.startAngle;
+        return this.angle;
     }
 
     /**
      * Retrieve the current x position
      * @return the current x position
      */
-    public double getNavxX()
+    public double getX()
     {
-        return this.navxX;
+        return this.x;
     }
 
     /**
      * Retrieve the current y position
      * @return the current y position
      */
-    public double getNavxY()
+    public double getY()
     {
-        return this.navxY;
+        return this.y;
     }
 
     /**
      * Retrieve the current z position
      * @return the current z position
      */
-    public double getNavxZ()
+    public double getZ()
     {
-        return this.navxZ;
+        return this.z;
     }
 
     /**
@@ -174,11 +171,11 @@ public class PositionManager implements IMechanism
      */
     public void reset()
     {
-        this.navxX = 0.0;
-        this.navxY = 0.0;
-        this.navxZ = 0.0;
+        this.x = 0.0;
+        this.y = 0.0;
+        this.z = 0.0;
 
-        this.navxAngle = 0.0;
+        this.angle = 0.0;
         this.startAngle = 0.0;
 
         this.navx.reset();

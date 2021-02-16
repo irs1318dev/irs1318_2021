@@ -28,7 +28,7 @@ public class TuningConstants
     public static final boolean COMPETITION_ROBOT = true;
     public static boolean THROW_EXCEPTIONS = !TuningConstants.COMPETITION_ROBOT;
 
-    public static final int CALENDAR_YEAR = 2020;
+    public static final int CALENDAR_YEAR = 2021;
     public static final boolean LOG_TO_FILE = true; //TuningConstants.COMPETITION_ROBOT;
     public static final boolean LOG_FILE_ONLY_COMPETITION_MATCHES = false; // true;
     public static final long LOG_FILE_REQUIRED_FREE_SPACE = 50 * 1024 * 1024; // require at least 50 MB of space
@@ -39,7 +39,7 @@ public class TuningConstants
     public static List<IMechanism> GetActiveMechanisms(Injector injector)
     {
         List<IMechanism> mechanismList = new ArrayList<IMechanism>();
-        mechanismList.add(injector.getInstance(PositionManager.class)); // PositionManager should come before DriveTrainMechanism
+        mechanismList.add(injector.getInstance(NavxManager.class)); // NavxManager should come before DriveTrainMechanism
         mechanismList.add(injector.getInstance(PowerManager.class));
         mechanismList.add(injector.getInstance(DriveTrainMechanism.class));
         // mechanismList.add(injector.getInstance(CompressorMechanism.class));
@@ -301,5 +301,5 @@ public class TuningConstants
     public static final double DRIVETRAIN_ROTATION_A_MULTIPLIER = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE / 2.0;
     public static final double DRIVETRAIN_ROTATION_B_MULTIPLIER = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE / 2.0;
 
-    public static final double DRIVETRAIN_TURN_VELOCITY = 1.0 / 15.0; // convert from inches to percentage
+    public static final double DRIVETRAIN_TURN_VELOCITY = 1.0 / 15.0; // convert from radians per second to percentage
 }
