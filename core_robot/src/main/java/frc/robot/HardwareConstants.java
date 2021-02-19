@@ -31,7 +31,7 @@ public class HardwareConstants
     public static final double[] DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSET = new double[] { -106.0, 68.0, -104.0, 24.0 };
 
     public static final double DRIVETRAIN_STEER_ENCODER_PULSES_PER_REVOLUTION = 2048.0;
-    public static final double DRIVETRAIN_STEER_GEAR_RATIO = 18.0; // set correctly    
+    public static final double DRIVETRAIN_STEER_GEAR_RATIO = 18.0; // set correctly
     public static final double DRIVETRAIN_STEER_DEGREES = 360.0;
     public static final double DRIVETRAIN_STEER_PULSE_DISTANCE = HardwareConstants.DRIVETRAIN_STEER_DEGREES / (HardwareConstants.DRIVETRAIN_STEER_GEAR_RATIO * HardwareConstants.DRIVETRAIN_STEER_ENCODER_PULSES_PER_REVOLUTION);
     public static final double DRIVETRAIN_STEER_TICKS_PER_DEGREE = (HardwareConstants.DRIVETRAIN_STEER_GEAR_RATIO * HardwareConstants.DRIVETRAIN_STEER_ENCODER_PULSES_PER_REVOLUTION) / HardwareConstants.DRIVETRAIN_STEER_DEGREES;
@@ -43,6 +43,6 @@ public class HardwareConstants
     public static final double DRIVETRAIN_DRIVE_PULSE_DISTANCE = HardwareConstants.DRIVETRAIN_DRIVE_WHEEL_CIRCUMFERENCE / (HardwareConstants.DRIVETRAIN_DRIVE_GEAR_RATIO * HardwareConstants.DRIVETRAIN_DRIVE_ENCODER_PULSES_PER_REVOLUTION);
     public static final double DRIVETRAIN_DRIVE_TICKS_PER_INCH = (HardwareConstants.DRIVETRAIN_DRIVE_GEAR_RATIO * HardwareConstants.DRIVETRAIN_DRIVE_ENCODER_PULSES_PER_REVOLUTION) / HardwareConstants.DRIVETRAIN_DRIVE_WHEEL_CIRCUMFERENCE;
 
-    public static final double DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE = 21.5;
-    public static final double DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE = 25.5;
+    public static final double DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE = 21.5; // (in inches)
+    public static final double DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE = 25.5; // (in inches)
 }

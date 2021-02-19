@@ -123,8 +123,7 @@ public class Driver
         this.isAutonomous = false;
 
         // initialize the path manager and load all of the paths
-        PathManager manager = injector.getInstance(PathManager.class);
-        manager.loadPaths();
+        injector.getInstance(PathManager.class);
     }
 
     /**

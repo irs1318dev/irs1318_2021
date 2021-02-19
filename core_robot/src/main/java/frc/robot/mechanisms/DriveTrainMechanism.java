@@ -11,8 +11,6 @@
 
 package frc.robot.mechanisms;
 
-import javax.inject.Singleton;
-
 import frc.robot.*;
 import frc.robot.common.*;
 import frc.robot.common.robotprovider.*;
@@ -20,6 +18,7 @@ import frc.robot.driver.*;
 import frc.robot.driver.common.Driver;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 @Singleton
 public class DriveTrainMechanism implements IMechanism

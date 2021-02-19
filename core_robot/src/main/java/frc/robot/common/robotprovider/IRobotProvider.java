@@ -33,4 +33,5 @@ public interface IRobotProvider
     public IDriverStation getDriverStation();
     public IOpenCVProvider getOpenCVProvider();
     public INetworkTableProvider getNetworkTableProvider();
+    public ITrajectoryGenerator getTrajectoryGenerator();
 }
