@@ -260,6 +260,7 @@ public class TuningConstants
     //================================================== DriveTrain ==============================================================
 
     public static final boolean DRIVETRAIN_USE_PID = true;
+	public static final boolean DRIVETRAIN_USE_ODOMETRY = true;
 
     // Position PID (angle) per-module
     public static final double[] DRIVETRAIN_STEER_MOTOR_POSITION_PID_KP = new double[] { 1.0, 1.0, 1.0, 1.0 };
@@ -302,7 +303,7 @@ public class TuningConstants
     public static final double DRIVETRAIN_ROTATION_B_MULTIPLIER = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE / 2.0;
 
     public static final double DRIVETRAIN_TURN_VELOCITY = 1.0 / 15.0; // convert from radians per second to percentage
-    public static final double DRIVETRAIN_MAX_MODULE_PATH_VELOCITY = 0.50 * (TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS * HardwareConstants.DRIVETRAIN_DRIVE_PULSE_DISTANCE * 10.0); // up to x% of our max controllable speed (with a conversion of per-module max velocity from #ticks / 100ms to inches per second)
+    public static final double DRIVETRAIN_MAX_MODULE_PATH_VELOCITY = 0.50 * (TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND); // up to x% of our max controllable speed (with a conversion of per-module max velocity from #ticks / 100ms to inches per second)
     public static final double DRIVETRAIN_MAX_PATH_VELOCITY = 120.0; // in inches per second
     public static final double DRIVETRAIN_MAX_PATH_ACCELERATION = 120.0; // in inches per second per second
 }
