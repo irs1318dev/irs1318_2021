@@ -10,8 +10,7 @@ import frc.robot.driver.common.*;
 import frc.robot.driver.controltasks.*;
 
 @Singleton
-public class AutonomousRoutineSelector
-{
+public class AutonomousRoutineSelector {
     private final ILogger logger;
 
     private final PathManager pathManager;
@@ -29,6 +28,8 @@ public class AutonomousRoutineSelector
     public enum AutoRoutine
     {
         None,
+        PathA,
+        PathB,
     }
 
     /**
@@ -77,6 +78,16 @@ public class AutonomousRoutineSelector
         {
             routine = AutoRoutine.None;
         }
+        if (routine == AutoRoutine.PathA)
+        {
+            return SearchPaths( "crissCross", "slideToTheLeft", "slideToTheRight", "forward5ft",
+                "forward5ft", "slideToTheRight", "slideToTheLeft", "crissCross"); 
+        }
+        if (routine == AutoRoutine.PathB)
+        {
+            return SearchPaths( "crissCross", "slideToTheLeftB", "slideToTheRightB", "chaChaNowYall",
+                "forward5ft", "slideToTheRightB", "slideToTheLeftB", "chaChaRealSmooth"); 
+        }
 
         this.logger.logString(LoggingKey.AutonomousSelection, startPosition.toString() + "." + routine.toString());
 
@@ -111,8 +122,122 @@ public class AutonomousRoutineSelector
                 {
                     new Point2d(60.0, 60.0)
                 }));
+        
+        // -------------------- path A paths ----------------   
+
+        this.pathManager.addPath(
+            "forward5ft",
+            trajectoryGenerator.generateTrajectory(
+                new Pose2d(0.0, 0.0, 0.0),
+                new Pose2d(60.0, 0.0, 0.0), // which way is forward?
+                new Point2d[]
+                {
+                    new Point2d(30.0, 0.0) // is this needed?
+                }));
+                    
+        // D5 TO A6, E6 TO B7
+        this.pathManager.addPath( 
+            "slideToTheLeft",
+            trajectoryGenerator.generateTrajectory(
+                new Pose2d(0.0, 0.0, 0.0),
+                new Pose2d(30.0, 90.0, 0.0),
+                new Point2d[]
+                {
+                    new Point2d(15.0, 45.0)
+                }));
+
+        // C3 TO D5, B7 TO C9 
+        this.pathManager.addPath( 
+            "slideToTheRight",
+            trajectoryGenerator.generateTrajectory(
+                new Pose2d(0.0, 0.0, 0.0),
+                new Pose2d(60.0, -30.0, 0.0),
+                new Point2d[]
+                {
+                    new Point2d(30.0, -15.0)
+                }));
+        
+        // A6 TO A11, E1 TO E6
+        this.pathManager.addPath( 
+            "crissCross",                // EVERYBODY CLAP YOUR HANDS  
+            trajectoryGenerator.generateTrajectory( // clap
+                new Pose2d(0.0, 0.0, 0.0),          // clap
+                new Pose2d(150.0, 0.0, 0.0),        // clap
+                new Point2d[]                       // clap
+                {                                   // clap
+                    new Point2d(75.0, 0.0)          // clap
+                }));                                // clap
+
+
+
+        // ----------------------- Path B paths ------------------  // SLIDE AT YOUR OWN RISK
+
+        // B1 TO B3: forward5feet
+        
+        this.pathManager.addPath( //B3 TO D5, B8 TO D10
+            "slideToTheRightB",
+            trajectoryGenerator.generateTrajectory(
+                new Pose2d(0.0, 0.0, 0.0),
+                new Pose2d(60.0, -60.0, 0.0),
+                new Point2d[]
+                {
+                    new Point2d(30.0, -30.0)
+                }));
+
+        this.pathManager.addPath( // D5 TO B7
+            "slideToTheLeftB",
+            trajectoryGenerator.generateTrajectory(
+                new Pose2d(0.0, 0.0, 0.0),
+                new Pose2d(60.0, 60.0, 0.0),
+                new Point2d[]
+                {
+                    new Point2d(30.0, 30.0)
+                }));
+
+        this.pathManager.addPath( //D10 to D11, 
+            "chaChaNowYall", // go forward a lil bit - it'll be a smol amount, almost as smol as VaruANsShiHIKA 
+            trajectoryGenerator.generateTrajectory(
+                new Pose2d(0.0, 0.0, 0.0),
+                new Pose2d(30.0, 0.0, 0.0),
+                new Point2d[]
+                {
+                    new Point2d(15.0, 0.0)
+                }));
+        
+        this.pathManager.addPath( //B7 to B11
+            "chaChaRealSmooth", // goes forward 10 ft
+            trajectoryGenerator.generateTrajectory(
+                new Pose2d(0.0, 0.0, 0.0),
+                new Pose2d(120.0, 0.0, 0.0),
+                new Point2d[]
+                {
+                    new Point2d(60.0, 0.0)
+                }));
+            
+    } // one hop this time
+
+    /**
+     * nowwww it's time to get funky
+     */
+    private static IControlTask SearchPaths(String forwardPathB, String secondPathB, String thirdPathB, String finalPathB,
+                                            String forwardPathR, String secondPathR, String thirdPathR, String finalPathR)
+    {
+        return new VisionPowercellTask( // add intake part when we have intake code
+            SequentialTask.Sequence( 
+            new FollowPathTask(forwardPathB), // FollowPathTask doesn't exist yet
+            new FollowPathTask(secondPathB),
+            new FollowPathTask(thirdPathB),
+            new FollowPathTask(finalPathB)
+            ),
+            SequentialTask.Sequence( 
+            new FollowPathTask(forwardPathR), // FollowPathTask doesn't exist yet
+            new FollowPathTask(secondPathR),
+            new FollowPathTask(thirdPathR),
+            new FollowPathTask(finalPathR)
+            )
+        ); // first four parameters are the four blue path parts, next four are the four red path parts
     }
-}
+} // yaaaaaAAAaaaAaaaAAAAaa
 
 
 
@@ -375,13 +500,13 @@ public class AutonomousRoutineSelector
                         +::::+';;;+                 ':'  +:;;;;;;;;`                                
                        `;;;::::;#+:                `;:+  +;;;;;;;:;;      '#+,                      
                        +#::::::::;'`               +:;,  `;;;;:;;'#';;;;;::;:'`                     
-                       ;:''::::::::#`              +:'    ';:;;+'::;;:;::::::''                     
-                       +::;+':::::::'.            .:;+    '''+;::;:;:::;:::;':'                     
-                        ';;:;'';:::::':           +::.     +:::::::::::::;#;:#                      
-                         .''##;#;:;;:::'+        `+;'      ;:;::::::::;'+;:'+                       
-                           ` `+:;+:;::;::+       +:;#      ';:::;:+#+';:::+.                        
-                              ,+::+#';::;+       ';::      #:;;'+';'''++:`                          
-                                '':::;'''#      ,:;;`      #';:;;:+                                 
+                      ';:''::::::::#`              +:'    ';:;;+'::;;:;::::::''                     
+                      #+::;+':::::::'.            .:;+    '''+;::;:;:::;:::;':'                     
+                    `';+';;:;'';:::::':    '      +::.     +:::::::::::::;#;:#                      
+                    :+;#'.''##;#;:;;:::'+  #     `+;'      ;:;::::::::;'+;:'+                       
+                   '#;+". ` `+:;+:;::;::+'#+     +:;#     ';:::;:+#+';:::+.                        
+                   ';#''      ,+::+#';::;+'#+    ';::      #:;;'+';'''++:`                          
+                                '':::;'''#+     ,:;;`      #';:;;:+                                 
                                  `:'++;;':       :++       .;;:;;#,                                 
                                        `                    '':``                                   
 

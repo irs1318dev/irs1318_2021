@@ -18,4 +18,6 @@ public class VisionConstants
     public static final double LIFECAM_CAMERA_CENTER_VIEW_ANGLE = VisionConstants.LIFECAM_CAMERA_FIELD_OF_VIEW_X / 2.0;
     public static final double LIFECAM_CAMERA_FOCAL_LENGTH_X = 1078.4675; // focal_length = res_* / (2.0 * tan (FOV_* / 2.0)
     public static final double LIFECAM_CAMERA_FOCAL_LENGTH_Y = 1078.4675; // focal_length = res_* / (2.0 * tan (FOV_* / 2.0)
+
+    public static final double VISION_POWERCELL_LOCATION_Y = 1318.0;
 }

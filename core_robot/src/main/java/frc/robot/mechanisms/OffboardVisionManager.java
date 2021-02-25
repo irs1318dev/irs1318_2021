@@ -31,6 +31,9 @@ public class OffboardVisionManager implements IMechanism
     private Double distance;
     private Double horizontalAngle;
 
+    private double powercellX;
+    private double powercellY;
+
     /**
      * Initializes a new OffboardVisionManager
      * @param logger for logging to smart dashboard
@@ -46,6 +49,9 @@ public class OffboardVisionManager implements IMechanism
 
         this.centerX = 0.0;
         this.centerY = 0.0;
+
+        this.powercellX = 0.0;
+        this.powercellY = 0.0;
     }
 
     /**
@@ -57,28 +63,37 @@ public class OffboardVisionManager implements IMechanism
         this.centerX = this.networkTable.getSmartDashboardNumber("v.x");
         this.centerY = this.networkTable.getSmartDashboardNumber("v.y");
 
+        this.powercellX = this.networkTable.getSmartDashboardNumber("v.pointX");
+        this.powercellY = this.networkTable.getSmartDashboardNumber("v.pointY");
+
         this.logger.logNumber(LoggingKey.OffboardVisionX, this.centerX);
         this.logger.logNumber(LoggingKey.OffboardVisionY, this.centerY);
 
+        this.logger.logNumber(LoggingKey.OffboardVisionPowercellX, this.powercellX);
+        this.logger.logNumber(LoggingKey.OffboardVisionPowercellY, this.powercellY);
+
         // return if we couldn't find a vision target
-        if (this.centerX < 0.0 || this.centerY < 0)
+        if (this.centerX < 0.0 || this.centerY < 0.0)
         {
             this.distance = null;
             this.horizontalAngle = null;
 
-            return;
+            //return;
         }
 
-        double yOffset = VisionConstants.LIFECAM_CAMERA_CENTER_WIDTH - this.centerY;
-        double verticalAngle = Helpers.atand(yOffset / VisionConstants.LIFECAM_CAMERA_FOCAL_LENGTH_Y);
+        if(this.distance != null && this.horizontalAngle != null) 
+        {
+            double yOffset = VisionConstants.LIFECAM_CAMERA_CENTER_WIDTH - this.centerY;
+            double verticalAngle = Helpers.atand(yOffset / VisionConstants.LIFECAM_CAMERA_FOCAL_LENGTH_Y);
 
-        this.distance = (HardwareConstants.CAMERA_TO_TARGET_Z_OFFSET / Helpers.tand(verticalAngle + HardwareConstants.CAMERA_PITCH)) - HardwareConstants.CAMERA_X_OFFSET;
+            this.distance = (HardwareConstants.CAMERA_TO_TARGET_Z_OFFSET / Helpers.tand(verticalAngle + HardwareConstants.CAMERA_PITCH)) - HardwareConstants.CAMERA_X_OFFSET;
 
-        double xOffset = this.centerX - VisionConstants.LIFECAM_CAMERA_CENTER_WIDTH;
-        this.horizontalAngle = Helpers.atand(xOffset / VisionConstants.LIFECAM_CAMERA_FOCAL_LENGTH_X) + HardwareConstants.CAMERA_YAW;
+            double xOffset = this.centerX - VisionConstants.LIFECAM_CAMERA_CENTER_WIDTH;
+            this.horizontalAngle = Helpers.atand(xOffset / VisionConstants.LIFECAM_CAMERA_FOCAL_LENGTH_X) + HardwareConstants.CAMERA_YAW;
 
-        this.logger.logNumber(LoggingKey.OffboardVisionDistance, this.distance);
-        this.logger.logNumber(LoggingKey.OffboardVisionHorizontalAngle, this.horizontalAngle);
+            this.logger.logNumber(LoggingKey.OffboardVisionDistance, this.distance);
+            this.logger.logNumber(LoggingKey.OffboardVisionHorizontalAngle, this.horizontalAngle);
+        }
     }
 
     @Override
@@ -118,5 +133,15 @@ public class OffboardVisionManager implements IMechanism
     public Double getDistance()
     {
         return this.distance;
+    }
+
+    public double getPowercellX() 
+    {
+        return this.powercellX;
+    }
+
+    public double getPowercellY() 
+    {
+        return this.powercellY;
     }
 }

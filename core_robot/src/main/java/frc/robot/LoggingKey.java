@@ -18,7 +18,7 @@ public enum LoggingKey
     OffboardVisionHorizontalAngle("rpi.horizontalAngle", true),
     OffboardVisionEnableVision("rpi.enableVision", true),
     OffboardVisionEnableStream("rpi.enableStream", true),
-    OffboardVisionEnableProcessing("rpi.enableProcessing", true),
+    OffboardVisionEnableProcessing("rpi.enableProcessing", true), // why do some have True?
     NavxConnected("navx.connected", true),
     NavxAngle("navx.angle", true),
     NavxX("navx.x"),
@@ -28,6 +28,9 @@ public enum LoggingKey
     PositionAngle("pos.angle"),
     PositionX("pos.x"),
     PositionY("pos.y"),
+
+    OffboardVisionPowercellX("rpi.pointX"),
+    OffboardVisionPowercellY("rpi.pointY"),
 
     DriveTrainDesiredAngle("dt.angle_goal"),
 
@@ -74,6 +77,8 @@ public enum LoggingKey
     DriveTrainSteerAngle4("dt.steer_ang4"),
     DriveTrainSteerError4("dt.steer_err4"),
     DriveTrainSteerPositionGoal4("dt.steer_goal4");
+
+    
 
     public final String value;
     public final boolean shouldLog;
