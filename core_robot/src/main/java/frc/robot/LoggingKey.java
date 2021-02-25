@@ -29,9 +29,6 @@ public enum LoggingKey
     NavxZ("navx.z"),
     NavxStartingAngle("navx.startingAngle"),
 
-    OffboardVisionPowercellX("rpi.pointX"),
-    OffboardVisionPowercellY("rpi.pointY"),
-
     DriveTrainDesiredAngle("dt.angle_goal"),
     DriveTrainAngle("dt.angle"),
     DriveTrainXPosition("dt.xpos"),
