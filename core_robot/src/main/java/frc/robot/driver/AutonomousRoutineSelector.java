@@ -213,7 +213,6 @@ public class AutonomousRoutineSelector {
                 {
                     new Point2d(60.0, 0.0)
                 }));
-            
     } // one hop this time
 
     /**
@@ -224,17 +223,15 @@ public class AutonomousRoutineSelector {
     {
         return new VisionPowercellTask( // add intake part when we have intake code
             SequentialTask.Sequence( 
-            new FollowPathTask(forwardPathB), // FollowPathTask doesn't exist yet
-            new FollowPathTask(secondPathB),
-            new FollowPathTask(thirdPathB),
-            new FollowPathTask(finalPathB)
-            ),
+                new FollowPathTask(forwardPathB), // FollowPathTask doesn't exist yet
+                new FollowPathTask(secondPathB),
+                new FollowPathTask(thirdPathB),
+                new FollowPathTask(finalPathB)),
             SequentialTask.Sequence( 
-            new FollowPathTask(forwardPathR), // FollowPathTask doesn't exist yet
-            new FollowPathTask(secondPathR),
-            new FollowPathTask(thirdPathR),
-            new FollowPathTask(finalPathR)
-            )
+                new FollowPathTask(forwardPathR), // FollowPathTask doesn't exist yet
+                new FollowPathTask(secondPathR),
+                new FollowPathTask(thirdPathR),
+                new FollowPathTask(finalPathR))
         ); // first four parameters are the four blue path parts, next four are the four red path parts
     }
 } // yaaaaaAAAaaaAaaaAAAAaa

@@ -30,4 +30,9 @@ public class TrajectoryWrapper implements ITrajectory
                 state.poseMeters.getRotation().getRadians() * Helpers.RADIANS_TO_DEGREES),
             (state.curvatureRadPerMeter * Helpers.RADIANS_TO_DEGREES) / Helpers.INCHES_PER_METER);
     }
+
+    public double getDuration()
+    {
+        return this.wrappedObject.getTotalTimeSeconds();
+    }
 }
