@@ -284,6 +284,30 @@ public class TuningConstants
     public static final double DRIVETRAIN_OMEGA_MAX_OUTPUT = 0.5;
     public static final double DRIVETRAIN_OMEGA_MIN_OUTPUT = -0.5;
 
+    public static final double DRIVETRAIN_PATH_OMEGA_POSITION_PID_KP = 0.016;
+    public static final double DRIVETRAIN_PATH_OMEGA_POSITION_PID_KI = 0.0;
+    public static final double DRIVETRAIN_PATH_OMEGA_POSITION_PID_KD = 0.0;
+    public static final double DRIVETRAIN_PATH_OMEGA_POSITION_PID_KF = 0.0;
+    public static final double DRIVETRAIN_PATH_OMEGA_POSITION_PID_KS = 1.0;
+    public static final double DRIVETRAIN_PATH_OMEGA_MAX_OUTPUT = 0.5;
+    public static final double DRIVETRAIN_PATH_OMEGA_MIN_OUTPUT = -0.5;
+
+    public static final double DRIVETRAIN_PATH_X_POSITION_PID_KP = 0.0;
+    public static final double DRIVETRAIN_PATH_X_POSITION_PID_KI = 0.0;
+    public static final double DRIVETRAIN_PATH_X_POSITION_PID_KD = 0.0;
+    public static final double DRIVETRAIN_PATH_X_POSITION_PID_KF = 0.0;
+    public static final double DRIVETRAIN_PATH_X_POSITION_PID_KS = 1.0;
+    public static final double DRIVETRAIN_PATH_X_MAX_OUTPUT = 0.5;
+    public static final double DRIVETRAIN_PATH_X_MIN_OUTPUT = -0.5;
+
+    public static final double DRIVETRAIN_PATH_Y_POSITION_PID_KP = 0.0;
+    public static final double DRIVETRAIN_PATH_Y_POSITION_PID_KI = 0.0;
+    public static final double DRIVETRAIN_PATH_Y_POSITION_PID_KD = 0.0;
+    public static final double DRIVETRAIN_PATH_Y_POSITION_PID_KF = 0.0;
+    public static final double DRIVETRAIN_PATH_Y_POSITION_PID_KS = 1.0;
+    public static final double DRIVETRAIN_PATH_Y_MAX_OUTPUT = 0.5;
+    public static final double DRIVETRAIN_PATH_Y_MIN_OUTPUT = -0.5;
+
     public static final boolean DRIVETRAIN_VOLTAGE_COMPENSATION_ENABLED = false;
     public static final double DRIVETRAIN_VOLTAGE_COMPENSATION = 0.0;
     public static final boolean DRIVETRAIN_SUPPLY_CURRENT_LIMITING_ENABLED = false;

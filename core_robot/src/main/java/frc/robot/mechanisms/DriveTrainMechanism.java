@@ -60,6 +60,10 @@ public class DriveTrainMechanism implements IMechanism
     private double desiredYaw;
     private boolean[] isDirectionSwapped;
 
+    private PIDHandler pathOmegaPID;
+    private PIDHandler pathXOffsetPID;
+    private PIDHandler pathYOffsetPID;
+
     private double time;
     private double angle;
     private double xPosition;
@@ -155,6 +159,36 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_OMEGA_POSITION_PID_KS,
             TuningConstants.DRIVETRAIN_OMEGA_MIN_OUTPUT,
             TuningConstants.DRIVETRAIN_OMEGA_MAX_OUTPUT,
+            this.timer);
+
+        this.pathOmegaPID = new PIDHandler(
+            TuningConstants.DRIVETRAIN_PATH_OMEGA_POSITION_PID_KP,
+            TuningConstants.DRIVETRAIN_PATH_OMEGA_POSITION_PID_KI,
+            TuningConstants.DRIVETRAIN_PATH_OMEGA_POSITION_PID_KD,
+            TuningConstants.DRIVETRAIN_PATH_OMEGA_POSITION_PID_KF,
+            TuningConstants.DRIVETRAIN_PATH_OMEGA_POSITION_PID_KS,
+            TuningConstants.DRIVETRAIN_PATH_OMEGA_MIN_OUTPUT,
+            TuningConstants.DRIVETRAIN_PATH_OMEGA_MAX_OUTPUT,
+            this.timer);
+
+        this.pathXOffsetPID = new PIDHandler(
+            TuningConstants.DRIVETRAIN_PATH_X_POSITION_PID_KP,
+            TuningConstants.DRIVETRAIN_PATH_X_POSITION_PID_KI,
+            TuningConstants.DRIVETRAIN_PATH_X_POSITION_PID_KD,
+            TuningConstants.DRIVETRAIN_PATH_X_POSITION_PID_KF,
+            TuningConstants.DRIVETRAIN_PATH_X_POSITION_PID_KS,
+            TuningConstants.DRIVETRAIN_PATH_X_MIN_OUTPUT,
+            TuningConstants.DRIVETRAIN_PATH_X_MAX_OUTPUT,
+            this.timer);
+
+        this.pathYOffsetPID = new PIDHandler(
+            TuningConstants.DRIVETRAIN_PATH_Y_POSITION_PID_KP,
+            TuningConstants.DRIVETRAIN_PATH_Y_POSITION_PID_KI,
+            TuningConstants.DRIVETRAIN_PATH_Y_POSITION_PID_KD,
+            TuningConstants.DRIVETRAIN_PATH_Y_POSITION_PID_KF,
+            TuningConstants.DRIVETRAIN_PATH_Y_POSITION_PID_KS,
+            TuningConstants.DRIVETRAIN_PATH_Y_MIN_OUTPUT,
+            TuningConstants.DRIVETRAIN_PATH_Y_MAX_OUTPUT,
             this.timer);
 
         double a1 = -HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE;
@@ -282,52 +316,91 @@ public class DriveTrainMechanism implements IMechanism
         }
     }
 
+    public Pose2d getPose()
+    {
+        return new Pose2d(this.xPosition, this.yPosition, this.robotNavxYaw);
+    }
+
     private void calculateSetpoints()
     {
-        // get the  center of rotation modifying control values
-        double a = this.driver.getAnalog(AnalogOperation.DriveTrainRotationA);
-        double b = this.driver.getAnalog(AnalogOperation.DriveTrainRotationB);
-
-        // get the turning-related control values
-        double turnX = this.driver.getAnalog(AnalogOperation.DriveTrainTurnX);
-        double turnY = this.driver.getAnalog(AnalogOperation.DriveTrainTurnY);
-
-        // get the center velocity control values
-        double centerVelocityXRaw = this.driver.getAnalog(AnalogOperation.DriveTrainMoveSide);
-        double centerVelocityYRaw = this.driver.getAnalog(AnalogOperation.DriveTrainMoveForward);
-
         // calculate center velocity and turn velocity based on our current control mode:
+        double rotationCenterA;
+        double rotationCenterB;
         double centerVelocityX;
         double centerVelocityY;
         double omega;
-        if (this.fieldOriented)
+        if (this.driver.getDigital(DigitalOperation.DriveTrainPathMode))
         {
-            centerVelocityX = Helpers.cosd(this.robotNavxYaw) * centerVelocityXRaw + Helpers.sind(this.robotNavxYaw) * centerVelocityYRaw;
-            centerVelocityY = Helpers.cosd(this.robotNavxYaw) * centerVelocityYRaw - Helpers.sind(this.robotNavxYaw) * centerVelocityXRaw;
+            // path mode doesn't support rotation centers besides the robot center
+            rotationCenterA = 0.0;
+            rotationCenterB = 0.0;
 
-            if (TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY
-                && !Helpers.WithinDelta(Math.sqrt(turnX * turnX + turnY * turnY), 0.0, TuningConstants.DRIVETRAIN_SKIP_OMEGA_ON_ZERO_DELTA))
-            {
-                double steerGoal = Helpers.atan2d(-turnX, turnY);
-                AnglePair anglePair = AnglePair.getClosestAngle(steerGoal, this.robotNavxYaw, false);
-                this.desiredYaw = anglePair.getAngle();
-            }
+            double xGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathXGoal);
+            double yGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathYGoal);
+            double angleGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathAngleGoal);
+            double velocityGoal = this.driver.getAnalog(AnalogOperation.DriveTrainVelocityGoal);
+
+            // convert velocity goal to be field-relative (from being angleGoal relative)
+            double fieldVelocityX = velocityGoal * Helpers.cosd(angleGoal);
+            double fieldVelocityY = velocityGoal * Helpers.sind(angleGoal);
+
+            // add correction for x/y drift
+            fieldVelocityX += this.pathXOffsetPID.calculatePosition(xGoal, this.xPosition);
+            fieldVelocityY += this.pathYOffsetPID.calculatePosition(yGoal, this.yPosition);
+
+            // convert velocity to be robot-oriented
+            centerVelocityX = Helpers.cosd(this.robotNavxYaw) * fieldVelocityX + Helpers.sind(this.robotNavxYaw) * fieldVelocityX;
+            centerVelocityY = Helpers.cosd(this.robotNavxYaw) * fieldVelocityY - Helpers.sind(this.robotNavxYaw) * fieldVelocityY;
+
+            AnglePair anglePair = AnglePair.getClosestAngle(angleGoal, this.robotNavxYaw, false);
+            this.desiredYaw = anglePair.getAngle();
 
             this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);
-            omega = -1.0 * this.omegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw);
+            omega = -this.omegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw);
         }
         else
         {
-            centerVelocityX = centerVelocityXRaw;
-            centerVelocityY = centerVelocityYRaw;
-            omega = turnX;
+            // get the center of rotation modifying control values
+            rotationCenterA = this.driver.getAnalog(AnalogOperation.DriveTrainRotationA);
+            rotationCenterB = this.driver.getAnalog(AnalogOperation.DriveTrainRotationB);
+
+            // get the turning-related control values
+            double turnX = this.driver.getAnalog(AnalogOperation.DriveTrainTurnX);
+            double turnY = this.driver.getAnalog(AnalogOperation.DriveTrainTurnY);
+
+            // get the center velocity control values (could be field-oriented or robot-oriented center velocity)
+            double centerVelocityXRaw = this.driver.getAnalog(AnalogOperation.DriveTrainMoveSide);
+            double centerVelocityYRaw = this.driver.getAnalog(AnalogOperation.DriveTrainMoveForward);
+
+            if (this.fieldOriented)
+            {
+                centerVelocityX = Helpers.cosd(this.robotNavxYaw) * centerVelocityXRaw + Helpers.sind(this.robotNavxYaw) * centerVelocityYRaw;
+                centerVelocityY = Helpers.cosd(this.robotNavxYaw) * centerVelocityYRaw - Helpers.sind(this.robotNavxYaw) * centerVelocityXRaw;
+
+                if (TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY
+                    && !Helpers.WithinDelta(Math.sqrt(turnX * turnX + turnY * turnY), 0.0, TuningConstants.DRIVETRAIN_SKIP_OMEGA_ON_ZERO_DELTA))
+                {
+                    double yawGoal = Helpers.atan2d(-turnX, turnY);
+                    AnglePair anglePair = AnglePair.getClosestAngle(yawGoal, this.robotNavxYaw, false);
+                    this.desiredYaw = anglePair.getAngle();
+                }
+
+                this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);
+                omega = -this.omegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw);
+            }
+            else
+            {
+                centerVelocityX = centerVelocityXRaw;
+                centerVelocityY = centerVelocityYRaw;
+                omega = turnX;
+            }
         }
 
         omega *= TuningConstants.DRIVETRAIN_TURN_VELOCITY;
         for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
         {
-            double moduleVelocityX = centerVelocityX - omega * (this.MODULE_OFFSET_Y[i] + b);
-            double moduleVelocityY = centerVelocityY + omega * (this.MODULE_OFFSET_X[i] + a);
+            double moduleVelocityX = centerVelocityX - omega * (this.MODULE_OFFSET_Y[i] + rotationCenterB);
+            double moduleVelocityY = centerVelocityY + omega * (this.MODULE_OFFSET_X[i] + rotationCenterA);
 
             Double moduleSteerPositionGoal;
             double moduleDriveVelocityGoal;
