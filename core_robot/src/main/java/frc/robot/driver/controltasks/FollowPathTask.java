@@ -77,8 +77,8 @@ public class FollowPathTask extends ControlTaskBase
         TrajectoryState state = this.trajectory.get(this.timer.get());
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathXGoal, state.pose.x + this.initialPose.x);
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathYGoal, state.pose.y + this.initialPose.y);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainPathAngleGoal, state.pose.angle + this.initialPose.angle);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainVelocityGoal, state.velocity);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainTurnAngleGoal, state.pose.angle + this.initialPose.angle);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainPathVelocityGoal, state.velocity);
     }
 
     /**
@@ -90,8 +90,8 @@ public class FollowPathTask extends ControlTaskBase
         this.setDigitalOperationState(DigitalOperation.DriveTrainPathMode, false);
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathXGoal, 0.0);
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathYGoal, 0.0);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainPathAngleGoal, 0.0);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainVelocityGoal, 0.0);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainTurnAngleGoal, 0.0);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainPathVelocityGoal, 0.0);
     }
 
     /**

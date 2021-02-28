@@ -4,7 +4,7 @@ import frc.robot.*;
 import frc.robot.driver.common.IControlTask;
 import frc.robot.mechanisms.OffboardVisionManager;
 
-public class VisionPowercellTask extends DecisionSequentialTask
+public class VisionPowercellDecisionTask extends DecisionSequentialTask
 {
     private IControlTask routineBlue;
     private IControlTask routineRed;
@@ -16,7 +16,7 @@ public class VisionPowercellTask extends DecisionSequentialTask
      * @param routineBlue 
      * @param routineRed
      */
-    public VisionPowercellTask(IControlTask routineBlue, IControlTask routineRed)
+    public VisionPowercellDecisionTask(IControlTask routineBlue, IControlTask routineRed)
     {
         this.routineBlue = routineBlue;
         this.routineRed = routineRed;

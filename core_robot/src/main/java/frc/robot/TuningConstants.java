@@ -317,7 +317,7 @@ public class TuningConstants
 
     public static final boolean DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY = true;
     public static final double DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA = 0.001;
-    public static final double DRIVETRAIN_SKIP_OMEGA_ON_ZERO_DELTA = 0.5;
+    public static final double DRIVETRAIN_SKIP_OMEGA_ON_ZERO_DELTA = 0.25;
 
     public static final double DRIVETRAIN_DEAD_ZONE_TURN = 0.15;
     public static final double DRIVETRAIN_DEAD_ZONE_VELOCITY = 0.15;
@@ -326,7 +326,8 @@ public class TuningConstants
     public static final double DRIVETRAIN_ROTATION_A_MULTIPLIER = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE / 2.0;
     public static final double DRIVETRAIN_ROTATION_B_MULTIPLIER = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE / 2.0;
 
-    public static final double DRIVETRAIN_TURN_VELOCITY = 1.0 / 15.0; // convert from radians per second to percentage
+    public static final double DRIVETRAIN_TURN_GOAL_VELOCITY = 45.0; // degrees per second for turn goal
+    public static final double DRIVETRAIN_TURN_SCALE = 1.0 / 15.0; // convert from radians per second to percentage (?)
     public static final double DRIVETRAIN_MAX_MODULE_PATH_VELOCITY = 0.50 * (TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND); // up to x% of our max controllable speed (with a conversion of per-module max velocity from #ticks / 100ms to inches per second)
     public static final double DRIVETRAIN_MAX_PATH_VELOCITY = 120.0; // in inches per second
     public static final double DRIVETRAIN_MAX_PATH_ACCELERATION = 120.0; // in inches per second per second

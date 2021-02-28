@@ -221,7 +221,7 @@ public class AutonomousRoutineSelector {
     private static IControlTask SearchPaths(String forwardPathB, String secondPathB, String thirdPathB, String finalPathB,
                                             String forwardPathR, String secondPathR, String thirdPathR, String finalPathR)
     {
-        return new VisionPowercellTask( // add intake part when we have intake code
+        return new VisionPowercellDecisionTask( // add intake part when we have intake code
             SequentialTask.Sequence( 
                 new FollowPathTask(forwardPathB), // FollowPathTask doesn't exist yet
                 new FollowPathTask(secondPathB),

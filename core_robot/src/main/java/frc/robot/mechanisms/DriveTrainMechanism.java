@@ -68,6 +68,7 @@ public class DriveTrainMechanism implements IMechanism
     private double angle;
     private double xPosition;
     private double yPosition;
+    private double deltaT;
 
     private double robotNavxYaw;
     private double[] driveVelocities;
@@ -243,11 +244,11 @@ public class DriveTrainMechanism implements IMechanism
         this.robotNavxYaw = this.navxManager.getAngle();
         this.time = this.timer.get();
 
+        this.deltaT = this.time - prevTime;
         if (TuningConstants.DRIVETRAIN_USE_ODOMETRY)
         {
-            double deltaT = this.time - prevTime;
-            double deltaNavxYaw = (this.robotNavxYaw - prevNavxYaw) / deltaT;
-            this.calculateOdometry(deltaT, deltaNavxYaw);
+            double deltaNavxYaw = (this.robotNavxYaw - prevNavxYaw) / this.deltaT;
+            this.calculateOdometry(deltaNavxYaw);
             this.logger.logNumber(LoggingKey.DriveTrainXPosition, this.xPosition);
             this.logger.logNumber(LoggingKey.DriveTrainYPosition, this.yPosition);
             this.logger.logNumber(LoggingKey.DriveTrainAngle, this.angle);
@@ -337,8 +338,8 @@ public class DriveTrainMechanism implements IMechanism
 
             double xGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathXGoal);
             double yGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathYGoal);
-            double angleGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathAngleGoal);
-            double velocityGoal = this.driver.getAnalog(AnalogOperation.DriveTrainVelocityGoal);
+            double angleGoal = this.driver.getAnalog(AnalogOperation.DriveTrainTurnAngleGoal);
+            double velocityGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathVelocityGoal);
 
             // convert velocity goal to be field-relative (from being angleGoal relative)
             double fieldVelocityX = velocityGoal * Helpers.cosd(angleGoal);
@@ -356,17 +357,13 @@ public class DriveTrainMechanism implements IMechanism
             this.desiredYaw = anglePair.getAngle();
 
             this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);
-            omega = -this.omegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw);
+            omega = -this.pathOmegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw);
         }
         else
         {
             // get the center of rotation modifying control values
             rotationCenterA = this.driver.getAnalog(AnalogOperation.DriveTrainRotationA);
             rotationCenterB = this.driver.getAnalog(AnalogOperation.DriveTrainRotationB);
-
-            // get the turning-related control values
-            double turnX = this.driver.getAnalog(AnalogOperation.DriveTrainTurnX);
-            double turnY = this.driver.getAnalog(AnalogOperation.DriveTrainTurnY);
 
             // get the center velocity control values (could be field-oriented or robot-oriented center velocity)
             double centerVelocityXRaw = this.driver.getAnalog(AnalogOperation.DriveTrainMoveSide);
@@ -377,30 +374,34 @@ public class DriveTrainMechanism implements IMechanism
                 centerVelocityX = Helpers.cosd(this.robotNavxYaw) * centerVelocityXRaw + Helpers.sind(this.robotNavxYaw) * centerVelocityYRaw;
                 centerVelocityY = Helpers.cosd(this.robotNavxYaw) * centerVelocityYRaw - Helpers.sind(this.robotNavxYaw) * centerVelocityXRaw;
 
-                if (TuningConstants.DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY
-                    && !Helpers.WithinDelta(Math.sqrt(turnX * turnX + turnY * turnY), 0.0, TuningConstants.DRIVETRAIN_SKIP_OMEGA_ON_ZERO_DELTA))
+                double yawGoal = this.driver.getAnalog(AnalogOperation.DriveTrainTurnAngleGoal);
+                if (yawGoal != TuningConstants.MAGIC_NULL_VALUE)
                 {
-                    double yawGoal = Helpers.atan2d(-turnX, turnY);
                     AnglePair anglePair = AnglePair.getClosestAngle(yawGoal, this.robotNavxYaw, false);
                     this.desiredYaw = anglePair.getAngle();
                 }
+                else
+                {
+                    double turnSpeed = this.driver.getAnalog(AnalogOperation.DriveTrainTurnSpeed);
+                    this.desiredYaw += turnSpeed * TuningConstants.DRIVETRAIN_TURN_GOAL_VELOCITY;
+                }
 
                 this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);
-                omega = -this.omegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw);
+                omega = this.omegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw);
             }
             else
             {
                 centerVelocityX = centerVelocityXRaw;
                 centerVelocityY = centerVelocityYRaw;
-                omega = turnX;
+                omega = this.driver.getAnalog(AnalogOperation.DriveTrainTurnSpeed);
             }
         }
 
-        omega *= TuningConstants.DRIVETRAIN_TURN_VELOCITY;
+        omega *= TuningConstants.DRIVETRAIN_TURN_SCALE;
         for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
         {
-            double moduleVelocityX = centerVelocityX - omega * (this.MODULE_OFFSET_Y[i] + rotationCenterB);
-            double moduleVelocityY = centerVelocityY + omega * (this.MODULE_OFFSET_X[i] + rotationCenterA);
+            double moduleVelocityX = centerVelocityX + omega * (this.MODULE_OFFSET_Y[i] + rotationCenterB);
+            double moduleVelocityY = centerVelocityY - omega * (this.MODULE_OFFSET_X[i] + rotationCenterA);
 
             Double moduleSteerPositionGoal;
             double moduleDriveVelocityGoal;
@@ -436,9 +437,9 @@ public class DriveTrainMechanism implements IMechanism
         }
     }
 
-    private void calculateOdometry(double deltaT, double deltaNavxYaw)
+    private void calculateOdometry(double deltaNavxYaw)
     {
-        double navxOmega = deltaNavxYaw / deltaT; // in degrees
+        double navxOmega = deltaNavxYaw / this.deltaT; // in degrees
 
         double omega1; // in radians / second
         double horizontalCenterDistance1;
@@ -578,7 +579,7 @@ public class DriveTrainMechanism implements IMechanism
         }
         else
         {
-            this.angle += averageOmega * deltaT;
+            this.angle += averageOmega * this.deltaT;
 
             // calculate our horizontal and vertical velocities using the turn velocity...
             horizontalVelocity = averageVerticalCenterDistance * averageOmega;
@@ -587,8 +588,8 @@ public class DriveTrainMechanism implements IMechanism
 
         double horizontalCenterVelocity = horizontalVelocity * Helpers.cosd(this.angle) - verticalVelocity * Helpers.sind(this.angle);
         double verticalCenterVelocity = horizontalVelocity * Helpers.sind(this.angle) + verticalVelocity * Helpers.cosd(this.angle);
-        this.yPosition += horizontalCenterVelocity * deltaT;
-        this.xPosition += verticalCenterVelocity * deltaT;
+        this.yPosition += horizontalCenterVelocity * this.deltaT;
+        this.xPosition += verticalCenterVelocity * this.deltaT;
     }
 
     private void assertPowerLevelRange(double powerLevel, String side)
