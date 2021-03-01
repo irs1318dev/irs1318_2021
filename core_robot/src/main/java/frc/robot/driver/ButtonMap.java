@@ -18,10 +18,10 @@ public class ButtonMap implements IButtonMap
             Shift.DriverDebug,
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_LEFT_BUTTON),
-        new ShiftDescription(
-            Shift.OperatorDebug,
-            UserInputDevice.Operator,
-            UserInputDeviceButton.PS4_LEFT_BUTTON),
+        // new ShiftDescription(
+        //     Shift.OperatorDebug,
+        //     UserInputDevice.Operator,
+        //     UserInputDeviceButton.PS4_LEFT_BUTTON),
     };
 
     public static AnalogOperationDescription[] AnalogOperationSchema = new AnalogOperationDescription[]
@@ -40,7 +40,7 @@ public class ButtonMap implements IButtonMap
             TuningConstants.DRIVETRAIN_DEAD_ZONE_VELOCITY),
         new AnalogOperationDescription(
             AnalogOperation.DriveTrainTurnAngleGoal,
-            UserInputDevice.Operator,
+            UserInputDevice.Driver,
             AnalogAxis.XBONE_RSX,
             AnalogAxis.XBONE_RSY,
             Shift.DriverDebug,
@@ -114,7 +114,30 @@ public class ButtonMap implements IButtonMap
 
     public static MacroOperationDescription[] MacroSchema = new MacroOperationDescription[]
     {
-        // DriveTrain macros
+        new MacroOperationDescription(
+            MacroOperation.FollowSomePath,
+            UserInputDevice.Driver,
+            UserInputDeviceButton.XBONE_A_BUTTON,
+            Shift.DriverDebug,
+            Shift.DriverDebug,
+            ButtonType.Toggle,
+            () -> new FollowPathTask("forward5ft", true),
+            new IOperation[]
+            {
+                AnalogOperation.DriveTrainMoveForward,
+                AnalogOperation.DriveTrainMoveSide,
+                AnalogOperation.DriveTrainTurnAngleGoal,
+                AnalogOperation.DriveTrainTurnSpeed,
+                AnalogOperation.DriveTrainRotationA,
+                AnalogOperation.DriveTrainRotationB,
+                AnalogOperation.DriveTrainPathXGoal,
+                AnalogOperation.DriveTrainPathYGoal,
+                AnalogOperation.DriveTrainPathVelocityGoal,
+                DigitalOperation.DriveTrainPathMode,
+                DigitalOperation.DriveTrainReset,
+                DigitalOperation.DriveTrainEnableFieldOrientation,
+                DigitalOperation.DriveTrainDisableFieldOrientation,
+            }),
     };
 
     @Override

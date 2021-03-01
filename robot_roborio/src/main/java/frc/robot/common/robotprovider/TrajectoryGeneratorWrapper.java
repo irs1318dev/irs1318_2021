@@ -22,8 +22,8 @@ public class TrajectoryGeneratorWrapper implements ITrajectoryGenerator
 
     public TrajectoryGeneratorWrapper()
     {
-        double a = (HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE / 12.0) / 2.0;
-        double b = (HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE / 12.0) / 2.0;
+        double a = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE / 12.0;
+        double b = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE / 12.0;
 
         this.swerveDriveKinematics =
             new SwerveDriveKinematics(
@@ -46,8 +46,8 @@ public class TrajectoryGeneratorWrapper implements ITrajectoryGenerator
 
     public ITrajectory generateTrajectory(Pose2d start, Pose2d end, Point2d[] translations)
     {
-        edu.wpi.first.wpilibj.geometry.Pose2d sideStart = new edu.wpi.first.wpilibj.geometry.Pose2d(start.x * Helpers.METERS_PER_INCH, start.y * Helpers.METERS_PER_INCH, Rotation2d.fromDegrees(start.angle));
-        edu.wpi.first.wpilibj.geometry.Pose2d crossScale = new edu.wpi.first.wpilibj.geometry.Pose2d(end.x * Helpers.METERS_PER_INCH, end.y * Helpers.METERS_PER_INCH, Rotation2d.fromDegrees(end.angle));
+        edu.wpi.first.wpilibj.geometry.Pose2d startPose = new edu.wpi.first.wpilibj.geometry.Pose2d(start.x * Helpers.METERS_PER_INCH, start.y * Helpers.METERS_PER_INCH, Rotation2d.fromDegrees(start.angle));
+        edu.wpi.first.wpilibj.geometry.Pose2d endPose = new edu.wpi.first.wpilibj.geometry.Pose2d(end.x * Helpers.METERS_PER_INCH, end.y * Helpers.METERS_PER_INCH, Rotation2d.fromDegrees(end.angle));
 
         ArrayList<Translation2d> interiorWaypoints = new ArrayList<Translation2d>(translations.length);
         for (int i = 0; i < translations.length; i++)
@@ -56,9 +56,9 @@ public class TrajectoryGeneratorWrapper implements ITrajectoryGenerator
         }
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-            sideStart,
+            startPose,
             interiorWaypoints,
-            crossScale,
+            endPose,
             this.swerveConfig);
 
         return new TrajectoryWrapper(trajectory);

@@ -10,7 +10,8 @@ import frc.robot.driver.common.*;
 import frc.robot.driver.controltasks.*;
 
 @Singleton
-public class AutonomousRoutineSelector {
+public class AutonomousRoutineSelector
+{
     private final ILogger logger;
 
     private final PathManager pathManager;
@@ -132,7 +133,7 @@ public class AutonomousRoutineSelector {
                 new Pose2d(60.0, 0.0, 0.0), // which way is forward?
                 new Point2d[]
                 {
-                    new Point2d(30.0, 0.0) // is this needed?
+                    new Point2d(30.0, 0.0),
                 }));
                     
         // D5 TO A6, E6 TO B7

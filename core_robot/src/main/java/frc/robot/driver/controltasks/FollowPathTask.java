@@ -75,6 +75,7 @@ public class FollowPathTask extends ControlTaskBase
     public void update()
     {
         TrajectoryState state = this.trajectory.get(this.timer.get());
+        System.out.println("x: " + state.pose.x + " y: " + state.pose.y + " angle: " + state.pose.angle + " vel: " + state.velocity);
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathXGoal, state.pose.x + this.initialPose.x);
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathYGoal, state.pose.y + this.initialPose.y);
         this.setAnalogOperationState(AnalogOperation.DriveTrainTurnAngleGoal, state.pose.angle + this.initialPose.angle);
