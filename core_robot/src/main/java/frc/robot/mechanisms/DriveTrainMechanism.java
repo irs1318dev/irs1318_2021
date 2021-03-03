@@ -437,14 +437,14 @@ public class DriveTrainMechanism implements IMechanism
         }
     }
 
-    private void calculateOdometry(double deltaNavxYaw)
+    public void calculateOdometry(double deltaNavxYaw)
     {
         double navxOmega = deltaNavxYaw / this.deltaT; // in degrees
 
         double omega1; // in radians / second
         double horizontalCenterDistance1;
         double verticalCenterDistance1;
-        if (Helpers.WithinDelta(this.steerAngles[0], this.steerAngles[1], 0.01))
+        if (Helpers.AnglePairWithinDelta(this.steerAngles[0], this.isDirectionSwapped[0] ^ (this.driveVelocities[0] >= 0.0), this.steerAngles[1], this.isDirectionSwapped[1] ^ (this.driveVelocities[1] >= 0.0), 0.01))
         {
             omega1 = 0.0;
             horizontalCenterDistance1 = Double.POSITIVE_INFINITY;
@@ -455,18 +455,18 @@ public class DriveTrainMechanism implements IMechanism
             if (Helpers.WithinDelta(Math.abs(this.steerAngles[0]), 90.0, 0.005))
             {
                 horizontalCenterDistance1 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE;
-                verticalCenterDistance1 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE * Helpers.tand(this.steerAngles[1]) + HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
+                verticalCenterDistance1 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE * Helpers.tand(-this.steerAngles[1]) - HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
             }
             else if (Helpers.WithinDelta(Math.abs(this.steerAngles[1]), 90.0, 0.005))
             {
                 horizontalCenterDistance1 = -HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE;
-                verticalCenterDistance1 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE * Helpers.tand(this.steerAngles[0]) + HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
+                verticalCenterDistance1 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE * Helpers.tand(this.steerAngles[0]) - HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
             }
             else
             {
                 // calculate distance to rotation point based on the first and second modules
-                double tanSteeringAngle1 = Helpers.tand(this.steerAngles[0]);
-                double tanSteeringAngle2 = Helpers.tand(this.steerAngles[1]);
+                double tanSteeringAngle1 = Helpers.tand(-this.steerAngles[0]);
+                double tanSteeringAngle2 = Helpers.tand(-this.steerAngles[1]);
                 horizontalCenterDistance1 = (tanSteeringAngle1 + tanSteeringAngle2) * HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE / (tanSteeringAngle1 - tanSteeringAngle2);
                 verticalCenterDistance1 = (horizontalCenterDistance1 +  HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE) * tanSteeringAngle2 - HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
             }
@@ -497,7 +497,7 @@ public class DriveTrainMechanism implements IMechanism
         double omega2; // in radians / second
         double horizontalCenterDistance2;
         double verticalCenterDistance2;
-        if (Helpers.WithinDelta(this.steerAngles[2], this.steerAngles[3], 0.01))
+        if (Helpers.AnglePairWithinDelta(this.steerAngles[2], this.isDirectionSwapped[2] ^ (this.driveVelocities[2] >= 0.0), this.steerAngles[3], this.isDirectionSwapped[3] ^ (this.driveVelocities[3] >= 0.0), 0.01))
         {
             omega2 = 0.0;
             horizontalCenterDistance2 = Double.POSITIVE_INFINITY;
@@ -508,20 +508,20 @@ public class DriveTrainMechanism implements IMechanism
             if (Helpers.WithinDelta(Math.abs(this.steerAngles[2]), 90.0, 0.005))
             {
                 horizontalCenterDistance2 = -HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE;
-                verticalCenterDistance2 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE * Helpers.tand(this.steerAngles[3]) - HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
+                verticalCenterDistance2 = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE - HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE * Helpers.tand(-this.steerAngles[3]);
             }
             else if (Helpers.WithinDelta(Math.abs(this.steerAngles[3]), 90.0, 0.005))
             {
                 horizontalCenterDistance2 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE;
-                verticalCenterDistance2 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE * Helpers.tand(this.steerAngles[2]) - HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
+                verticalCenterDistance2 = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE - HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE * Helpers.tand(this.steerAngles[2]);
             }
             else
             {
                 // calculate distance to rotation point based on the third and fourth modules
                 double tanSteeringAngle3 = Helpers.tand(this.steerAngles[2]);
                 double tanSteeringAngle4 = Helpers.tand(this.steerAngles[3]);
-                horizontalCenterDistance2 = (tanSteeringAngle3 + tanSteeringAngle4) * HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE / (tanSteeringAngle3 - tanSteeringAngle4);
-                verticalCenterDistance2 = (horizontalCenterDistance2 +  HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE) * tanSteeringAngle4 - HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
+                horizontalCenterDistance2 = (tanSteeringAngle3 + tanSteeringAngle4) * HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE / (tanSteeringAngle4 - tanSteeringAngle3);
+                verticalCenterDistance2 = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE - (horizontalCenterDistance2 - HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE) * tanSteeringAngle4;
             }
 
             // calculate radius of third and fourth modules from the rotation point
@@ -560,22 +560,19 @@ public class DriveTrainMechanism implements IMechanism
             // this.angle doesn't change
 
             // calculate our horizontal and vertical velocities using an average of our various velocities and the angle.
-            double averageVelocity = 
-                (this.driveVelocities[0] * (this.isDirectionSwapped[0] ? -1.0 : 1.0) +
-                    this.driveVelocities[1] * (this.isDirectionSwapped[1] ? -1.0 : 1.0) +
-                    this.driveVelocities[2] * (this.isDirectionSwapped[2] ? -1.0 : 1.0) +
-                    this.driveVelocities[3] * (this.isDirectionSwapped[3] ? -1.0 : 1.0))
+            horizontalVelocity = 
+                (Helpers.sind(this.steerAngles[0]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[0] * (this.isDirectionSwapped[0] ? -1.0 : 1.0) +
+                    Helpers.sind(this.steerAngles[1]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[1] * (this.isDirectionSwapped[1] ? -1.0 : 1.0) +
+                    Helpers.sind(this.steerAngles[2]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[2] * (this.isDirectionSwapped[2] ? -1.0 : 1.0) +
+                    Helpers.sind(this.steerAngles[3]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[3] * (this.isDirectionSwapped[3] ? -1.0 : 1.0))
                 / 4.0;
 
-            double averageAngle =
-                (Helpers.updateAngleRange(this.steerAngles[0] + (this.isDirectionSwapped[0] ? -180.0 : 0.0)) +
-                    Helpers.updateAngleRange(this.steerAngles[1] + (this.isDirectionSwapped[1] ? -180.0 : 0.0)) +
-                    Helpers.updateAngleRange(this.steerAngles[2] + (this.isDirectionSwapped[2] ? -180.0 : 0.0)) +
-                    Helpers.updateAngleRange(this.steerAngles[3] + (this.isDirectionSwapped[3] ? -180.0 : 0.0)))
+            verticalVelocity = 
+                (Helpers.cosd(this.steerAngles[0]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[0] * (this.isDirectionSwapped[0] ? -1.0 : 1.0) +
+                    Helpers.cosd(this.steerAngles[1]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[1] * (this.isDirectionSwapped[1] ? -1.0 : 1.0) +
+                    Helpers.cosd(this.steerAngles[2]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[2] * (this.isDirectionSwapped[2] ? -1.0 : 1.0) +
+                    Helpers.cosd(this.steerAngles[3]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[3] * (this.isDirectionSwapped[3] ? -1.0 : 1.0))
                 / 4.0;
-
-            horizontalVelocity = averageVelocity * Helpers.sind(averageAngle);
-            verticalVelocity = averageVelocity * Helpers.cosd(averageAngle);
         }
         else
         {

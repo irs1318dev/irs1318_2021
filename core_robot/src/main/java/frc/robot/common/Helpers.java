@@ -126,6 +126,21 @@ public class Helpers
         return twoLoopAngle;
     }
 
+    public static boolean AnglePairWithinDelta(double value1, boolean isSwapped1, double value2, boolean isSwapped2, double acceptableDelta)
+    {
+        if (isSwapped1)
+        {
+            value1 = Helpers.updateAngleRange(value1 + 180.0);
+        }
+        
+        if (isSwapped2)
+        {
+            value2 = Helpers.updateAngleRange(value2 + 180.0);
+        }
+
+        return Helpers.WithinDelta(value1, value2, acceptableDelta);
+    }
+
     /**
      * Convert from cartesian coordinates (x, y) to polar angle (along positive x-axis is 0, increasing counter-clockwise)
      * @param x coordinate

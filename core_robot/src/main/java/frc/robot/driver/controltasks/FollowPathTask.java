@@ -21,7 +21,7 @@ public class FollowPathTask extends ControlTaskBase
     private ITimer timer;
 
     private double startTime;
-    private double duration;
+    private double trajectoryDuration;
     private ITrajectory trajectory;
     private Pose2d initialPose;
 
@@ -53,7 +53,7 @@ public class FollowPathTask extends ControlTaskBase
 
         this.timer = this.getInjector().getInstance(ITimer.class);
         this.startTime = this.timer.get();
-        this.duration = this.trajectory.getDuration();
+        this.trajectoryDuration = this.trajectory.getDuration();
 
         if (this.fromCurrentPose)
         {
@@ -74,7 +74,7 @@ public class FollowPathTask extends ControlTaskBase
     @Override
     public void update()
     {
-        TrajectoryState state = this.trajectory.get(this.timer.get());
+        TrajectoryState state = this.trajectory.get(this.timer.get() - this.startTime);
         System.out.println("x: " + state.pose.x + " y: " + state.pose.y + " angle: " + state.pose.angle + " vel: " + state.velocity);
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathXGoal, state.pose.x + this.initialPose.x);
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathYGoal, state.pose.y + this.initialPose.y);
@@ -102,6 +102,6 @@ public class FollowPathTask extends ControlTaskBase
     @Override
     public boolean hasCompleted()
     {
-        return this.timer.get() > this.startTime + this.duration;
+        return this.timer.get() > this.startTime + this.trajectoryDuration;
     }
 }
