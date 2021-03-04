@@ -271,6 +271,7 @@ public class DriveTrainMechanism implements IMechanism
 
         if (this.driver.getDigital(DigitalOperation.PositionResetFieldOrientation))
         {
+            this.robotNavxYaw = this.navxManager.getAngle();
             this.desiredYaw = this.robotNavxYaw;
         }
 
@@ -341,23 +342,34 @@ public class DriveTrainMechanism implements IMechanism
             double angleGoal = this.driver.getAnalog(AnalogOperation.DriveTrainTurnAngleGoal);
             double velocityGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathVelocityGoal);
 
+            // System.out.println("velocityGoal " + velocityGoal + " angleGoal " + angleGoal);
+
+            // convert velocity goal from in/sec to percentage of max velocity
+            velocityGoal *= TuningConstants.DRIVETRAIN_VELOCITY_TO_PERCENTAGE;
+
             // convert velocity goal to be field-relative (from being angleGoal relative)
             double fieldVelocityX = velocityGoal * Helpers.cosd(angleGoal);
             double fieldVelocityY = velocityGoal * Helpers.sind(angleGoal);
 
+            // System.out.println("fieldVelocityX " + fieldVelocityX + " fieldVelocityY " + fieldVelocityY);
+
             // add correction for x/y drift
-            fieldVelocityX += this.pathXOffsetPID.calculatePosition(xGoal, this.xPosition);
-            fieldVelocityY += this.pathYOffsetPID.calculatePosition(yGoal, this.yPosition);
+            // fieldVelocityX += this.pathXOffsetPID.calculatePosition(xGoal, this.xPosition);
+            // fieldVelocityY += this.pathYOffsetPID.calculatePosition(yGoal, this.yPosition);
+
+            System.out.println("fieldVelocityX " + fieldVelocityX + " fieldVelocityY " + fieldVelocityY);
 
             // convert velocity to be robot-oriented
             centerVelocityX = Helpers.cosd(this.robotNavxYaw) * fieldVelocityX + Helpers.sind(this.robotNavxYaw) * fieldVelocityX;
             centerVelocityY = Helpers.cosd(this.robotNavxYaw) * fieldVelocityY - Helpers.sind(this.robotNavxYaw) * fieldVelocityY;
 
+            System.out.println("centerVelocityX " + centerVelocityX + " centerVelocityY " + centerVelocityY);
+
             AnglePair anglePair = AnglePair.getClosestAngle(angleGoal, this.robotNavxYaw, false);
             this.desiredYaw = anglePair.getAngle();
 
             this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);
-            omega = -this.pathOmegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw);
+            omega = this.pathOmegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw);
         }
         else
         {
@@ -585,8 +597,8 @@ public class DriveTrainMechanism implements IMechanism
 
         double horizontalCenterVelocity = horizontalVelocity * Helpers.cosd(this.angle) - verticalVelocity * Helpers.sind(this.angle);
         double verticalCenterVelocity = horizontalVelocity * Helpers.sind(this.angle) + verticalVelocity * Helpers.cosd(this.angle);
-        this.yPosition += horizontalCenterVelocity * this.deltaT;
-        this.xPosition += verticalCenterVelocity * this.deltaT;
+        this.xPosition += horizontalCenterVelocity * this.deltaT;
+        this.yPosition += verticalCenterVelocity * this.deltaT;
     }
 
     private void assertPowerLevelRange(double powerLevel, String side)
