@@ -78,7 +78,8 @@ public class FollowPathTask extends ControlTaskBase
         System.out.println("x: " + state.pose.x + " y: " + state.pose.y + " angle: " + state.pose.angle + " vel: " + state.velocity);
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathXGoal, state.pose.x + this.initialPose.x);
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathYGoal, state.pose.y + this.initialPose.y);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainTurnAngleGoal, state.pose.angle + this.initialPose.angle);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainTurnAngleGoal, state.pose.angle);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainTurnAngleReference, this.initialPose.angle);
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathVelocityGoal, state.velocity);
     }
 
@@ -89,9 +90,6 @@ public class FollowPathTask extends ControlTaskBase
     public void end()
     {
         this.setDigitalOperationState(DigitalOperation.DriveTrainPathMode, false);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainPathXGoal, 0.0);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainPathYGoal, 0.0);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainTurnAngleGoal, 0.0);
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathVelocityGoal, 0.0);
     }
 

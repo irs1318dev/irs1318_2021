@@ -339,10 +339,11 @@ public class DriveTrainMechanism implements IMechanism
 
             double xGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathXGoal);
             double yGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathYGoal);
+            double angleReference = this.driver.getAnalog(AnalogOperation.DriveTrainTurnAngleReference);
             double angleGoal = this.driver.getAnalog(AnalogOperation.DriveTrainTurnAngleGoal);
             double velocityGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathVelocityGoal);
 
-            // System.out.println("velocityGoal " + velocityGoal + " angleGoal " + angleGoal);
+            System.out.println("velocityGoal " + velocityGoal + " angleGoal " + angleGoal);
 
             // convert velocity goal from in/sec to percentage of max velocity
             velocityGoal *= TuningConstants.DRIVETRAIN_VELOCITY_TO_PERCENTAGE;
@@ -351,21 +352,17 @@ public class DriveTrainMechanism implements IMechanism
             double fieldVelocityX = velocityGoal * Helpers.cosd(angleGoal);
             double fieldVelocityY = velocityGoal * Helpers.sind(angleGoal);
 
-            // System.out.println("fieldVelocityX " + fieldVelocityX + " fieldVelocityY " + fieldVelocityY);
+            System.out.println("fieldVelocityX " + fieldVelocityX + " fieldVelocityY " + fieldVelocityY);
 
             // add correction for x/y drift
             // fieldVelocityX += this.pathXOffsetPID.calculatePosition(xGoal, this.xPosition);
             // fieldVelocityY += this.pathYOffsetPID.calculatePosition(yGoal, this.yPosition);
 
-            System.out.println("fieldVelocityX " + fieldVelocityX + " fieldVelocityY " + fieldVelocityY);
-
             // convert velocity to be robot-oriented
             centerVelocityX = Helpers.cosd(this.robotNavxYaw) * fieldVelocityX + Helpers.sind(this.robotNavxYaw) * fieldVelocityX;
             centerVelocityY = Helpers.cosd(this.robotNavxYaw) * fieldVelocityY - Helpers.sind(this.robotNavxYaw) * fieldVelocityY;
 
-            System.out.println("centerVelocityX " + centerVelocityX + " centerVelocityY " + centerVelocityY);
-
-            AnglePair anglePair = AnglePair.getClosestAngle(angleGoal, this.robotNavxYaw, false);
+            AnglePair anglePair = AnglePair.getClosestAngle(angleGoal + angleReference, this.robotNavxYaw, false);
             this.desiredYaw = anglePair.getAngle();
 
             this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);

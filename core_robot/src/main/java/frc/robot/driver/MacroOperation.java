@@ -8,6 +8,8 @@ public enum MacroOperation implements IOperation
     PIDBrake,
 
     // Testing operations
+    VisionCenter,
+    VisionCenterAndAdvance,
     FollowSomePath,
     FollowAnotherPath,
     FollowADifferentPath,
