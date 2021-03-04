@@ -329,6 +329,6 @@ public class TuningConstants
     public static final double DRIVETRAIN_TURN_GOAL_VELOCITY = 45.0; // degrees per second for turn goal
     public static final double DRIVETRAIN_TURN_SCALE = 1.0 / 15.0; // convert from radians per second to percentage (?)
     public static final double DRIVETRAIN_MAX_MODULE_PATH_VELOCITY = 0.50 * (TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND); // up to x% of our max controllable speed (with a conversion of per-module max velocity from #ticks / 100ms to inches per second)
-    public static final double DRIVETRAIN_MAX_PATH_VELOCITY = 120.0; // in inches per second
-    public static final double DRIVETRAIN_MAX_PATH_ACCELERATION = 120.0; // in inches per second per second
+    public static final double DRIVETRAIN_MAX_PATH_VELOCITY = 0.3 * 120.0; // in inches per second
+    public static final double DRIVETRAIN_MAX_PATH_ACCELERATION = 0.75 * 120.0; // in inches per second per second
 }
