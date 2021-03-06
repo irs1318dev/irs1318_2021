@@ -464,7 +464,7 @@ public class DriveTrainMechanism implements IMechanism
             if (Helpers.WithinDelta(Math.abs(this.steerAngles[0]), 90.0, 0.005))
             {
                 horizontalCenterDistance1 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE;
-                verticalCenterDistance1 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE * Helpers.tand(-this.steerAngles[1]) - HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
+                verticalCenterDistance1 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE * Helpers.tand(90.0 - this.steerAngles[1]) - HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
             }
             else if (Helpers.WithinDelta(Math.abs(this.steerAngles[1]), 90.0, 0.005))
             {
@@ -474,8 +474,8 @@ public class DriveTrainMechanism implements IMechanism
             else
             {
                 // calculate distance to rotation point based on the first and second modules
-                double tanSteeringAngle1 = Helpers.tand(-this.steerAngles[0]);
-                double tanSteeringAngle2 = Helpers.tand(-this.steerAngles[1]);
+                double tanSteeringAngle1 = Helpers.tand(90.0 - this.steerAngles[0]);
+                double tanSteeringAngle2 = Helpers.tand(90.0 - this.steerAngles[1]);
                 horizontalCenterDistance1 = (tanSteeringAngle1 + tanSteeringAngle2) * HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE / (tanSteeringAngle1 - tanSteeringAngle2);
                 verticalCenterDistance1 = (horizontalCenterDistance1 +  HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE) * tanSteeringAngle2 - HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
             }
@@ -517,7 +517,7 @@ public class DriveTrainMechanism implements IMechanism
             if (Helpers.WithinDelta(Math.abs(this.steerAngles[2]), 90.0, 0.005))
             {
                 horizontalCenterDistance2 = -HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE;
-                verticalCenterDistance2 = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE - HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE * Helpers.tand(-this.steerAngles[3]);
+                verticalCenterDistance2 = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE - HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE * Helpers.tand(90.0 - this.steerAngles[3]);
             }
             else if (Helpers.WithinDelta(Math.abs(this.steerAngles[3]), 90.0, 0.005))
             {
