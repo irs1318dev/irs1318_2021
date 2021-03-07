@@ -58,7 +58,7 @@ public class AutonomousRoutineSelector
         this.positionChooser.addObject("right", StartPosition.Right);
         networkTableProvider.addChooser("Start Position", this.positionChooser);
 
-        this.generateDynamicPaths(provider.getTrajectoryGenerator());
+        RoadRunnerTrajectoryGenerator.generateTrajectories(this.pathManager);
     }
 
     /**
@@ -102,119 +102,6 @@ public class AutonomousRoutineSelector
     {
         return new WaitTask(0);
     }
-
-    /**
-     * Generate any ad-hoc paths and add them to the mapping
-     * @param trajectoryGenerator to help generate trajectories
-     */
-    private void generateDynamicPaths(ITrajectoryGenerator trajectoryGenerator)
-    {
-        if (trajectoryGenerator == null)
-        {
-            return;
-        }
-
-        this.pathManager.addPath(
-            "turnArcLeft",
-            trajectoryGenerator.generateTrajectory(
-                new Pose2d(0.0, 0.0, 0.0),
-                new Pose2d(100.0, 100.0, 90.0),
-                new Point2d[]
-                {
-                    new Point2d(60.0, 60.0)
-                }));
-        
-        // -------------------- path A paths ----------------   
-
-        this.pathManager.addPath(
-            "forward5ft",
-            trajectoryGenerator.generateTrajectory(
-                new Pose2d(0.0, 0.0, 0.0),
-                new Pose2d(60.0, 0.0, 0.0), // which way is forward?
-                new Point2d[]
-                {
-                    new Point2d(30.0, 0.0),
-                }));
-                    
-        // D5 TO A6, E6 TO B7
-        this.pathManager.addPath( 
-            "slideToTheLeft",
-            trajectoryGenerator.generateTrajectory(
-                new Pose2d(0.0, 0.0, 0.0),
-                new Pose2d(30.0, 90.0, 0.0),
-                new Point2d[]
-                {
-                    new Point2d(15.0, 45.0)
-                }));
-
-        // C3 TO D5, B7 TO C9 
-        this.pathManager.addPath( 
-            "slideToTheRight",
-            trajectoryGenerator.generateTrajectory(
-                new Pose2d(0.0, 0.0, 0.0),
-                new Pose2d(60.0, -30.0, 0.0),
-                new Point2d[]
-                {
-                    new Point2d(30.0, -15.0)
-                }));
-        
-        // A6 TO A11, E1 TO E6
-        this.pathManager.addPath( 
-            "crissCross",                // EVERYBODY CLAP YOUR HANDS  
-            trajectoryGenerator.generateTrajectory( // clap
-                new Pose2d(0.0, 0.0, 0.0),          // clap
-                new Pose2d(150.0, 0.0, 0.0),        // clap
-                new Point2d[]                       // clap
-                {                                   // clap
-                    new Point2d(75.0, 0.0)          // clap
-                }));                                // clap
-
-
-
-        // ----------------------- Path B paths ------------------  // SLIDE AT YOUR OWN RISK
-
-        // B1 TO B3: forward5feet
-        
-        this.pathManager.addPath( //B3 TO D5, B8 TO D10
-            "slideToTheRightB",
-            trajectoryGenerator.generateTrajectory(
-                new Pose2d(0.0, 0.0, 0.0),
-                new Pose2d(60.0, -60.0, 0.0),
-                new Point2d[]
-                {
-                    new Point2d(30.0, -30.0)
-                }));
-
-        this.pathManager.addPath( // D5 TO B7
-            "slideToTheLeftB",
-            trajectoryGenerator.generateTrajectory(
-                new Pose2d(0.0, 0.0, 0.0),
-                new Pose2d(60.0, 60.0, 0.0),
-                new Point2d[]
-                {
-                    new Point2d(30.0, 30.0)
-                }));
-
-        this.pathManager.addPath( //D10 to D11, 
-            "chaChaNowYall", // go forward a lil bit - it'll be a smol amount, almost as smol as VaruANsShiHIKA 
-            trajectoryGenerator.generateTrajectory(
-                new Pose2d(0.0, 0.0, 0.0),
-                new Pose2d(30.0, 0.0, 0.0),
-                new Point2d[]
-                {
-                    new Point2d(15.0, 0.0)
-                }));
-        
-        this.pathManager.addPath( //B7 to B11
-            "chaChaRealSmooth", // goes forward 10 ft
-            trajectoryGenerator.generateTrajectory(
-                new Pose2d(0.0, 0.0, 0.0),
-                new Pose2d(120.0, 0.0, 0.0),
-                new Point2d[]
-                {
-                    new Point2d(60.0, 0.0)
-                }));
-    } // one hop this time
 
     /**
      * nowwww it's time to get funky

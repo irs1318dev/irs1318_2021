@@ -319,7 +319,7 @@ public class TuningConstants
     public static final double DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA = 0.001;
     public static final double DRIVETRAIN_SKIP_OMEGA_ON_ZERO_DELTA = 0.25;
 
-    public static final double DRIVETRAIN_DEAD_ZONE_TURN = 0.15;
+    public static final double DRIVETRAIN_DEAD_ZONE_TURN = 0.20;
     public static final double DRIVETRAIN_DEAD_ZONE_VELOCITY = 0.15;
     public static final double DRIVETRAIN_DEAD_ZONE_TRIGGER_AB = 0.15;
 
@@ -330,7 +330,9 @@ public class TuningConstants
     public static final double DRIVETRAIN_VELOCITY_TO_PERCENTAGE = 1.0 / TuningConstants.DRIVETRAIN_MAX_VELOCITY;
     public static final double DRIVETRAIN_TURN_GOAL_VELOCITY = 45.0; // degrees per second for turn goal
     public static final double DRIVETRAIN_TURN_SCALE = 1.0 / 15.0; // convert from radians per second to percentage (?)
+    public static final double DRIVETRAIN_TURN_APPROXIMATION = 0.5; // number of degrees off at which point we give up trying to face an angle when uncommanded
     public static final double DRIVETRAIN_MAX_MODULE_PATH_VELOCITY = 0.50 * TuningConstants.DRIVETRAIN_MAX_VELOCITY; // up to x% of our max controllable speed
-    public static final double DRIVETRAIN_MAX_PATH_VELOCITY = 0.3 * TuningConstants.DRIVETRAIN_MAX_VELOCITY; // in inches per second
-    public static final double DRIVETRAIN_MAX_PATH_ACCELERATION = 0.75 * TuningConstants.DRIVETRAIN_MAX_VELOCITY; // in inches per second per second
+    public static final double DRIVETRAIN_MAX_PATH_TURN_VELOCITY = 45.0; // in degrees per second
+    public static final double DRIVETRAIN_MAX_PATH_TRANSLATIONAL_VELOCITY = 0.3 * TuningConstants.DRIVETRAIN_MAX_VELOCITY; // in inches per second
+    public static final double DRIVETRAIN_MAX_PATH_TRANSLATIONAL_ACCELERATION = 0.75 * TuningConstants.DRIVETRAIN_MAX_VELOCITY; // in inches per second per second
 }

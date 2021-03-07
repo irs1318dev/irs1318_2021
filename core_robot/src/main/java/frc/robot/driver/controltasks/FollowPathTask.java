@@ -75,12 +75,14 @@ public class FollowPathTask extends ControlTaskBase
     public void update()
     {
         TrajectoryState state = this.trajectory.get(this.timer.get() - this.startTime);
-        System.out.println("x: " + state.pose.x + " y: " + state.pose.y + " angle: " + state.pose.angle + " vel: " + state.velocity);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainPathXGoal, state.pose.x + this.initialPose.x);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainPathYGoal, state.pose.y + this.initialPose.y);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainTurnAngleGoal, state.pose.angle);
+        System.out.println("x: " + state.xPosition + " y: " + state.yPosition + " angle: " + state.angle + " velX: " + state.xVelocity + " velY: " + state.yVelocity + " velAngle: " + state.angleVelocity);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainPathXGoal, state.xPosition + this.initialPose.x);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainPathYGoal, state.yPosition + this.initialPose.y);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainTurnAngleGoal, state.angle);
         this.setAnalogOperationState(AnalogOperation.DriveTrainTurnAngleReference, this.initialPose.angle);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainPathVelocityGoal, state.velocity);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainPathXVelocityGoal, state.xVelocity);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainPathYVelocityGoal, state.xVelocity);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainPathAngleVelocityGoal, state.angleVelocity);
     }
 
     /**
@@ -90,7 +92,9 @@ public class FollowPathTask extends ControlTaskBase
     public void end()
     {
         this.setDigitalOperationState(DigitalOperation.DriveTrainPathMode, false);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainPathVelocityGoal, 0.0);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainPathXVelocityGoal, 0.0);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainPathYVelocityGoal, 0.0);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainPathAngleVelocityGoal, 0.0);
     }
 
     /**

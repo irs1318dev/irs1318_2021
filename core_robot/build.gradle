@@ -11,6 +11,7 @@ dependencies {
     compile "javax.inject:javax.inject:1"
     compile "com.google.guava:guava:21.0"
     compile "com.google.inject:guice:4.1.0:no_aop"
+    compile "com.acmerobotics.roadrunner:core:0.5.3"
 
     testCompile "org.mockito:mockito-all:1.10.19"
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"

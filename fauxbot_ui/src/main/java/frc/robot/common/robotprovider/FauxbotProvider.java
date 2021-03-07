@@ -202,10 +202,4 @@ public class FauxbotProvider implements IRobotProvider
     {
         return new FauxbotNetworkTableProvider();
     }
-
-    @Override
-    public ITrajectoryGenerator getTrajectoryGenerator()
-    {
-        return null;
-    }
 }

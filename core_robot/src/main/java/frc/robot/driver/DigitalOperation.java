@@ -19,4 +19,6 @@ public enum DigitalOperation implements IOperation
     DriveTrainReset,
     DriveTrainEnableFieldOrientation,
     DriveTrainDisableFieldOrientation,
+    DriveTrainEnableMaintainDirectionMode,
+    DriveTrainDisableMaintainDirectionMode,
 }

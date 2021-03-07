@@ -308,10 +308,4 @@ public class TestProvider implements IRobotProvider
     {
         return null;
     }
-
-    @Override
-    public ITrajectoryGenerator getTrajectoryGenerator()
-    {
-        return null;
-    }
 }

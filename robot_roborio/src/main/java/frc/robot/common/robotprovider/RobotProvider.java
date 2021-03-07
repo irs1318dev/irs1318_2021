@@ -190,10 +190,4 @@ public class RobotProvider implements IRobotProvider
     {
         return new NetworkTableProvider();
     }
-
-    @Override
-    public ITrajectoryGenerator getTrajectoryGenerator()
-    {
-        return new TrajectoryGeneratorWrapper();
-    }
 }
