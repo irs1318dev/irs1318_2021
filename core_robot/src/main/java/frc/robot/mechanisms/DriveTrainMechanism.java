@@ -57,6 +57,7 @@ public class DriveTrainMechanism implements IMechanism
 
     private boolean fieldOriented;
     private boolean maintainOrientation;
+    private boolean updatedOrientation;
     private PIDHandler omegaPID;
     private double desiredYaw;
     private boolean[] isDirectionSwapped;
@@ -209,6 +210,7 @@ public class DriveTrainMechanism implements IMechanism
 
         this.fieldOriented = false;
         this.maintainOrientation = true;
+        this.updatedOrientation = false;
     }
 
     @Override
@@ -405,11 +407,12 @@ public class DriveTrainMechanism implements IMechanism
                 centerVelocityRight = Helpers.cosd(this.robotNavxYaw) * centerVelocityRightRaw + Helpers.sind(this.robotNavxYaw) * centerVelocityForwardRaw;
                 centerVelocityForward = Helpers.cosd(this.robotNavxYaw) * centerVelocityForwardRaw - Helpers.sind(this.robotNavxYaw) * centerVelocityRightRaw;
 
-                boolean updatedOrientation = false;
+                boolean hadUpdatedOrientation = this.updatedOrientation;
+                this.updatedOrientation = false;
                 double yawGoal = this.driver.getAnalog(AnalogOperation.DriveTrainTurnAngleGoal);
                 if (yawGoal != TuningConstants.MAGIC_NULL_VALUE)
                 {
-                    updatedOrientation = true;
+                    this.updatedOrientation = true;
 
                     AnglePair anglePair = AnglePair.getClosestAngle(yawGoal, this.robotNavxYaw, false);
                     this.desiredYaw = anglePair.getAngle();
@@ -419,22 +422,30 @@ public class DriveTrainMechanism implements IMechanism
                     double turnSpeed = this.driver.getAnalog(AnalogOperation.DriveTrainTurnSpeed);
                     if (turnSpeed != 0.0)
                     {
-                        updatedOrientation = true;
+                        this.updatedOrientation = true;
+                        if (!hadUpdatedOrientation)
+                        {
+                            this.desiredYaw = this.robotNavxYaw;
+                        }
+
                         this.desiredYaw += turnSpeed * TuningConstants.DRIVETRAIN_TURN_GOAL_VELOCITY;
-                    }
-                    else if (this.maintainOrientation &&
-                        TuningConstants.DRIVETRAIN_TURN_APPROXIMATION != 0.0 &&
-                        Helpers.WithinDelta(this.desiredYaw, this.robotNavxYaw, TuningConstants.DRIVETRAIN_TURN_APPROXIMATION))
-                    {
-                        // stop trying to force turns if we are within a very small delta from our goal angle
-                        this.desiredYaw = this.robotNavxYaw;
                     }
                 }
 
-                if (this.maintainOrientation || updatedOrientation)
+                if (this.maintainOrientation || this.updatedOrientation)
                 {
-                    this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);
-                    omega = this.omegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw) * TuningConstants.DRIVETRAIN_TURN_SCALE;
+                    if (!this.updatedOrientation &&
+                        TuningConstants.DRIVETRAIN_TURN_APPROXIMATION != 0.0 &&
+                        Helpers.WithinDelta(this.desiredYaw, this.robotNavxYaw, TuningConstants.DRIVETRAIN_TURN_APPROXIMATION))
+                    {
+                        // don't turn aggressively if we are within a very small delta from our goal angle
+                        omega = 0.0;
+                    }
+                    else
+                    {
+                        this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);
+                        omega = this.omegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw) * TuningConstants.DRIVETRAIN_TURN_SCALE;    
+                    }
                 }
                 else
                 {
