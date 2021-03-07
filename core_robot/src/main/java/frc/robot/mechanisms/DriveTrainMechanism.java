@@ -28,9 +28,6 @@ public class DriveTrainMechanism implements IMechanism
     private static final int pidSlotId = 0;
     private static final int FRAME_PERIOD_MS = 5;
 
-    private static final double POWERLEVEL_MIN = -1.0;
-    private static final double POWERLEVEL_MAX = 1.0;
-
     private final LoggingKey[] ENCODER_ANGLE_LOGGING_KEYS = { LoggingKey.DriveTrainAbsoluteEncoderAngle1, LoggingKey.DriveTrainAbsoluteEncoderAngle2, LoggingKey.DriveTrainAbsoluteEncoderAngle3, LoggingKey.DriveTrainAbsoluteEncoderAngle4 };
     private final LoggingKey[] DRIVE_VELOCITY_LOGGING_KEYS = { LoggingKey.DriveTrainDriveVelocity1, LoggingKey.DriveTrainDriveVelocity2, LoggingKey.DriveTrainDriveVelocity3, LoggingKey.DriveTrainDriveVelocity4 };
     private final LoggingKey[] DRIVE_POSITION_LOGGING_KEYS = { LoggingKey.DriveTrainDrivePosition1, LoggingKey.DriveTrainDrivePosition2, LoggingKey.DriveTrainDrivePosition3, LoggingKey.DriveTrainDrivePosition4 };
@@ -519,40 +516,46 @@ public class DriveTrainMechanism implements IMechanism
     {
         double navxOmega = deltaNavxYaw / this.deltaT; // in degrees
 
-        double rightVelocity;
-        double forwardVelocity;
+        double rightRobotVelocity;
+        double forwardRobotVelocity;
 
         // calculate our right and forward velocities using an average of our various velocities and the angle.
-        double rightVelocity1 = -Helpers.sind(this.steerAngles[0]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[0]; //* (this.isDirectionSwapped[0] ? -1.0 : 1.0);
-        double rightVelocity2 = -Helpers.sind(this.steerAngles[1]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[1]; //* (this.isDirectionSwapped[1] ? -1.0 : 1.0);
-        double rightVelocity3 = -Helpers.sind(this.steerAngles[2]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[2]; //* (this.isDirectionSwapped[2] ? -1.0 : 1.0);
-        double rightVelocity4 = -Helpers.sind(this.steerAngles[3]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[3]; //* (this.isDirectionSwapped[3] ? -1.0 : 1.0);
+        double rightRobotVelocity1 = -Helpers.sind(this.steerAngles[0]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[0];
+        double rightRobotVelocity2 = -Helpers.sind(this.steerAngles[1]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[1];
+        double rightRobotVelocity3 = -Helpers.sind(this.steerAngles[2]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[2];
+        double rightRobotVelocity4 = -Helpers.sind(this.steerAngles[3]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[3];
 
-        double forwardVelocity1 = Helpers.cosd(this.steerAngles[0]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[0]; //* (this.isDirectionSwapped[0] ? -1.0 : 1.0);
-        double forwardVelocity2 = Helpers.cosd(this.steerAngles[1]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[1]; //* (this.isDirectionSwapped[1] ? -1.0 : 1.0);
-        double forwardVelocity3 = Helpers.cosd(this.steerAngles[2]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[2]; //* (this.isDirectionSwapped[2] ? -1.0 : 1.0);
-        double forwardVelocity4 = Helpers.cosd(this.steerAngles[3]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[3]; //* (this.isDirectionSwapped[3] ? -1.0 : 1.0);
+        double forwardRobotVelocity1 = Helpers.cosd(this.steerAngles[0]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[0];
+        double forwardRobotVelocity2 = Helpers.cosd(this.steerAngles[1]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[1];
+        double forwardRobotVelocity3 = Helpers.cosd(this.steerAngles[2]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[2];
+        double forwardRobotVelocity4 = Helpers.cosd(this.steerAngles[3]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[3];
 
-        rightVelocity = (rightVelocity1 + rightVelocity2 + rightVelocity3 + rightVelocity4) / 4.0;
-        forwardVelocity = (forwardVelocity1 + forwardVelocity2 + forwardVelocity3 + forwardVelocity4) / 4.0;
+        // rightRobotVelocity = (rightRobotVelocity1 + rightRobotVelocity2 + rightRobotVelocity3 + rightRobotVelocity4) / 4.0;
+        // forwardRobotVelocity = (forwardRobotVelocity1 + forwardRobotVelocity2 + forwardRobotVelocity3 + forwardRobotVelocity4) / 4.0;
 
-        // RoadRunner:
-        // double omegaRadians =
-        //     (HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE * (forwardVelocity1 - forwardVelocity2 - forwardVelocity3 + forwardVelocity4) + 
-        //         HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE * (-rightVelocity1 - rightVelocity2 + rightVelocity3 + rightVelocity4))
-        //     / (HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE * HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE + HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE * HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE);
+        double a = 0.5 * (-rightRobotVelocity3 - rightRobotVelocity4);
+        double b = 0.5 * (-rightRobotVelocity1 - rightRobotVelocity2);
+        double c = 0.5 * (forwardRobotVelocity1 + forwardRobotVelocity4);
+        double d = 0.5 * (forwardRobotVelocity2 + forwardRobotVelocity3);
 
-        // Jim:
-        double omegaRadians = 2 *
-            (((forwardVelocity1 - forwardVelocity2 - forwardVelocity3 + forwardVelocity4) / HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE)
-            + ((-rightVelocity1 - rightVelocity2 + rightVelocity3 + rightVelocity4) / HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE));
+        double omegaRadians1 = (b - a) / HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE;
+        double omegaRadians2 = (c - d) / HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE;
+        double omegaRadians = (omegaRadians1 + omegaRadians2) / 2.0;
+
+        double rightRobotVelocityA = omegaRadians * HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE + c;
+        double rightRobotVelocityB = -omegaRadians * HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE + d;
+        rightRobotVelocity = (rightRobotVelocityA + rightRobotVelocityB) / 2.0;
+
+        double forwardRobotVelocityA = omegaRadians * HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE + a;
+        double forwardRobotVelocityB = -omegaRadians * HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE + b;
+        forwardRobotVelocity = (forwardRobotVelocityA + forwardRobotVelocityB) / 2.0;
 
         this.angle += omegaRadians * Helpers.RADIANS_TO_DEGREES * this.deltaT;
 
-        double rightCenterVelocity = rightVelocity * Helpers.cosd(this.angle) - forwardVelocity * Helpers.sind(this.angle);
-        double forwardCenterVelocity = rightVelocity * Helpers.sind(this.angle) + forwardVelocity * Helpers.cosd(this.angle);
-        this.xPosition += rightCenterVelocity * this.deltaT;
-        this.yPosition += forwardCenterVelocity * this.deltaT;
+        double rightFieldVelocity = rightRobotVelocity * Helpers.cosd(this.robotNavxYaw) - forwardRobotVelocity * Helpers.sind(this.robotNavxYaw);
+        double forwardFieldVelocity = rightRobotVelocity * Helpers.sind(this.robotNavxYaw) + forwardRobotVelocity * Helpers.cosd(this.robotNavxYaw);
+        this.xPosition += rightFieldVelocity * this.deltaT;
+        this.yPosition += forwardFieldVelocity * this.deltaT;
     }
 
     /**
