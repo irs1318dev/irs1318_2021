@@ -202,6 +202,10 @@ public class DriveTrainMechanism implements IMechanism
         this.MODULE_OFFSET_X = new double[] { a1, a2, a2, a1 };
         this.MODULE_OFFSET_Y = new double[] { b1, b1, b2, b2 };
         this.result = new Setpoint[DriveTrainMechanism.NUM_MODULES];
+        for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
+        {
+            this.result[i] = new Setpoint();
+        }
 
         this.time = 0.0;
         this.angle = 0.0;
@@ -311,8 +315,8 @@ public class DriveTrainMechanism implements IMechanism
         for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
         {
             Setpoint current = this.result[i];
-            Double steerSetpoint = current.getAngle();
-            double driveSetpoint = current.getDrive();
+            Double steerSetpoint = current.angle;
+            double driveSetpoint = current.drive;
 
             this.logger.logNumber(this.DRIVE_GOAL_LOGGING_KEYS[i], driveSetpoint);
             this.driveMotors[i].set(driveSetpoint);
@@ -460,6 +464,7 @@ public class DriveTrainMechanism implements IMechanism
             }
         }
 
+        double maxModuleDriveVelocityGoal = 0.0;
         for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
         {
             double moduleVelocityRight = centerVelocityRight + omega * (this.MODULE_OFFSET_Y[i] + rotationCenterB);
@@ -483,19 +488,30 @@ public class DriveTrainMechanism implements IMechanism
                 AnglePair anglePair = AnglePair.getClosestAngle(moduleSteerPositionGoal, currentAngle, true);
                 moduleSteerPositionGoal = anglePair.getAngle() * TuningConstants.DRIVETRAIN_STEER_MOTOR_POSITION_PID_KS;
                 this.isDirectionSwapped[i] = anglePair.getSwapDirection();
+
+                if (maxModuleDriveVelocityGoal < moduleDriveVelocityGoal)
+                {
+                    maxModuleDriveVelocityGoal = moduleDriveVelocityGoal;
+                }
+
+                moduleDriveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS;
+                if (this.isDirectionSwapped[i])
+                {
+                    moduleDriveVelocityGoal *= -1.0;
+                }
             }
 
-            moduleDriveVelocityGoal = this.applyPowerLevelRange(moduleDriveVelocityGoal);
+            this.result[i].drive = moduleDriveVelocityGoal;
+            this.result[i].angle = moduleSteerPositionGoal;
+        }
 
-            this.assertPowerLevelRange(moduleDriveVelocityGoal, "drive");
-
-            moduleDriveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS;
-            if (this.isDirectionSwapped[i])
+        // rescale velocities based on max velocity percentage, if 100% is exceeded for any module
+        if (maxModuleDriveVelocityGoal > 1.0)
+        {
+            for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
             {
-                moduleDriveVelocityGoal *= -1.0;
+                this.result[i].drive /= maxModuleDriveVelocityGoal;
             }
-
-            this.result[i] = new Setpoint(moduleDriveVelocityGoal, moduleSteerPositionGoal);
         }
     }
 
@@ -539,66 +555,16 @@ public class DriveTrainMechanism implements IMechanism
         this.yPosition += forwardCenterVelocity * this.deltaT;
     }
 
-    private void assertPowerLevelRange(double powerLevel, String side)
-    {
-        if (powerLevel < DriveTrainMechanism.POWERLEVEL_MIN)
-        {
-            if (TuningConstants.THROW_EXCEPTIONS)
-            {
-                throw new RuntimeException(side + " power level too low!");
-            }
-
-            return;
-        }
-
-        if (powerLevel > DriveTrainMechanism.POWERLEVEL_MAX)
-        {
-            if (TuningConstants.THROW_EXCEPTIONS)
-            {
-                throw new RuntimeException(side + " power level too high!");
-            }
-
-            return;
-        }
-    }
-
-    private double applyPowerLevelRange(double powerLevel)
-    {
-        return Helpers.EnforceRange(powerLevel, DriveTrainMechanism.POWERLEVEL_MIN, DriveTrainMechanism.POWERLEVEL_MAX);
-    }
-
+    /**
+     * Basic structure to hold an angle/drive pair
+     */
     private class Setpoint
     {
-        private Double angle;
-        private double drive;
+        public Double angle;
+        public double drive;
 
-        /**
-         * Initializes a new Setpoint
-         * @param drive value to apply
-         * @param angle value to apply
-         */
-        public Setpoint(double drive, Double angle)
+        public Setpoint()
         {
-            this.drive = drive;
-            this.angle = angle;
-        }
-
-        /**
-         * gets the drive setpoint
-         * @return drive setpoint value
-         */
-        public double getDrive()
-        {
-            return this.drive;
-        }
-
-        /**
-         * gets the angle setpoint
-         * @return angle setpoint value
-         */
-        public Double getAngle()
-        {
-            return this.angle;
         }
     }
 }
