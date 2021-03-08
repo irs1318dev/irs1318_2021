@@ -1,362 +1,249 @@
 package frc.robot.mechanisms;
 
-// import static org.junit.jupiter.api.Assertions.assertEquals;
+import frc.robot.TestProvider;
+import frc.robot.common.robotprovider.INavx;
+import frc.robot.common.robotprovider.ITalonFX;
+import frc.robot.common.robotprovider.ITalonSRX;
+import frc.robot.common.robotprovider.IVictorSPX;
+import frc.robot.common.robotprovider.MotorNeutralMode;
+import frc.robot.common.robotprovider.NullLogger;
+import frc.robot.common.robotprovider.TalonSRXControlMode;
+import frc.robot.common.robotprovider.TalonXFeedbackDevice;
+import frc.robot.common.robotprovider.TalonXLimitSwitchStatus;
 
-// import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 public class DriveTrainMechanismTests
 {
-    // private static double ONEINCHPERSECOND_IN100MS = 1357.5789;
+    @Test
+    public void test1()
+    {
+        TestProvider provider = new TestProvider();
+        MockNavx navx = new MockNavx();
+        provider.setNavx(navx);
 
-    // @Test
-    // public void testOdometryForward1()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+        MockTalonFX[] steer = new MockTalonFX[4];
+        MockTalonFX[] drive = new MockTalonFX[4];
+        for (int i = 0; i < 4; i++)
+        {
+            steer[i] = new MockTalonFX(2 * i + 1);
+            drive[i] = new MockTalonFX(2 * i + 2);
 
-    //     double[] steerAngles = new double[] { 0.0, 0.0, 0.0, 0.0 };
-    //     double[] driveVelocities = new double[] { ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { false, false, false, false };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+            provider.setTalonFX(2 * i + 1, steer[i]);
+            provider.setTalonFX(2 * i + 2, drive[i]);
+        }
+    }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(1.0, xPosition, 0.1);
-    //     assertEquals(0.0, yPosition, 0.1);
-    // }
+    private class MockNavx implements INavx
+    {
+        private double currentAngle;
 
-    // @Test
-    // public void testOdometryForward2()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+        MockNavx()
+        {
+        }
 
-    //     double[] steerAngles = new double[] { 0.0, 0.0, 0.0, 0.0 };
-    //     double[] driveVelocities = new double[] { -ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { true, true, true, true };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+        @Override
+        public boolean isConnected()
+        {
+            return true;
+        }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(1.0, xPosition, 0.1);
-    //     assertEquals(0.0, yPosition, 0.1);
-    // }
+        @Override
+        public double getAngle()
+        {
+            return this.currentAngle;
+        }
 
-    // @Test
-    // public void testOdometryForward3()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+        @Override
+        public double getDisplacementX()
+        {
+            return 0;
+        }
 
-    //     double[] steerAngles = new double[] { 0.0, 180.0, 0.0, 0.0 };
-    //     double[] driveVelocities = new double[] { -ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { true, true, true, false };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+        @Override
+        public double getDisplacementY()
+        {
+            return 0;
+        }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(1.0, xPosition, 0.1);
-    //     assertEquals(0.0, yPosition, 0.1);
-    // }
+        @Override
+        public double getDisplacementZ()
+        {
+            return 0;
+        }
 
-    // @Test
-    // public void testOdometryBackward1()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+        @Override
+        public void reset()
+        {
+            this.currentAngle = 0.0;
+        }
 
-    //     double[] steerAngles = new double[] { 0.0, 0.0, 0.0, 0.0 };
-    //     double[] driveVelocities = new double[] { ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { true, true, true, true };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+        @Override
+        public void resetDisplacement()
+        {
+        }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(-1.0, xPosition, 0.1);
-    //     assertEquals(0.0, yPosition, 0.1);
-    // }
+        public void set(double angle)
+        {
+            this.currentAngle = angle;
+        }
+    }
 
-    // @Test
-    // public void testOdometryBackward2()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+    private class MockTalonFX implements ITalonFX
+    {
+        private final int deviceId;
+        private double currentValue;
 
-    //     double[] steerAngles = new double[] { 0.0, 0.0, 0.0, 0.0 };
-    //     double[] driveVelocities = new double[] { -ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { false, false, true, false };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+        MockTalonFX(int deviceId)
+        {
+            this.deviceId = deviceId;
+        }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(-1.0, xPosition, 0.1);
-    //     assertEquals(0.0, yPosition, 0.1);
-    // }
+        @Override
+        public void follow(ITalonSRX talonSRX)
+        {
+        }
 
-    // @Test
-    // public void testOdometryBackward3()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+        @Override
+        public void follow(ITalonFX talonFX)
+        {
+        }
 
-    //     double[] steerAngles = new double[] { 180.0, 0.0, 0.0, 0.0 };
-    //     double[] driveVelocities = new double[] { ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { false, true, true, false };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+        @Override
+        public void follow(IVictorSPX victorSPX)
+        {
+        }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(-1.0, xPosition, 0.1);
-    //     assertEquals(0.0, yPosition, 0.1);
-    // }
+        @Override
+        public void setControlMode(TalonSRXControlMode mode)
+        {
+        }
 
-    // @Test
-    // public void testOdometryLeft1()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+        @Override
+        public void setSensorType(TalonXFeedbackDevice feedbackDevice)
+        {
+        }
 
-    //     double[] steerAngles = new double[] { 90.0, 90.0, 90.0, 90.0 };
-    //     double[] driveVelocities = new double[] { ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { false, false, false, false };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+        @Override
+        public void setFeedbackFramePeriod(int periodMS)
+        {
+        }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(0.0, xPosition, 0.1);
-    //     assertEquals(1.0, yPosition, 0.1);
-    // }
+        @Override
+        public void setPIDFFramePeriod(int periodMS)
+        {
+        }
 
-    // @Test
-    // public void testOdometryLeft2()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+        @Override
+        public void configureVelocityMeasurements(int periodMS, int windowSize)
+        {
+        }
 
-    //     double[] steerAngles = new double[] { 90.0, 90.0, 90.0, 90.0 };
-    //     double[] driveVelocities = new double[] { -ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { true, true, true, true };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+        @Override
+        public void configureAllowableClosedloopError(int slotId, int error)
+        {
+        }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(0.0, xPosition, 0.1);
-    //     assertEquals(1.0, yPosition, 0.1);
-    // }
+        @Override
+        public void setSelectedSlot(int slotId)
+        {
+        }
 
-    // @Test
-    // public void testOdometryLeft3()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+        @Override
+        public void setPIDF(double p, double i, double d, double f, int slotId)
+        {
+        }
 
-    //     double[] steerAngles = new double[] { 90.0, 90.0, -90.0, 90.0 };
-    //     double[] driveVelocities = new double[] { -ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { true, false, true, false };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+        @Override
+        public void setMotionMagicPIDF(double p, double i, double d, double f, int velocity, int acceleration, int slotId)
+        {
+        }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(0.0, xPosition, 0.1);
-    //     assertEquals(1.0, yPosition, 0.1);
-    // }
+        @Override
+        public void setPIDF(double p, double i, double d, double f, int izone, double closeLoopRampRate, int slotId)
+        {
+        }
 
-    // @Test
-    // public void testOdometryRight1()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+        @Override
+        public void setForwardLimitSwitch(boolean enabled, boolean normallyOpen)
+        {
+        }
 
-    //     double[] steerAngles = new double[] { -90.0, -90.0, -90.0, -90.0 };
-    //     double[] driveVelocities = new double[] { ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { false, false, false, false };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+        @Override
+        public void setReverseLimitSwitch(boolean enabled, boolean normallyOpen)
+        {
+        }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(0.0, xPosition, 0.1);
-    //     assertEquals(-1.0, yPosition, 0.1);
-    // }
+        @Override
+        public void setInvertOutput(boolean flip)
+        {
+        }
 
-    // @Test
-    // public void testOdometryRight2()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+        @Override
+        public void setInvertSensor(boolean flip)
+        {
+        }
 
-    //     double[] steerAngles = new double[] { -90.0, -90.0, 90.0, -90.0 };
-    //     double[] driveVelocities = new double[] { -ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { true, true, true, true };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+        @Override
+        public void setNeutralMode(MotorNeutralMode neutralMode)
+        {
+        }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(0.0, xPosition, 0.1);
-    //     assertEquals(-1.0, yPosition, 0.1);
-    // }
+        @Override
+        public void setVoltageCompensation(boolean enabled, double maxVoltage)
+        {
+        }
 
-    // @Test
-    // public void testOdometryRigh3()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+        @Override
+        public void stop()
+        {
+        }
 
-    //     double[] steerAngles = new double[] { -90.0, -90.0, 90.0, -90.0 };
-    //     double[] driveVelocities = new double[] { -ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { true, false, true, false };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+        @Override
+        public void setPosition(double position)
+        {
+        }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(0.0, xPosition, 0.1);
-    //     assertEquals(-1.0, yPosition, 0.1);
-    // }
+        @Override
+        public void reset()
+        {
+        }
 
-    // @Test
-    // public void testOdometryUpLeft()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+        @Override
+        public double getPosition() 
+        {
+            return this.currentValue;
+        }
 
-    //     double[] steerAngles = new double[] { 45.0, 45.0, -135.0, 45.0 };
-    //     double[] driveVelocities = new double[] { ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { false, false, true, false };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+        @Override
+        public double getVelocity()
+        {
+            return this.currentValue;
+        }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(Math.sqrt(0.5), xPosition, 0.1);
-    //     assertEquals(Math.sqrt(0.5), yPosition, 0.1);
-    // }
+        @Override
+        public double getError()
+        {
+            return 0;
+        }
 
-    // @Test
-    // public void testOdometryUpRight()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
+        @Override
+        public TalonXLimitSwitchStatus getLimitSwitchStatus()
+        {
+            return null;
+        }
 
-    //     double[] steerAngles = new double[] { -45.0, -45.0, 135.0, -45.0 };
-    //     double[] driveVelocities = new double[] { -ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, -ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { true, true, true, true };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
+        @Override
+        public void set(double power)
+        {
+            this.currentValue = power;
+        }
 
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(Math.sqrt(0.5), xPosition, 0.1);
-    //     assertEquals(-Math.sqrt(0.5), yPosition, 0.1);
-    // }
-
-    // @Test
-    // public void testOdometryBackRight()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
-
-    //     double[] steerAngles = new double[] { -135.0, -135.0, 45.0, -135.0 };
-    //     double[] driveVelocities = new double[] { -ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { true, false, true, false };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
-
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(-Math.sqrt(0.5), xPosition, 0.1);
-    //     assertEquals(-Math.sqrt(0.5), yPosition, 0.1);
-    // }
-
-    // @Test
-    // public void testOdometryTurnInPlaceCCW()
-    // {
-    //     double angle = 0.0;
-    //     double xPosition = 0.0;
-    //     double yPosition = 0.0;
-    //     double deltaNavxYaw = 0.0;
-    //     double deltaT = 0.1;
-
-    //     double[] steerAngles = new double[] { 45.0, 135.0, -135.0, -45.0 };
-    //     double[] driveVelocities = new double[] { ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS, ONEINCHPERSECOND_IN100MS };
-    //     boolean[] isDirectionSwapped = new boolean[] { false, false, false, false };
-    //     OdometryResult result = DriveTrainMechanism.calculateOdometry(angle, xPosition, yPosition, deltaNavxYaw, deltaT, steerAngles, driveVelocities, isDirectionSwapped);
-    //     angle = result.angle;
-    //     xPosition = result.xPosition;
-    //     yPosition = result.yPosition;
-
-    //     assertEquals(0.0, angle, 0.1);
-    //     assertEquals(0.0, xPosition, 0.1);
-    //     assertEquals(0.0, yPosition, 0.1);
-    // }
+        @Override
+        public void setSupplyCurrentLimit(boolean enabled, double currentLimit, double triggerThresholdCurrent, double triggerThresholdTime)
+        {
+        }
+    }
 }
