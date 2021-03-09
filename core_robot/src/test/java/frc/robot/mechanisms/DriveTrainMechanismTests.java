@@ -256,8 +256,8 @@ public class DriveTrainMechanismTests
         assertEquals(0.0, pose.y, 0.5);
     }
 
-    //@Test
-    public void testTwist90()
+    @Test
+    public void testTwist1Rad()
     {
         TestProvider provider = new TestProvider();
 
@@ -286,8 +286,8 @@ public class DriveTrainMechanismTests
 
         double robotVelocityRight = 0.0;
         double robotVelocityForward = 0.0;
-        double omega = 1.0 / 15.0;
-        for (double timestep = 0; timestep < 50; timestep++)
+        double omega = 1.0;
+        for (double timestep = 0; timestep <= 50.0; timestep += 1.0)
         {
             for (int i = 0; i < 4; i++)
             {
@@ -298,20 +298,20 @@ public class DriveTrainMechanismTests
                 moduleSteerPositionGoal *= TuningConstants.DRIVETRAIN_STEER_MOTOR_POSITION_PID_KS;
 
                 double moduleDriveVelocityGoal = Math.sqrt(moduleVelocityRight * moduleVelocityRight + moduleVelocityForward * moduleVelocityForward);
-                moduleDriveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS;
+                moduleDriveVelocityGoal *= HardwareConstants.DRIVETRAIN_DRIVE_INCHES_PER_SECOND_TO_MOTOR_VELOCITY;
 
                 drive[i].set(moduleDriveVelocityGoal);
                 steer[i].set(moduleSteerPositionGoal);
             }
 
-            navx.set(0.0);
+            navx.set(-timestep * 0.02 * 180.0 / Math.PI);
             navxManager.readSensors();
             driveTrain.readSensors();
             timer.increment(0.02);
         }
 
         Pose2d pose = driveTrain.getPose();
-        assertEquals(0.0, pose.angle, 0.5);
+        assertEquals(180.0 / Math.PI, pose.angle, 1.0);
         assertEquals(0.0, pose.x, 0.5);
         assertEquals(0.0, pose.y, 0.5);
     }

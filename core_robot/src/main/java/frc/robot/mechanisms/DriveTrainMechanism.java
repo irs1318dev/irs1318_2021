@@ -361,8 +361,12 @@ public class DriveTrainMechanism implements IMechanism
         // calculate center velocity and turn velocity based on our current control mode:
         double rotationCenterA;
         double rotationCenterB;
+
+        // robot center velocity, in inches/sec
         double centerVelocityRight;
         double centerVelocityForward;
+
+        // robot turn velocity, in rad/sec
         double omega;
         if (this.driver.getDigital(DigitalOperation.DriveTrainPathMode))
         {
@@ -377,10 +381,6 @@ public class DriveTrainMechanism implements IMechanism
             double xVelocityGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathXVelocityGoal);
             double yVelocityGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathYVelocityGoal);
             double angleVelocityGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathAngleVelocityGoal);
-
-            // convert velocity goal from in/sec to percentage of max velocity
-            xVelocityGoal *= TuningConstants.DRIVETRAIN_VELOCITY_TO_PERCENTAGE;
-            yVelocityGoal *= TuningConstants.DRIVETRAIN_VELOCITY_TO_PERCENTAGE;
 
             omega = 0.0; //angleVelocityGoal * Helpers.DEGREES_TO_RADIANS;
             if (this.fieldOriented)
@@ -458,7 +458,7 @@ public class DriveTrainMechanism implements IMechanism
                     else
                     {
                         this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);
-                        omega = this.omegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw) * TuningConstants.DRIVETRAIN_TURN_SCALE;    
+                        omega = this.omegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw) * TuningConstants.DRIVETRAIN_TURN_SCALE;
                     }
                 }
                 else
@@ -504,7 +504,7 @@ public class DriveTrainMechanism implements IMechanism
                     maxModuleDriveVelocityGoal = moduleDriveVelocityGoal;
                 }
 
-                moduleDriveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS;
+                moduleDriveVelocityGoal *= HardwareConstants.DRIVETRAIN_DRIVE_INCHES_PER_SECOND_TO_MOTOR_VELOCITY;
                 if (this.isDirectionSwapped[i])
                 {
                     moduleDriveVelocityGoal *= -1.0;
@@ -515,12 +515,14 @@ public class DriveTrainMechanism implements IMechanism
             this.result[i].angle = moduleSteerPositionGoal;
         }
 
-        // rescale velocities based on max velocity percentage, if 100% is exceeded for any module
-        if (maxModuleDriveVelocityGoal > 1.0)
+        // rescale velocities based on max velocity percentage, if max velocity is exceeded for any module
+        if (maxModuleDriveVelocityGoal > TuningConstants.DRIVETRAIN_MAX_VELOCITY)
         {
+            // divide by percentage is interchangeable with multiply by inverse-percentage
+            double invPercentage = TuningConstants.DRIVETRAIN_MAX_VELOCITY / maxModuleDriveVelocityGoal;
             for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
             {
-                this.result[i].drive /= maxModuleDriveVelocityGoal;
+                this.result[i].drive *= invPercentage;
             }
         }
     }
@@ -533,15 +535,15 @@ public class DriveTrainMechanism implements IMechanism
         double forwardRobotVelocity;
 
         // calculate our right and forward velocities using an average of our various velocities and the angle.
-        double rightRobotVelocity1 = -Helpers.sind(this.steerAngles[0]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[0];
-        double rightRobotVelocity2 = -Helpers.sind(this.steerAngles[1]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[1];
-        double rightRobotVelocity3 = -Helpers.sind(this.steerAngles[2]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[2];
-        double rightRobotVelocity4 = -Helpers.sind(this.steerAngles[3]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[3];
+        double rightRobotVelocity1 = -Helpers.sind(this.steerAngles[0]) * HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[0];
+        double rightRobotVelocity2 = -Helpers.sind(this.steerAngles[1]) * HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[1];
+        double rightRobotVelocity3 = -Helpers.sind(this.steerAngles[2]) * HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[2];
+        double rightRobotVelocity4 = -Helpers.sind(this.steerAngles[3]) * HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[3];
 
-        double forwardRobotVelocity1 = Helpers.cosd(this.steerAngles[0]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[0];
-        double forwardRobotVelocity2 = Helpers.cosd(this.steerAngles[1]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[1];
-        double forwardRobotVelocity3 = Helpers.cosd(this.steerAngles[2]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[2];
-        double forwardRobotVelocity4 = Helpers.cosd(this.steerAngles[3]) * HardwareConstants.DRIVETRAIN_DRIVE_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[3];
+        double forwardRobotVelocity1 = Helpers.cosd(this.steerAngles[0]) * HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[0];
+        double forwardRobotVelocity2 = Helpers.cosd(this.steerAngles[1]) * HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[1];
+        double forwardRobotVelocity3 = Helpers.cosd(this.steerAngles[2]) * HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[2];
+        double forwardRobotVelocity4 = Helpers.cosd(this.steerAngles[3]) * HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND * this.driveVelocities[3];
 
         // rightRobotVelocity = (rightRobotVelocity1 + rightRobotVelocity2 + rightRobotVelocity3 + rightRobotVelocity4) / 4.0;
         // forwardRobotVelocity = (forwardRobotVelocity1 + forwardRobotVelocity2 + forwardRobotVelocity3 + forwardRobotVelocity4) / 4.0;
