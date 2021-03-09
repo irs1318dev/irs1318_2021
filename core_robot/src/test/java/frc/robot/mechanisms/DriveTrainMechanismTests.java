@@ -1,12 +1,18 @@
 package frc.robot.mechanisms;
 
+import frc.robot.HardwareConstants;
 import frc.robot.TestProvider;
+import frc.robot.TuningConstants;
+import frc.robot.common.Helpers;
+import frc.robot.common.LoggingManager;
 import frc.robot.common.robotprovider.INavx;
 import frc.robot.common.robotprovider.ITalonFX;
 import frc.robot.common.robotprovider.ITalonSRX;
+import frc.robot.common.robotprovider.ITimer;
 import frc.robot.common.robotprovider.IVictorSPX;
 import frc.robot.common.robotprovider.MotorNeutralMode;
 import frc.robot.common.robotprovider.NullLogger;
+import frc.robot.common.robotprovider.Pose2d;
 import frc.robot.common.robotprovider.TalonSRXControlMode;
 import frc.robot.common.robotprovider.TalonXFeedbackDevice;
 import frc.robot.common.robotprovider.TalonXLimitSwitchStatus;
@@ -18,9 +24,11 @@ import org.junit.jupiter.api.Test;
 public class DriveTrainMechanismTests
 {
     @Test
-    public void test1()
+    public void testStill()
     {
         TestProvider provider = new TestProvider();
+
+        MockTimer timer = new MockTimer();
         MockNavx navx = new MockNavx();
         provider.setNavx(navx);
 
@@ -33,6 +41,320 @@ public class DriveTrainMechanismTests
 
             provider.setTalonFX(2 * i + 1, steer[i]);
             provider.setTalonFX(2 * i + 2, drive[i]);
+        }
+
+        LoggingManager logger = new LoggingManager(new NullLogger());
+        NavxManager navxManager = new NavxManager(logger, provider);
+        DriveTrainMechanism driveTrain = new DriveTrainMechanism(
+            logger,
+            provider,
+            navxManager,
+            timer);
+
+        for (int timestep = 0; timestep < 10; timestep++)
+        {
+            navxManager.readSensors();
+            driveTrain.readSensors();
+            timer.increment(0.02);
+        }
+
+        Pose2d pose = driveTrain.getPose();
+        assertEquals(0.0, pose.angle, 0.0001);
+        assertEquals(0.0, pose.x, 0.0001);
+        assertEquals(0.0, pose.y, 0.0001);
+    }
+
+    @Test
+    public void testForward1()
+    {
+        TestProvider provider = new TestProvider();
+
+        MockTimer timer = new MockTimer();
+        MockNavx navx = new MockNavx();
+        provider.setNavx(navx);
+
+        MockTalonFX[] steer = new MockTalonFX[4];
+        MockTalonFX[] drive = new MockTalonFX[4];
+        for (int i = 0; i < 4; i++)
+        {
+            steer[i] = new MockTalonFX(2 * i + 1);
+            drive[i] = new MockTalonFX(2 * i + 2);
+
+            provider.setTalonFX(2 * i + 1, steer[i]);
+            provider.setTalonFX(2 * i + 2, drive[i]);
+        }
+
+        LoggingManager logger = new LoggingManager(new NullLogger());
+        NavxManager navxManager = new NavxManager(logger, provider);
+        DriveTrainMechanism driveTrain = new DriveTrainMechanism(
+            logger,
+            provider,
+            navxManager,
+            timer);
+
+        for (int timestep = 0; timestep < 50; timestep++)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                // 10% max-speed
+                drive[i].set(0.1 * TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS);;
+            }
+
+            navxManager.readSensors();
+            driveTrain.readSensors();
+            timer.increment(0.02);
+        }
+
+        Pose2d pose = driveTrain.getPose();
+        assertEquals(0.0, pose.angle, 0.5);
+        assertEquals(0.0, pose.x, 0.5);
+        assertEquals(0.1 * TuningConstants.DRIVETRAIN_MAX_VELOCITY, pose.y, 0.5);
+    }
+
+    @Test
+    public void testForward2()
+    {
+        TestProvider provider = new TestProvider();
+
+        MockTimer timer = new MockTimer();
+        MockNavx navx = new MockNavx();
+        provider.setNavx(navx);
+
+        MockTalonFX[] steer = new MockTalonFX[4];
+        MockTalonFX[] drive = new MockTalonFX[4];
+        for (int i = 0; i < 4; i++)
+        {
+            steer[i] = new MockTalonFX(2 * i + 1);
+            drive[i] = new MockTalonFX(2 * i + 2);
+
+            provider.setTalonFX(2 * i + 1, steer[i]);
+            provider.setTalonFX(2 * i + 2, drive[i]);
+        }
+
+        LoggingManager logger = new LoggingManager(new NullLogger());
+        NavxManager navxManager = new NavxManager(logger, provider);
+        DriveTrainMechanism driveTrain = new DriveTrainMechanism(
+            logger,
+            provider,
+            navxManager,
+            timer);
+
+        for (int timestep = 0; timestep < 50; timestep++)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                // 10% max-speed
+                drive[i].set(-0.1 * TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS);;
+            }
+
+            navx.set(-180.0);
+            navxManager.readSensors();
+            driveTrain.readSensors();
+            timer.increment(0.02);
+        }
+
+        Pose2d pose = driveTrain.getPose();
+        assertEquals(180.0, pose.angle, 0.5);
+        assertEquals(0.0, pose.x, 0.5);
+        assertEquals(0.1 * TuningConstants.DRIVETRAIN_MAX_VELOCITY, pose.y, 0.5);
+    }
+
+    @Test
+    public void testLeft1()
+    {
+        TestProvider provider = new TestProvider();
+
+        MockTimer timer = new MockTimer();
+        MockNavx navx = new MockNavx();
+        provider.setNavx(navx);
+
+        MockTalonFX[] steer = new MockTalonFX[4];
+        MockTalonFX[] drive = new MockTalonFX[4];
+        for (int i = 0; i < 4; i++)
+        {
+            steer[i] = new MockTalonFX(2 * i + 1);
+            drive[i] = new MockTalonFX(2 * i + 2);
+
+            provider.setTalonFX(2 * i + 1, steer[i]);
+            provider.setTalonFX(2 * i + 2, drive[i]);
+        }
+
+        LoggingManager logger = new LoggingManager(new NullLogger());
+        NavxManager navxManager = new NavxManager(logger, provider);
+        DriveTrainMechanism driveTrain = new DriveTrainMechanism(
+            logger,
+            provider,
+            navxManager,
+            timer);
+
+        for (int timestep = 0; timestep < 50; timestep++)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                // 10% max-speed
+                drive[i].set(0.1 * TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS);;
+                steer[i].set(90.0 * HardwareConstants.DRIVETRAIN_STEER_TICKS_PER_DEGREE);
+            }
+
+            navx.set(0.0);
+            navxManager.readSensors();
+            driveTrain.readSensors();
+            timer.increment(0.02);
+        }
+
+        Pose2d pose = driveTrain.getPose();
+        assertEquals(0.0, pose.angle, 0.5);
+        assertEquals(-0.1 * TuningConstants.DRIVETRAIN_MAX_VELOCITY, pose.x, 0.5);
+        assertEquals(0.0, pose.y, 0.5);
+    }
+
+    @Test
+    public void testLeft2()
+    {
+        TestProvider provider = new TestProvider();
+
+        MockTimer timer = new MockTimer();
+        MockNavx navx = new MockNavx();
+        provider.setNavx(navx);
+
+        MockTalonFX[] steer = new MockTalonFX[4];
+        MockTalonFX[] drive = new MockTalonFX[4];
+        for (int i = 0; i < 4; i++)
+        {
+            steer[i] = new MockTalonFX(2 * i + 1);
+            drive[i] = new MockTalonFX(2 * i + 2);
+
+            provider.setTalonFX(2 * i + 1, steer[i]);
+            provider.setTalonFX(2 * i + 2, drive[i]);
+        }
+
+        LoggingManager logger = new LoggingManager(new NullLogger());
+        NavxManager navxManager = new NavxManager(logger, provider);
+        DriveTrainMechanism driveTrain = new DriveTrainMechanism(
+            logger,
+            provider,
+            navxManager,
+            timer);
+
+        for (int timestep = 0; timestep < 50; timestep++)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                // 10% max-speed
+                drive[i].set(0.1 * TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS);
+            }
+
+            navx.set(-90.0);
+            navxManager.readSensors();
+            driveTrain.readSensors();
+            timer.increment(0.02);
+        }
+
+        Pose2d pose = driveTrain.getPose();
+        assertEquals(90.0, pose.angle, 0.5);
+        assertEquals(-0.1 * TuningConstants.DRIVETRAIN_MAX_VELOCITY, pose.x, 0.5);
+        assertEquals(0.0, pose.y, 0.5);
+    }
+
+    //@Test
+    public void testTwist90()
+    {
+        TestProvider provider = new TestProvider();
+
+        MockTimer timer = new MockTimer();
+        MockNavx navx = new MockNavx();
+        provider.setNavx(navx);
+
+        MockTalonFX[] steer = new MockTalonFX[4];
+        MockTalonFX[] drive = new MockTalonFX[4];
+        for (int i = 0; i < 4; i++)
+        {
+            steer[i] = new MockTalonFX(2 * i + 1);
+            drive[i] = new MockTalonFX(2 * i + 2);
+
+            provider.setTalonFX(2 * i + 1, steer[i]);
+            provider.setTalonFX(2 * i + 2, drive[i]);
+        }
+
+        LoggingManager logger = new LoggingManager(new NullLogger());
+        NavxManager navxManager = new NavxManager(logger, provider);
+        DriveTrainMechanism driveTrain = new DriveTrainMechanism(
+            logger,
+            provider,
+            navxManager,
+            timer);
+
+        double robotVelocityRight = 0.0;
+        double robotVelocityForward = 0.0;
+        double omega = 1.0 / 15.0;
+        for (double timestep = 0; timestep < 50; timestep++)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                double moduleVelocityRight = robotVelocityRight + omega * DriveTrainMechanism.MODULE_OFFSET_Y[i];
+                double moduleVelocityForward = robotVelocityForward - omega * DriveTrainMechanism.MODULE_OFFSET_X[i];
+
+                double moduleSteerPositionGoal = Helpers.atan2d(-moduleVelocityRight, moduleVelocityForward);
+                moduleSteerPositionGoal *= TuningConstants.DRIVETRAIN_STEER_MOTOR_POSITION_PID_KS;
+
+                double moduleDriveVelocityGoal = Math.sqrt(moduleVelocityRight * moduleVelocityRight + moduleVelocityForward * moduleVelocityForward);
+                moduleDriveVelocityGoal *= TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS;
+
+                drive[i].set(moduleDriveVelocityGoal);
+                steer[i].set(moduleSteerPositionGoal);
+            }
+
+            navx.set(0.0);
+            navxManager.readSensors();
+            driveTrain.readSensors();
+            timer.increment(0.02);
+        }
+
+        Pose2d pose = driveTrain.getPose();
+        assertEquals(0.0, pose.angle, 0.5);
+        assertEquals(0.0, pose.x, 0.5);
+        assertEquals(0.0, pose.y, 0.5);
+    }
+
+    private class MockTimer implements ITimer
+    {
+        private double currentTime;
+
+        MockTimer()
+        {
+            this.currentTime = 0.0;
+        }
+
+        @Override
+        public void start()
+        {
+        }
+
+        @Override
+        public void stop()
+        {
+        }
+
+        @Override
+        public double get()
+        {
+            return this.currentTime;
+        }
+
+        @Override
+        public void reset()
+        {
+            this.currentTime = 0.0;
+        }
+
+        public void set(double value)
+        {
+            this.currentTime = value;
+        }
+
+        public void increment(double value)
+        {
+            this.currentTime += value;
         }
     }
 

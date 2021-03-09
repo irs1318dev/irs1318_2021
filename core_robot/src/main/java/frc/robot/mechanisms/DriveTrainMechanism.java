@@ -39,8 +39,30 @@ public class DriveTrainMechanism implements IMechanism
     private final LoggingKey[] DRIVE_GOAL_LOGGING_KEYS = { LoggingKey.DriveTrainDriveVelocityGoal1, LoggingKey.DriveTrainDriveVelocityGoal2, LoggingKey.DriveTrainDriveVelocityGoal3, LoggingKey.DriveTrainDriveVelocityGoal4 };
     private final LoggingKey[] STEER_GOAL_LOGGING_KEYS = { LoggingKey.DriveTrainSteerPositionGoal1, LoggingKey.DriveTrainSteerPositionGoal2, LoggingKey.DriveTrainSteerPositionGoal3, LoggingKey.DriveTrainSteerPositionGoal4 };
 
-    private final double[] MODULE_OFFSET_X; // the x offsets of the swerve modules from the default center of rotation
-    private final double[] MODULE_OFFSET_Y; // the y offsets of the swerve modules from the default center of rotation
+    double a1 = -HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE;
+    double a2 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE;
+    double b1 = -HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
+    double b2 = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
+
+    // the x offsets of the swerve modules from the default center of rotation
+    public static final double[] MODULE_OFFSET_X =
+        new double[]
+        {
+            -HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE, // module 1 (front-right)
+            HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE, // module 2 (front-left)
+            HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE, // module 3 (back-left)
+            -HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE // module 4 (back-right)
+        };
+
+    // the y offsets of the swerve modules from the default center of rotation
+    public static final double[] MODULE_OFFSET_Y =
+        new double[]
+        {
+            -HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE, // module 1 (front-right)
+            -HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE, // module 2 (front-left)
+            HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE, // module 3 (back-left)
+            HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE // module 4 (back-right)
+        };
 
     private final NavxManager navxManager;
     private final ILogger logger;
@@ -191,13 +213,6 @@ public class DriveTrainMechanism implements IMechanism
             TuningConstants.DRIVETRAIN_PATH_Y_MAX_OUTPUT,
             this.timer);
 
-        double a1 = -HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE;
-        double a2 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE;
-        double b1 = -HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
-        double b2 = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
-
-        this.MODULE_OFFSET_X = new double[] { a1, a2, a2, a1 };
-        this.MODULE_OFFSET_Y = new double[] { b1, b1, b2, b2 };
         this.result = new Setpoint[DriveTrainMechanism.NUM_MODULES];
         for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
         {
@@ -363,8 +378,6 @@ public class DriveTrainMechanism implements IMechanism
             double yVelocityGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathYVelocityGoal);
             double angleVelocityGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathAngleVelocityGoal);
 
-            // System.out.println("velocityGoal " + velocityGoal + " angleGoal " + angleGoal);
-
             // convert velocity goal from in/sec to percentage of max velocity
             xVelocityGoal *= TuningConstants.DRIVETRAIN_VELOCITY_TO_PERCENTAGE;
             yVelocityGoal *= TuningConstants.DRIVETRAIN_VELOCITY_TO_PERCENTAGE;
@@ -377,8 +390,8 @@ public class DriveTrainMechanism implements IMechanism
                 // yVelocityGoal += this.pathYOffsetPID.calculatePosition(yGoal, this.yPosition);
 
                 // convert velocity to be robot-oriented
-                centerVelocityRight = Helpers.cosd(this.robotNavxYaw) * xVelocityGoal + Helpers.sind(this.robotNavxYaw) * xVelocityGoal;
-                centerVelocityForward = Helpers.cosd(this.robotNavxYaw) * yVelocityGoal - Helpers.sind(this.robotNavxYaw) * yVelocityGoal;
+                centerVelocityRight = Helpers.cosd(this.robotNavxYaw) * xVelocityGoal + Helpers.sind(this.robotNavxYaw) * yVelocityGoal;
+                centerVelocityForward = Helpers.cosd(this.robotNavxYaw) * yVelocityGoal - Helpers.sind(this.robotNavxYaw) * xVelocityGoal;
 
                 // add correction for angle drift
                 AnglePair anglePair = AnglePair.getClosestAngle(angleGoal + angleReference, this.robotNavxYaw, false);
@@ -464,8 +477,8 @@ public class DriveTrainMechanism implements IMechanism
         double maxModuleDriveVelocityGoal = 0.0;
         for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
         {
-            double moduleVelocityRight = centerVelocityRight + omega * (this.MODULE_OFFSET_Y[i] + rotationCenterB);
-            double moduleVelocityForward = centerVelocityForward - omega * (this.MODULE_OFFSET_X[i] + rotationCenterA);
+            double moduleVelocityRight = centerVelocityRight + omega * (DriveTrainMechanism.MODULE_OFFSET_Y[i] + rotationCenterB);
+            double moduleVelocityForward = centerVelocityForward - omega * (DriveTrainMechanism.MODULE_OFFSET_X[i] + rotationCenterA);
 
             Double moduleSteerPositionGoal;
             double moduleDriveVelocityGoal;
@@ -542,12 +555,12 @@ public class DriveTrainMechanism implements IMechanism
         double omegaRadians2 = (c - d) / HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_SEPERATION_DISTANCE;
         double omegaRadians = (omegaRadians1 + omegaRadians2) / 2.0;
 
-        double rightRobotVelocityA = omegaRadians * HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE + c;
-        double rightRobotVelocityB = -omegaRadians * HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE + d;
-        rightRobotVelocity = (rightRobotVelocityA + rightRobotVelocityB) / 2.0;
+        double rightRobotVelocityA = omegaRadians * HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE + a;
+        double rightRobotVelocityB = -omegaRadians * HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE + b;
+        rightRobotVelocity = -(rightRobotVelocityA + rightRobotVelocityB) / 2.0;
 
-        double forwardRobotVelocityA = omegaRadians * HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE + a;
-        double forwardRobotVelocityB = -omegaRadians * HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE + b;
+        double forwardRobotVelocityA = omegaRadians * HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE + c;
+        double forwardRobotVelocityB = -omegaRadians * HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE + d;
         forwardRobotVelocity = (forwardRobotVelocityA + forwardRobotVelocityB) / 2.0;
 
         this.angle += omegaRadians * Helpers.RADIANS_TO_DEGREES * this.deltaT;

@@ -34,7 +34,7 @@ public class RoadRunnerTrajectoryGenerator
             new ProfileAccelerationConstraint(TuningConstants.DRIVETRAIN_MAX_PATH_TRANSLATIONAL_ACCELERATION);
 
         Path turnArcLeft = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
-            .lineToLinearHeading(new Pose2d(100.0, 100.0, 90.0 * Helpers.DEGREES_TO_RADIANS))
+            .splineToLinearHeading(new Pose2d(72.0, 40.0, 90.0 * Helpers.DEGREES_TO_RADIANS), 1.0)
             .build();
         pathManager.addPath(
             "turnArcLeft",
@@ -43,15 +43,36 @@ public class RoadRunnerTrajectoryGenerator
         // -------------------- path A paths ----------------   
 
         Path forward5ft = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
-            .lineToConstantHeading(new Vector2d(60.0, 60.0))
+            .lineToConstantHeading(new Vector2d(60.0, 0.0))
             .build();
         pathManager.addPath(
             "forward5ft",
             new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(forward5ft, velocityConstraint, accelerationConstraint)));
 
+        Path left5ft = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
+            .lineToConstantHeading(new Vector2d(0.0, 60.0))
+            .build();
+        pathManager.addPath(
+            "left5ft",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(left5ft, velocityConstraint, accelerationConstraint)));
+
+        Path back5ft = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
+            .lineToConstantHeading(new Vector2d(-60.0, 0.0))
+            .build();
+        pathManager.addPath(
+            "back5ft",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(back5ft, velocityConstraint, accelerationConstraint)));
+
+        Path right5ft = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
+            .lineToConstantHeading(new Vector2d(0.0, -60.0))
+            .build();
+        pathManager.addPath(
+            "right5ft",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(right5ft, velocityConstraint, accelerationConstraint)));
+
         // D5 TO A6, E6 TO B7
         Path slideToTheLeft = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
-            .lineToConstantHeading(new Vector2d(30.0, 90.0))
+            .lineToConstantHeading(new Vector2d(-30.0, 90.0))
             .build();
         pathManager.addPath( 
             "slideToTheLeft",

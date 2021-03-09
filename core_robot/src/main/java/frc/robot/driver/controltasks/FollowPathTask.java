@@ -81,7 +81,7 @@ public class FollowPathTask extends ControlTaskBase
         this.setAnalogOperationState(AnalogOperation.DriveTrainTurnAngleGoal, state.angle);
         this.setAnalogOperationState(AnalogOperation.DriveTrainTurnAngleReference, this.initialPose.angle);
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathXVelocityGoal, state.xVelocity);
-        this.setAnalogOperationState(AnalogOperation.DriveTrainPathYVelocityGoal, state.xVelocity);
+        this.setAnalogOperationState(AnalogOperation.DriveTrainPathYVelocityGoal, state.yVelocity);
         this.setAnalogOperationState(AnalogOperation.DriveTrainPathAngleVelocityGoal, state.angleVelocity);
     }
 

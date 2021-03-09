@@ -29,11 +29,4 @@ public abstract class FauxbotModule extends AbstractModule
     {
         return new MechanismManager(TuningConstants.GetActiveMechanisms(injector));
     }
-
-    @Singleton
-    @Provides
-    public LoggingManager getLoggingManager()
-    {
-        return new LoggingManager(injector -> TuningConstants.GetLogger(injector));
-    }
 }

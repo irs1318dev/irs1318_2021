@@ -32,11 +32,11 @@ public class TrajectoryWrapper implements ITrajectory
         Pose2d pose = this.wrappedTrajectory.get(time);
         Pose2d vel = this.wrappedTrajectory.velocity(time);
         return new TrajectoryState(
+            -pose.getY(),
             pose.getX(),
-            pose.getY(),
             pose.getHeading() * Helpers.RADIANS_TO_DEGREES,
+            -vel.getY(),
             vel.getX(),
-            vel.getY(),
             vel.getHeading() * Helpers.RADIANS_TO_DEGREES);
     }
 }
