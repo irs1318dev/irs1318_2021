@@ -131,6 +131,13 @@ public class ButtonMap implements IButtonMap
         new DigitalOperationDescription(
             DigitalOperation.PowerCellIntake,
             UserInputDevice.Driver,
+            UserInputDeviceButton.XBONE_RIGHT_BUTTON,
+            Shift.DriverDebug,
+            Shift.None,
+            ButtonType.Simple),
+        new DigitalOperationDescription(
+            DigitalOperation.PowerCellOuttake,
+            UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_LEFT_BUTTON,
             Shift.DriverDebug,
             Shift.None,

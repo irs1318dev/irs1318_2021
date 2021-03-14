@@ -18,13 +18,11 @@ public class PowerCellMechanism implements IMechanism
 
     private final IDoubleSolenoid intakeSolenoid;
     private final ISparkMax rollerMotor;
-    //private final ISparkMax rollerMotorOuter;
 
     //private final IDoubleSolenoid outerHood;
     //private final IDoubleSolenoid innerHood;
     //private final IDoubleSolenoid kickerSolenoid;
     //private final ITalonSRX flyWheel;
-    //private final ITalonSRX turret;
 
     //private final IVictorSPX genevaMotor;
     //private final ITimer timer;
@@ -37,12 +35,7 @@ public class PowerCellMechanism implements IMechanism
     //private double flywheelPosition;
     //private double flywheelVelocity;
     //private double flywheelError;
-    //private double turretPosition;
-    //private double turretVelocity;
-    //private double turretError;
     //private int carouselCount;
-
-    //private double startingTurretOffsetAngle;
 
     //private boolean[] hasPowerCell;
     //private int currentCarouselIndex;
@@ -72,11 +65,6 @@ public class PowerCellMechanism implements IMechanism
         this.rollerMotor.setControlMode(SparkMaxControlMode.PercentOutput);
         this.rollerMotor.setNeutralMode(MotorNeutralMode.Brake);
 
-        //this.rollerMotorOuter = provider.getSparkMax(ElectronicsConstants.POWERCELL_OUTER_ROLLER_MOTOR_CAN_ID, SparkMaxMotorType.Brushless);
-        //this.rollerMotorOuter.setInvertOutput(HardwareConstants.POWERCELL_ROLLER_MOTOR_OUTER_INVERT_OUTPUT);
-        //this.rollerMotorOuter.setControlMode(SparkMaxControlMode.PercentOutput);
-        //this.rollerMotorOuter.setNeutralMode(MotorNeutralMode.Brake);
-
         //this.flyWheel = provider.getTalonSRX(ElectronicsConstants.POWERCELL_FLYWHEEL_MASTER_CAN_ID);
         //this.flyWheel.setInvertOutput(HardwareConstants.POWERCELL_FLYWHEEL_MASTER_INVERT_OUTPUT);
         //this.flyWheel.setInvertSensor(HardwareConstants.POWERCELL_FLYWHEEL_MASTER_INVERT_SENSOR);
@@ -98,29 +86,6 @@ public class PowerCellMechanism implements IMechanism
         //flyWheelFollower.follow(this.flyWheel);
         //flyWheelFollower.setInvertOutput(HardwareConstants.POWERCELL_FLYWHEEL_FOLLOWER_INVERT_OUTPUT);
         //flyWheelFollower.setVoltageCompensation(TuningConstants.POWERCELL_FLYWHEEL_FOLLOWER_VELOCITY_VOLTAGE_COMPENSATION_ENABLED, TuningConstants.POWERCELL_FLYWHEEL_FOLLOWER_VELOCITY_VOLTAGE_COMPENSATION_MAXVOLTAGE);
-
-        //this.turret = provider.getTalonSRX(ElectronicsConstants.POWERCELL_TURRET_MOTOR_CAN_ID);
-        //this.turret.setInvertOutput(HardwareConstants.POWERCELL_TURRET_INVERT_OUTPUT);
-        //this.turret.setInvertSensor(HardwareConstants.POWERCELL_TURRET_INVERT_SENSOR);
-        //this.turret.setNeutralMode(MotorNeutralMode.Brake);
-        //this.turret.setSensorType(TalonXFeedbackDevice.QuadEncoder);
-        //this.turret.setPosition(0);
-        //this.turret.setForwardLimitSwitch(TuningConstants.POWERCELL_TURRET_FORWARD_LIMIT_SWITCH_ENABLED, TuningConstants.POWERCELL_TURRET_FORWARD_LIMIT_SWITCH_NORMALLY_OPEN);
-        //this.turret.setReverseLimitSwitch(TuningConstants.POWERCELL_TURRET_REVERSE_LIMIT_SWITCH_ENABLED, TuningConstants.POWERCELL_TURRET_REVERSE_LIMIT_SWITCH_NORMALLY_OPEN);
-        //if (TuningConstants.POWERCELL_TURRET_USE_PID)
-       // {
-        //    this.turret.setControlMode(TalonSRXControlMode.Position);
-        //    this.turret.setPIDF(
-        //        TuningConstants.POWERCELL_TURRET_POSITION_PID_KP,
-        //        TuningConstants.POWERCELL_TURRET_POSITION_PID_KI,
-        //        TuningConstants.POWERCELL_TURRET_POSITION_PID_KD,
-        //        TuningConstants.POWERCELL_TURRET_POSITION_PID_KF,
-        //        PowerCellMechanism.slotId);
-        //}
-        //else
-        //{
-        //    this.turret.setControlMode(TalonSRXControlMode.PercentOutput);
-        //}
 
         //this.genevaMotor = provider.getVictorSPX(ElectronicsConstants.POWERCELL_GENEVA_MOTOR_CAN_ID);
         //this.genevaMotor.setInvertOutput(HardwareConstants.POWERCELL_GENEVA_MOTOR_INVERT_OUTPUT);
@@ -155,10 +120,6 @@ public class PowerCellMechanism implements IMechanism
         //    throughBeamBroken = true;
         //}
 
-        //this.turretPosition = this.turret.getPosition();
-        //this.turretVelocity = this.turret.getVelocity();
-        //this.turretError = this.turret.getError();
-
         //this.flywheelPosition = this.flyWheel.getPosition();
         //this.flywheelVelocity = this.flyWheel.getVelocity();
         //this.flywheelError = this.flyWheel.getError();
@@ -183,9 +144,6 @@ public class PowerCellMechanism implements IMechanism
 
         //this.carouselCount = newCarouselCount;
 
-        // this.logger.logNumber(LoggingKey.PowerCellTurretVelocity, this.turretVelocity);
-        // this.logger.logNumber(LoggingKey.PowerCellTurretPosition, this.turretPosition);
-        // this.logger.logNumber(LoggingKey.PowerCellTurretError, this.turretError);
         // this.logger.logNumber(LoggingKey.PowerCellFlywheelVelocity, this.flywheelVelocity);
         // this.logger.logNumber(LoggingKey.PowerCellFlywheelPosition, this.flywheelPosition);
         // this.logger.logNumber(LoggingKey.PowerCellFlywheelError, this.flywheelError);
@@ -200,19 +158,6 @@ public class PowerCellMechanism implements IMechanism
     public void update()
     {
         //double currentTime = this.timer.get();
-
-        //double startingTurretOffset = this.driver.getAnalog(AnalogOperation.PowerCellTurretOffset);
-        //if (startingTurretOffset != 0.0)
-        //{
-        //    this.startingTurretOffsetAngle = startingTurretOffset;
-        //}
-
-        //if (this.driver.getDigital(DigitalOperation.PowerCellResetTurretFront))
-        //{
-        //    this.startingTurretOffsetAngle = 0.0;
-        //    this.turret.setPosition(0);
-        //    this.turret.set(0.0);
-        //}
 
         //if (this.driver.getDigital(DigitalOperation.PowerCellHoodPointBlank))
         //{
@@ -297,21 +242,6 @@ public class PowerCellMechanism implements IMechanism
         // }
 
         // this.logger.logNumber(LoggingKey.PowerCellFlywheelVelocitySetpoint, this.flywheelVelocitySetpoint);
-
-        // double desiredTurretPosition = this.driver.getAnalog(AnalogOperation.PowerCellTurretPosition);
-        // this.logger.logNumber(LoggingKey.PowerCellTurretPositionDesired, desiredTurretPosition);
-        // if (TuningConstants.POWERCELL_TURRET_USE_PID)
-        // {
-        //     if (desiredTurretPosition != TuningConstants.POWERCELL_TURRET_MAGIC_DONT_MOVE_VALUE)
-        //     {
-        //         desiredTurretPosition = this.getClosestAngleInRange(desiredTurretPosition, this.getTurretPosition(), HardwareConstants.POWERCELL_TURRET_MINIMUM_RANGE_VALUE, HardwareConstants.POWERCELL_TURRET_MAXIMUM_RANGE_VALUE);
-        //         this.turret.set((desiredTurretPosition + startingTurretOffsetAngle) * HardwareConstants.POWERCELL_TURRET_DEGREES_TO_TICKS);
-        //     }
-        // }
-        // else
-        // {
-        //     this.turret.set(desiredTurretPosition);
-        // }
 
         // // determine if we should make any transition from our current carousel state:
         // switch (this.carouselState)
@@ -466,7 +396,6 @@ public class PowerCellMechanism implements IMechanism
         //this.outerHood.set(DoubleSolenoidValue.Off);
         //this.kickerSolenoid.set(DoubleSolenoidValue.Off);
         //this.intakeSolenoid.set(DoubleSolenoidValue.Off);
-        //this.turret.stop();
         //this.flyWheel.stop();
     }
 
@@ -475,11 +404,6 @@ public class PowerCellMechanism implements IMechanism
     {
         this.driver = driver;
     }
-
-    // public double getTurretPosition()
-    // {
-    //     return (this.turretPosition * HardwareConstants.POWERCELL_TURRET_TICKS_TO_DEGREES) - this.startingTurretOffsetAngle;
-    // }
 
     // public double getFlywheelVelocity()
     // {
