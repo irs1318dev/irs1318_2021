@@ -56,4 +56,11 @@ public class ElectronicsConstants
     public static final int DRIVETRAIN_ABSOLUTE_ENCODER_4_ANALOG_INPUT = 3;
 
     public static final int[] DRIVETRAIN_ABSOLUTE_ENCODER_ANALOG_INPUT = new int[] { ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_1_ANALOG_INPUT, ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_2_ANALOG_INPUT, ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_3_ANALOG_INPUT, ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_4_ANALOG_INPUT };
+
+    //================================================== Intake ==============================================================
+
+    public static final int POWERCELL_INTAKE_FORWARD_PCM = 0;
+    public static final int POWERCELL_INTAKE_REVERSE_PCM = 1;
+
+    public static final int POWERCELL_ROLLER_MOTOR_CAN_ID = 9;
 }

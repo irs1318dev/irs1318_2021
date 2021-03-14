@@ -76,7 +76,10 @@ public enum LoggingKey
     DriveTrainSteerPosition4("dt.steer_pos4"),
     DriveTrainSteerAngle4("dt.steer_ang4"),
     DriveTrainSteerError4("dt.steer_err4"),
-    DriveTrainSteerPositionGoal4("dt.steer_goal4");
+    DriveTrainSteerPositionGoal4("dt.steer_goal4"),
+
+    PowerCellIsIntaking("pc.intaking", false),
+    PowerCellIntakeExtended("pc.intake_extended", false);
 
     
 

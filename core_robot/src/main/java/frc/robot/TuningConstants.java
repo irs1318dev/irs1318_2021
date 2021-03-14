@@ -335,4 +335,12 @@ public class TuningConstants
     public static final double DRIVETRAIN_MAX_PATH_TURN_VELOCITY = 45.0; // in degrees per second
     public static final double DRIVETRAIN_MAX_PATH_TRANSLATIONAL_VELOCITY = 0.5 * TuningConstants.DRIVETRAIN_MAX_VELOCITY; // in inches per second
     public static final double DRIVETRAIN_MAX_PATH_TRANSLATIONAL_ACCELERATION = 0.75 * TuningConstants.DRIVETRAIN_MAX_VELOCITY; // in inches per second per second
+
+    //================================================== Intake ==============================================================
+
+    public static final double POWERCELL_ROLLER_MOTOR_INTAKE_POWER = 0.5;
+    public static final double POWERCELL_ROLLER_MOTOR_OUTTAKE_POWER = 0.5;
+
+    public static final double STHOPE_BLEASE = 0.0;
+
 }

@@ -128,6 +128,27 @@ public class ButtonMap implements IButtonMap
             Shift.DriverDebug,
             Shift.None,
             ButtonType.Click),
+        new DigitalOperationDescription(
+            DigitalOperation.PowerCellIntake,
+            UserInputDevice.Driver,
+            UserInputDeviceButton.XBONE_LEFT_BUTTON,
+            Shift.DriverDebug,
+            Shift.None,
+            ButtonType.Simple),
+        new DigitalOperationDescription(
+            DigitalOperation.PowerCellIntakeExtend,
+            UserInputDevice.Driver,
+            UserInputDeviceButton.XBONE_SELECT_BUTTON,
+            Shift.DriverDebug,
+            Shift.None,
+            ButtonType.Click),
+        new DigitalOperationDescription(
+            DigitalOperation.PowerCellIntakeRetract,
+            UserInputDevice.Driver,
+            UserInputDeviceButton.XBONE_START_BUTTON,
+            Shift.DriverDebug,
+            Shift.None,
+            ButtonType.Click)
     };
 
     public static MacroOperationDescription[] MacroSchema = new MacroOperationDescription[]
