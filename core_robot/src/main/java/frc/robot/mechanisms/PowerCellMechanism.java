@@ -395,7 +395,7 @@ public class PowerCellMechanism implements IMechanism
         //this.innerHood.set(DoubleSolenoidValue.Off);
         //this.outerHood.set(DoubleSolenoidValue.Off);
         //this.kickerSolenoid.set(DoubleSolenoidValue.Off);
-        //this.intakeSolenoid.set(DoubleSolenoidValue.Off);
+        this.intakeSolenoid.set(DoubleSolenoidValue.Off);
         //this.flyWheel.stop();
     }
 
