@@ -9,6 +9,11 @@ import frc.robot.driver.common.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+/**
+ * Extends/retracts intake and rolls the rollers in and out
+ * 
+ * @author Will, kwen perper, beezy choofs
+ */
 @Singleton
 public class PowerCellMechanism implements IMechanism
 {
