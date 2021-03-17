@@ -340,7 +340,7 @@ public class TuningConstants
     //================================================== Intake ==============================================================
 
     public static final double POWERCELL_ROLLER_MOTOR_INTAKE_POWER = 0.5;
-    public static final double POWERCELL_ROLLER_MOTOR_OUTTAKE_POWER = 0.5;
+    public static final double POWERCELL_ROLLER_MOTOR_OUTTAKE_POWER = -0.5;
 
     public static final double STHOPE_BLEASE = 0.0;
 }
