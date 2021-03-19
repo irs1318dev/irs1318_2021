@@ -73,11 +73,8 @@ public class RoadRunnerTrajectoryGenerator
             "turnArcLeft",
             new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(turnArcLeft, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
 
-        // -------------------- path A paths ----------------   
-
         Path forward5ft = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
-            .splineToLinearHeading(new Pose2d(30, 30, 0), 1.0)
-            .splineToLinearHeading(new Pose2d(60, -30, 0), 1.0)
+            .lineToLinearHeading(new Vector2d(60, 0.0))
             .build();
         pathManager.addPath(
             "forward5ft",
@@ -104,6 +101,53 @@ public class RoadRunnerTrajectoryGenerator
             "right5ft",
             new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(right5ft, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
 
+// ----------------------------------------- Galactic Search Paths ------------------------------
+
+        double scaleConstant = 0.5;
+
+        Path redPathA = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
+            .lineToLinearHeading(new Vector2d(45.0, 0.0)) // C3
+            .splineToConstantHeading(new Pose2d(105.0, -30.0, 0.0), 1.0) // D5     | what's end tangent?
+            .splineToConstantHeading(new Pose2d(135.0, 60.0, 0.0), 1.0) // A6
+            .lineToLinearHeading(new Vector2d(295.0, 60.0, 0.0)) // end
+            .build();
+        pathManager.addPath( 
+            "redPathA",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(redPathA, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+
+        Path bluePathA = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
+            .lineToLinearHeading(new Vector2d(135.0, 0.0)) // E6
+            .splineToConstantHeading(new Pose2d(165.0, 90.0, 0.0), 1.0) // B7
+            .splineToConstantHeading(new Pose2d(225.0, 60.0, 0.0), 1.0) // C9
+            .lineToLinearHeading(new Vector2d(295.0, 60.0)) // end
+            .build();
+        pathManager.addPath( 
+            "bluePathA",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(bluePathA, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+
+            
+        Path redPathB = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
+            .lineToLinearHeading(new Vector2d(45.0, 0.0)) // B3
+            .splineToConstantHeading(new Pose2d(105.0, -60.0, 0.0), 1.0) // D5
+            .splineToConstantHeading(new Pose2d(165.0, 0.0, 0.0), 1.0) // B7
+            .lineToLinearHeading(new Vector2d(295.0, 0.0)) // end
+            .build();
+        pathManager.addPath( 
+            "redPathB",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(redPathB, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+
+        Path bluePathB = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
+            .lineToLinearHeading(new Vector2d(135.0, 0.0)) // D6
+            .splineToConstantHeading(new Pose2d(195.0, 60.0, 0.0), 1.0) // B8
+            .splineToConstantHeading(new Pose2d(225.0, 0.0, 0.0), 1.0) // D10
+            .lineToLinearHeading(new Vector2d(295.0, 0.0)) // end
+            .build();
+        pathManager.addPath( 
+            "bluePathB",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(bluePathB, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+
+
+        /*
         // D5 TO A6, E6 TO B7
         Path slideToTheLeft = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
             .lineToConstantHeading(new Vector2d(-30.0, 90.0))
@@ -159,5 +203,62 @@ public class RoadRunnerTrajectoryGenerator
         pathManager.addPath( //B7 to B11
             "chaChaRealSmooth", // goes forward 10 ft
             new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(chaChaRealSmooth, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+    
+        /**/
+        // ----------------------- Slalom paths ------------------ 
+        // robot dimensions: 32in x 28in?
+        // forward left is positive
+        // starting point is with front left corner at D2
+        Path slalom = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
+            .splineTo(76.0, 30.0)
+            .splineTo(196.0, 30.0)
+            .splineTo(256.0, 0.0)
+            .splineTo(288.0, 15)
+            .splineTo(256.0, 30)
+            .splineTo(196.0, 0)
+            .splineTo(76.0, 0)
+            .splineTo(-10, 0)
+            .build();
+        pathManager.addPath( 
+            "slalom",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(slalom, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+    
+        // ----------------------- barrel race paths ------------------ 
+    
+        Path barrelRace = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
+            .lineToLinearHeading(new Vector2d(105.0, 0.0))
+            .splineTo(122, -15)
+            .splineTo(105, -30)
+            .splineTo(98, -15) // behind D5
+            .splineTo(222, 45)
+            .splineTo(205, 60)
+            .splineTo(187, 45)
+            .splineTo(254, -30)
+            .splineTo(272, 0)
+            .splineTo(-10, 28)
+            .build();
+        pathManger.addPath(
+            "barrelRace",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(barrelRace, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+    
+    // ----------------------- bounce paths ------------------ 
+        Path bounceStart = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
+            .splineTo(48, 46) // first target (A3)
+            .lineToConstantHeading(new Vector2d(74, -43))
+            .splineTo(104, -63)
+            .splineTo(136, 46) // second target (A6)
+            .lineToConstantHeading(146, -73)
+            .splineTo(181, -60)
+            .splineTo(220, 16)
+            .lineToConstantHeading(226, 46) // third target (A9)
+            .splineTo(278, 0)
+            .build();
+        pathManger.addPath(
+            "bounceStart",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(bounceStart, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+        )
+    
+    
     }
+
 }

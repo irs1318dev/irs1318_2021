@@ -50,6 +50,8 @@ public class AutonomousRoutineSelector
 
         this.routineChooser = networkTableProvider.getSendableChooser();
         this.routineChooser.addDefault("None", AutoRoutine.None);
+        this.routineChooser.addObject("Path A", AutoRoutine.PathA);
+        this.routineChooser.addObject("Path B", AutoRoutine.PathB);
         networkTableProvider.addChooser("Auto Routine", this.routineChooser);
 
         this.positionChooser = networkTableProvider.getSendableChooser();
@@ -81,13 +83,11 @@ public class AutonomousRoutineSelector
         }
         if (routine == AutoRoutine.PathA)
         {
-            return SearchPaths( "crissCross", "slideToTheLeft", "slideToTheRight", "forward5ft",
-                "forward5ft", "slideToTheRight", "slideToTheLeft", "crissCross"); 
+            return DecidePaths("redPathA", "bluePathA"); 
         }
         if (routine == AutoRoutine.PathB)
         {
-            return SearchPaths( "crissCross", "slideToTheLeftB", "slideToTheRightB", "chaChaNowYall",
-                "forward5ft", "slideToTheRightB", "slideToTheLeftB", "chaChaRealSmooth"); 
+            return DecidePaths("redPathB", "bluePathB"); 
         }
 
         this.logger.logString(LoggingKey.AutonomousSelection, startPosition.toString() + "." + routine.toString());
@@ -106,21 +106,17 @@ public class AutonomousRoutineSelector
     /**
      * nowwww it's time to get funky
      */
-    private static IControlTask SearchPaths(String forwardPathB, String secondPathB, String thirdPathB, String finalPathB,
-                                            String forwardPathR, String secondPathR, String thirdPathR, String finalPathR)
+    private static IControlTask DecidePaths(String redPath, String bluePath)
     {
-        return new VisionPowercellDecisionTask( // add intake part when we have intake code
-            SequentialTask.Sequence( 
-                new FollowPathTask(forwardPathB), // FollowPathTask doesn't exist yet
-                new FollowPathTask(secondPathB),
-                new FollowPathTask(thirdPathB),
-                new FollowPathTask(finalPathB)),
-            SequentialTask.Sequence( 
-                new FollowPathTask(forwardPathR), // FollowPathTask doesn't exist yet
-                new FollowPathTask(secondPathR),
-                new FollowPathTask(thirdPathR),
-                new FollowPathTask(finalPathR))
-        ); // first four parameters are the four blue path parts, next four are the four red path parts
+        return SequentialTask.Sequence(
+            new IntakePositionTask(true),
+            ConcurrentTask.AllTasks(
+                new IntakeOuttakeTask(15.0, true),
+                new VisionPowercellDecisionTask( 
+                    new FollowPathTask(redPath),
+                    new FollowPathTask(bluePath))
+            )
+        );
     }
 } // yaaaaaAAAaaaAaaaAAAAaa
 
