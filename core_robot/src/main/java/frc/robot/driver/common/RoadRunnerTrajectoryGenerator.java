@@ -76,7 +76,8 @@ public class RoadRunnerTrajectoryGenerator
         // -------------------- path A paths ----------------   
 
         Path forward5ft = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
-            .lineToConstantHeading(new Vector2d(60.0, 0.0))
+            .splineToLinearHeading(new Pose2d(30, 30, 0), 1.0)
+            .splineToLinearHeading(new Pose2d(60, -30, 0), 1.0)
             .build();
         pathManager.addPath(
             "forward5ft",

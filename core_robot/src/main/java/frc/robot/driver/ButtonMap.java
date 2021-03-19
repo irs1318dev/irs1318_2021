@@ -133,14 +133,14 @@ public class ButtonMap implements IButtonMap
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_RIGHT_BUTTON,
             Shift.DriverDebug,
-            Shift.None,
+            Shift.DriverDebug,
             ButtonType.Simple),
         new DigitalOperationDescription(
             DigitalOperation.PowerCellOuttake,
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_RIGHT_BUTTON,
             Shift.DriverDebug,
-            Shift.DriverDebug,
+            Shift.None,
             ButtonType.Simple),
         new DigitalOperationDescription(
             DigitalOperation.PowerCellIntakeExtend,
@@ -168,10 +168,7 @@ public class ButtonMap implements IButtonMap
             Shift.DriverDebug,
             ButtonType.Toggle,
             () -> SequentialTask.Sequence(
-                new FollowPathTask("forward5ft", true),
-                new FollowPathTask("left5ft", true),
-                new FollowPathTask("back5ft", true),
-                new FollowPathTask("right5ft", true)),
+                new FollowPathTask("forward5ft", true)),
             new IOperation[]
             {
                 AnalogOperation.DriveTrainMoveForward,
