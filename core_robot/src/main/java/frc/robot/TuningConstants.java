@@ -277,37 +277,37 @@ public class TuningConstants
     public static final double[] DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KF = new double[] { 0.0478, 0.0478, 0.0478, 0.0478 }; // .0478 ==> ~ 1023 / 21400 (100% control authority)
     public static final double DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS = 17000.0; // 21400 was highest speed at full throttle FF on blocks. this is #ticks / 100ms
 
-    public static final double DRIVETRAIN_OMEGA_POSITION_PID_KP = 0.016;
+    public static final double DRIVETRAIN_OMEGA_POSITION_PID_KP = 0.1;
     public static final double DRIVETRAIN_OMEGA_POSITION_PID_KI = 0.0;
     public static final double DRIVETRAIN_OMEGA_POSITION_PID_KD = 0.0;
     public static final double DRIVETRAIN_OMEGA_POSITION_PID_KF = 0.0;
     public static final double DRIVETRAIN_OMEGA_POSITION_PID_KS = 1.0;
-    public static final double DRIVETRAIN_OMEGA_MAX_OUTPUT = 0.5;
-    public static final double DRIVETRAIN_OMEGA_MIN_OUTPUT = -0.5;
+    public static final double DRIVETRAIN_OMEGA_MAX_OUTPUT = TuningConstants.DRIVETRAIN_TURN_SCALE;
+    public static final double DRIVETRAIN_OMEGA_MIN_OUTPUT = -TuningConstants.DRIVETRAIN_TURN_SCALE;
 
-    public static final double DRIVETRAIN_PATH_OMEGA_POSITION_PID_KP = 0.016;
+    public static final double DRIVETRAIN_PATH_OMEGA_POSITION_PID_KP = 0.1;
     public static final double DRIVETRAIN_PATH_OMEGA_POSITION_PID_KI = 0.0;
     public static final double DRIVETRAIN_PATH_OMEGA_POSITION_PID_KD = 0.0;
     public static final double DRIVETRAIN_PATH_OMEGA_POSITION_PID_KF = 0.0;
     public static final double DRIVETRAIN_PATH_OMEGA_POSITION_PID_KS = 1.0;
-    public static final double DRIVETRAIN_PATH_OMEGA_MAX_OUTPUT = 0.5;
-    public static final double DRIVETRAIN_PATH_OMEGA_MIN_OUTPUT = -0.5;
+    public static final double DRIVETRAIN_PATH_OMEGA_MAX_OUTPUT = TuningConstants.DRIVETRAIN_TURN_SCALE;
+    public static final double DRIVETRAIN_PATH_OMEGA_MIN_OUTPUT = -TuningConstants.DRIVETRAIN_TURN_SCALE;
 
-    public static final double DRIVETRAIN_PATH_X_POSITION_PID_KP = 0.0;
+    public static final double DRIVETRAIN_PATH_X_POSITION_PID_KP = 1.0;
     public static final double DRIVETRAIN_PATH_X_POSITION_PID_KI = 0.0;
     public static final double DRIVETRAIN_PATH_X_POSITION_PID_KD = 0.0;
     public static final double DRIVETRAIN_PATH_X_POSITION_PID_KF = 0.0;
     public static final double DRIVETRAIN_PATH_X_POSITION_PID_KS = 1.0;
-    public static final double DRIVETRAIN_PATH_X_MAX_OUTPUT = 0.5;
-    public static final double DRIVETRAIN_PATH_X_MIN_OUTPUT = -0.5;
+    public static final double DRIVETRAIN_PATH_X_MAX_OUTPUT = 10.0;
+    public static final double DRIVETRAIN_PATH_X_MIN_OUTPUT = -10.0;
 
-    public static final double DRIVETRAIN_PATH_Y_POSITION_PID_KP = 0.0;
+    public static final double DRIVETRAIN_PATH_Y_POSITION_PID_KP = 1.0;
     public static final double DRIVETRAIN_PATH_Y_POSITION_PID_KI = 0.0;
     public static final double DRIVETRAIN_PATH_Y_POSITION_PID_KD = 0.0;
     public static final double DRIVETRAIN_PATH_Y_POSITION_PID_KF = 0.0;
     public static final double DRIVETRAIN_PATH_Y_POSITION_PID_KS = 1.0;
-    public static final double DRIVETRAIN_PATH_Y_MAX_OUTPUT = 0.5;
-    public static final double DRIVETRAIN_PATH_Y_MIN_OUTPUT = -0.5;
+    public static final double DRIVETRAIN_PATH_Y_MAX_OUTPUT = 10.0;
+    public static final double DRIVETRAIN_PATH_Y_MIN_OUTPUT = -10.0;
 
     public static final boolean DRIVETRAIN_VOLTAGE_COMPENSATION_ENABLED = false;
     public static final double DRIVETRAIN_VOLTAGE_COMPENSATION = 0.0;
@@ -330,7 +330,7 @@ public class TuningConstants
     public static final double DRIVETRAIN_MAX_VELOCITY = TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS * HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND; // max velocity in inches per second
     public static final double DRIVETRAIN_VELOCITY_TO_PERCENTAGE = 1.0 / TuningConstants.DRIVETRAIN_MAX_VELOCITY;
     public static final double DRIVETRAIN_TURN_GOAL_VELOCITY = 45.0; // degrees per second for turn goal
-    public static final double DRIVETRAIN_TURN_SCALE = 1.0; // radians per second
+    public static final double DRIVETRAIN_TURN_SCALE = 2.0; // radians per second
     public static final double DRIVETRAIN_TURN_APPROXIMATION = 0.5; // number of degrees off at which point we give up trying to face an angle when uncommanded
     public static final double DRIVETRAIN_MAX_MODULE_PATH_VELOCITY = 0.50 * TuningConstants.DRIVETRAIN_MAX_VELOCITY; // up to x% of our max controllable speed
     public static final double DRIVETRAIN_MAX_PATH_TURN_VELOCITY = 45.0; // in degrees per second

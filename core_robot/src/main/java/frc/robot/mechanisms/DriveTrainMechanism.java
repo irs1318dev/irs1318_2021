@@ -382,12 +382,12 @@ public class DriveTrainMechanism implements IMechanism
             double yVelocityGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathYVelocityGoal);
             double angleVelocityGoal = this.driver.getAnalog(AnalogOperation.DriveTrainPathAngleVelocityGoal);
 
-            omega = 0.0; //angleVelocityGoal * Helpers.DEGREES_TO_RADIANS;
+            omega = angleVelocityGoal * Helpers.DEGREES_TO_RADIANS;
             if (this.fieldOriented)
             {
                 // add correction for x/y drift
-                // xVelocityGoal += this.pathXOffsetPID.calculatePosition(xGoal, this.xPosition);
-                // yVelocityGoal += this.pathYOffsetPID.calculatePosition(yGoal, this.yPosition);
+                xVelocityGoal += this.pathXOffsetPID.calculatePosition(xGoal, this.xPosition);
+                yVelocityGoal += this.pathYOffsetPID.calculatePosition(yGoal, this.yPosition);
 
                 // convert velocity to be robot-oriented
                 centerVelocityRight = Helpers.cosd(this.robotNavxYaw) * xVelocityGoal + Helpers.sind(this.robotNavxYaw) * yVelocityGoal;
@@ -398,7 +398,7 @@ public class DriveTrainMechanism implements IMechanism
                 this.desiredYaw = anglePair.getAngle();
 
                 this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);
-                omega += this.pathOmegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw) * TuningConstants.DRIVETRAIN_TURN_SCALE;
+                omega += this.pathOmegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw);
             }
             else
             {
@@ -458,7 +458,7 @@ public class DriveTrainMechanism implements IMechanism
                     else
                     {
                         this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);
-                        omega = this.omegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw) * TuningConstants.DRIVETRAIN_TURN_SCALE;
+                        omega = this.omegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw);
                     }
                 }
                 else

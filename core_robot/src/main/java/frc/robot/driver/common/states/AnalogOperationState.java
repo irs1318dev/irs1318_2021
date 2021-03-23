@@ -212,7 +212,7 @@ public class AnalogOperationState extends OperationState
             deadZone = deadZoneMin;
         }
 
-        return multiplier * (value - deadZone) / (1.0 - deadZone);
+        return multiplier * (value - deadZone) / (1.0 - Math.abs(deadZone));
     }
 
     /**
