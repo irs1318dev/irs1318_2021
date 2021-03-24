@@ -254,7 +254,7 @@ public class RoadRunnerTrajectoryGenerator
     
     // ----------------------- bounce paths ------------------ 
         Path bounce1 = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
-            .splineTo(new Vector2d(48, 46), 90.0) // first target (A3)
+            .splineTo(new Vector2d(48, 46), 90.0 * Helpers.DEGREES_TO_RADIANS) // first target (A3)
             .build();
         pathManager.addPath(
             "bounce1",
@@ -263,7 +263,7 @@ public class RoadRunnerTrajectoryGenerator
         Path bounce2 = new PathBuilder(new Pose2d(48, 46, 0.0))
             .lineToConstantHeading(new Vector2d(74, -43))
             .splineTo(new Vector2d(104, -63), 0.0)
-            .splineTo(new Vector2d(136, 46), 90.0) // second target (A6)
+            .splineTo(new Vector2d(136, 46), 90.0 * Helpers.DEGREES_TO_RADIANS) // second target (A6)
             .build();
         pathManager.addPath(
             "bounce2",
@@ -272,7 +272,7 @@ public class RoadRunnerTrajectoryGenerator
         Path bounce3 = new PathBuilder(new Pose2d(136, 46, 0.0))
             .lineToConstantHeading(new Vector2d(146, -73))
             .splineTo(new Vector2d(181, -60), 0.0)
-            .splineTo(new Vector2d(220, 16), 85.0)
+            .splineTo(new Vector2d(220, 16), 85.0 * Helpers.DEGREES_TO_RADIANS)
             .lineToConstantHeading(new Vector2d(226, 46)) // third target (A9)
             .build();
         pathManager.addPath(
