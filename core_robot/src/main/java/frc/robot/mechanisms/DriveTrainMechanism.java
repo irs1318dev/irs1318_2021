@@ -72,18 +72,31 @@ public class DriveTrainMechanism implements IMechanism
     private final ITalonFX[] driveMotors;
     private final IAnalogInput[] absoluteEncoders;
 
+    private final PIDHandler omegaPID;
+    private final boolean[] isDirectionSwapped;
+    private final PIDHandler pathOmegaPID;
+    private final PIDHandler pathXOffsetPID;
+    private final PIDHandler pathYOffsetPID;
+
+    private final double[] driveVelocities;
+    private final double[] drivePositions;
+    private final double[] driveErrors;
+    private final double[] steerVelocities;
+    private final double[] steerPositions;
+    private final double[] steerAngles;
+    private final double[] steerErrors;
+    private final double[] encoderVoltages;
+    private final double[] encoderAngles;
+
+    private final Setpoint[] result;
+
     private Driver driver;
+    private boolean firstRun;
 
     private boolean fieldOriented;
     private boolean maintainOrientation;
     private boolean updatedOrientation;
-    private PIDHandler omegaPID;
     private double desiredYaw;
-    private boolean[] isDirectionSwapped;
-
-    private PIDHandler pathOmegaPID;
-    private PIDHandler pathXOffsetPID;
-    private PIDHandler pathYOffsetPID;
 
     private double time;
     private double angle;
@@ -92,17 +105,6 @@ public class DriveTrainMechanism implements IMechanism
     private double deltaT;
 
     private double robotNavxYaw;
-    private double[] driveVelocities;
-    private double[] drivePositions;
-    private double[] driveErrors;
-    private double[] steerVelocities;
-    private double[] steerPositions;
-    private double[] steerAngles;
-    private double[] steerErrors;
-    private double[] encoderVoltages;
-    private double[] encoderAngles;
-
-    private Setpoint[] result;
 
     @Inject
     public DriveTrainMechanism(
@@ -277,6 +279,7 @@ public class DriveTrainMechanism implements IMechanism
         }
     }
 
+    @Override
     public void update()
     {
         if (this.driver.getDigital(DigitalOperation.DriveTrainEnableFieldOrientation))
@@ -308,7 +311,7 @@ public class DriveTrainMechanism implements IMechanism
             this.desiredYaw = this.robotNavxYaw;
         }
 
-        if (this.driver.getDigital(DigitalOperation.DriveTrainReset))
+        if (this.firstRun || this.driver.getDigital(DigitalOperation.DriveTrainReset))
         {
             for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
             {
@@ -316,11 +319,13 @@ public class DriveTrainMechanism implements IMechanism
                 double angleDifference = (this.encoderAngles[i] - HardwareConstants.DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSET[i]);
                 double tickDifference = angleDifference * HardwareConstants.DRIVETRAIN_STEER_TICKS_PER_DEGREE;
                 this.steerMotors[i].setPosition((int)tickDifference);
-
+    
                 this.drivePositions[i] = 0;
                 this.steerPositions[i] = (int)tickDifference;
                 this.steerAngles[i] = angleDifference % 360.0;
             }
+
+            this.firstRun = false;
         }
 
         this.calculateSetpoints();
@@ -341,6 +346,7 @@ public class DriveTrainMechanism implements IMechanism
         }
     }
 
+    @Override
     public void stop()
     {
         this.omegaPID.reset();
@@ -527,7 +533,7 @@ public class DriveTrainMechanism implements IMechanism
         }
     }
 
-    public void calculateOdometry(double deltaNavxYaw)
+    private void calculateOdometry(double deltaNavxYaw)
     {
         double navxOmega = deltaNavxYaw / this.deltaT; // in degrees
 
