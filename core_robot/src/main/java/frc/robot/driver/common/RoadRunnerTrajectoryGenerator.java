@@ -107,7 +107,7 @@ public class RoadRunnerTrajectoryGenerator
 
         Path redPathA = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
             .lineToLinearHeading(new Pose2d(45.0, 0.0)) // C3
-            .splineToConstantHeading(new Vector2d(105.0, -30.0), 0.0) // D5     | what's end tangent?
+            .splineToConstantHeading(new Vector2d(105.0, -30.0), 0.0) // D5 
             .splineToConstantHeading(new Vector2d(135.0, 60.0), 0.0) // A6
             .lineToLinearHeading(new Pose2d(295.0, 60.0, 0.0)) // end
             .build();
@@ -253,20 +253,38 @@ public class RoadRunnerTrajectoryGenerator
             new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(barrelRace, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
     
     // ----------------------- bounce paths ------------------ 
-/*        Path bounceStart = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
-            .splineTo(new Vector2d(48, 46), 0.0) // first target (A3)
+        Path bounce1 = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
+            .splineTo(new Vector2d(48, 46), 90.0) // first target (A3)
+            .build();
+        pathManager.addPath(
+            "bounce1",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(bounce1, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+            
+        Path bounce2 = new PathBuilder(new Pose2d(48, 46, 0.0))
             .lineToConstantHeading(new Vector2d(74, -43))
             .splineTo(new Vector2d(104, -63), 0.0)
-            .splineTo(new Vector2d(136, 46), 0.0) // second target (A6)
+            .splineTo(new Vector2d(136, 46), 90.0) // second target (A6)
+            .build();
+        pathManager.addPath(
+            "bounce2",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(bounce2, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+            
+        Path bounce3 = new PathBuilder(new Pose2d(136, 46, 0.0))
             .lineToConstantHeading(new Vector2d(146, -73))
             .splineTo(new Vector2d(181, -60), 0.0)
-            .splineTo(new Vector2d(220, 16), 0.0)
+            .splineTo(new Vector2d(220, 16), 85.0)
             .lineToConstantHeading(new Vector2d(226, 46)) // third target (A9)
+            .build();
+        pathManager.addPath(
+            "bounce3",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(bounce3, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+            
+        Path bounce4 = new PathBuilder(new Pose2d(226, 46, 0.0))
             .splineTo(new Vector2d(278, 0), 0.0)
             .build();
         pathManager.addPath(
-            "bounceStart",
-            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(bounceStart, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
-*/
+            "bounce4",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(bounce4, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+
     }
 }

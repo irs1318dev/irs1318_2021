@@ -118,6 +118,16 @@ public class AutonomousRoutineSelector
             )
         );
     }
+
+    private static IControlTask BouncePath(String bounce1, String bounce2, String bounce3, String bounce4)
+    {
+        return SequentialTask.Sequence(
+            new FollowPathTask(bounce1),
+            new FollowPathTask(bounce2),
+            new FollowPathTask(bounce3),
+            new FollowPathTask(bounce4)
+        );
+    }
 } // yaaaaaAAAaaaAaaaAAAAaa
 
 
