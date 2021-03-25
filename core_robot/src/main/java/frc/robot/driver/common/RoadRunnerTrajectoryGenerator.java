@@ -261,7 +261,8 @@ public class RoadRunnerTrajectoryGenerator
             new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(bounce1, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
             
         Path bounce2 = new PathBuilder(new Pose2d(scaleConstant * 48, 46, 0.0))
-            .splineToConstantHeading(new Vector2d(scaleConstant * 74, -43), -90.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(scaleConstant * 48, 45), -90.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(scaleConstant * 74, -43), -30.0 * Helpers.DEGREES_TO_RADIANS)
             .splineToConstantHeading(new Vector2d(scaleConstant * 104, -63), 0.0)
             .splineToConstantHeading(new Vector2d(scaleConstant * 136, 46), 90.0 * Helpers.DEGREES_TO_RADIANS) // second target (A6)
             .build();
@@ -270,6 +271,7 @@ public class RoadRunnerTrajectoryGenerator
             new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(bounce2, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
             
         Path bounce3 = new PathBuilder(new Pose2d(scaleConstant * 136, 46, 0.0))
+            .splineToConstantHeading(new Vector2d(scaleConstant * 136, 45), -90.0 * Helpers.DEGREES_TO_RADIANS)
             .splineToConstantHeading(new Vector2d(scaleConstant * 146, -73), -90 * Helpers.DEGREES_TO_RADIANS)
             .splineToConstantHeading(new Vector2d(scaleConstant * 181, -60), 0.0)
             .splineToConstantHeading(new Vector2d(scaleConstant * 220, 16), 85.0 * Helpers.DEGREES_TO_RADIANS)
@@ -280,6 +282,7 @@ public class RoadRunnerTrajectoryGenerator
             new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(bounce3, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
             
         Path bounce4 = new PathBuilder(new Pose2d(scaleConstant * 226, 46, 0.0))
+            .splineToConstantHeading(new Vector2d(scaleConstant * 226, 45), -90.0 * Helpers.DEGREES_TO_RADIANS)
             .splineToConstantHeading(new Vector2d(scaleConstant * 278, 0), 0.0)
             .build();
         pathManager.addPath(
