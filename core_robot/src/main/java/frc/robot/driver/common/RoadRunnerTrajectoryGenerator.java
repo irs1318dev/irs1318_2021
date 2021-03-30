@@ -103,7 +103,7 @@ public class RoadRunnerTrajectoryGenerator
 
 // ----------------------------------------- Galactic Search Paths ------------------------------
 
-        double scaleConstant = 0.5;
+        double scaleConstant = 1.0;
 
         Path redPathA = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
             .lineToLinearHeading(new Pose2d(45.0, 0.0)) // C3
@@ -221,14 +221,17 @@ public class RoadRunnerTrajectoryGenerator
         //     .splineToConstantHeading(new Vector2d(scaleConstant * 0.0, 40.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
         //     .build();
         Path slalom = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
-            .splineToConstantHeading(new Vector2d(40.0, 50.0), 0.0)
-            .splineToConstantHeading(new Vector2d(80.0, 50.0), 0.0)
-            .splineToConstantHeading(new Vector2d(115.0, 0.0), 0.0)
-            .splineToConstantHeading(new Vector2d(155.0, 25.0), 90.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(115.0, 50.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(80.0, 0.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(40.0, 0.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(30.0, 0), 0.0)
+            .splineToConstantHeading(new Vector2d(70.0, 50.0), 0.0)
+            .splineToConstantHeading(new Vector2d(225.0, 50.0), 0.0)
+            .splineToConstantHeading(new Vector2d(293.0, -7.0), 0.0)
+            .splineToConstantHeading(new Vector2d(370.0, 25.0), 90.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(300.0, 45.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(220.0, -10.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(70.0, 0.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(30.0, 50.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
             .splineToConstantHeading(new Vector2d(0.0, 50.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(-20.0, 50.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
             .build();
         pathManager.addPath( 
             "slalom",
