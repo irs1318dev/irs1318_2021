@@ -60,7 +60,7 @@ public class VisionCenteringTask extends ControlTaskBase
             this.timer = this.getInjector().getInstance(ITimer.class);
         }
 
-        this.setDigitalOperationState(DigitalOperation.VisionEnable, true);
+        this.setDigitalOperationState(DigitalOperation.VisionEnableStream, true);
     }
 
     /**
@@ -86,7 +86,7 @@ public class VisionCenteringTask extends ControlTaskBase
     {
         this.setAnalogOperationState(AnalogOperation.DriveTrainTurnSpeed, 0.0);
 
-        this.setDigitalOperationState(DigitalOperation.VisionEnable, false);
+        this.setDigitalOperationState(DigitalOperation.VisionEnableStream, false);
     }
 
     /**

@@ -1,6 +1,8 @@
 package frc.robot.driver.controltasks;
 
 import frc.robot.*;
+import frc.robot.driver.AnalogOperation;
+import frc.robot.driver.DigitalOperation;
 import frc.robot.driver.common.IControlTask;
 import frc.robot.mechanisms.OffboardVisionManager;
 
@@ -8,6 +10,8 @@ public class VisionPowercellDecisionTask extends DecisionSequentialTask
 {
     private IControlTask routineBlue;
     private IControlTask routineRed;
+
+    //private Driver driver;
 
     private OffboardVisionManager visionManager;
 
@@ -27,6 +31,11 @@ public class VisionPowercellDecisionTask extends DecisionSequentialTask
     {
         this.visionManager = this.getInjector().getInstance(OffboardVisionManager.class);
 
+        this.setDigitalOperationState(DigitalOperation.VisionEnableStream, true);
+        this.setDigitalOperationState(DigitalOperation.VisionEnablePowercellProcessing, true);
+
+        System.out.println(visionManager.getPowercellY() + " VISION Y VALUE");
+        //System.out.println(this.driver.getDigital(DigitalOperation.VisionForceDisable));
         if (visionManager.getPowercellY() <= VisionConstants.VISION_POWERCELL_LOCATION_Y)
         {
             this.AppendTask(routineBlue);

@@ -21,7 +21,7 @@ public class OffboardVisionManager implements IMechanism
     private final INetworkTableProvider networkTable;
     private final ILogger logger;
 
-    private final IDigitalOutput ringLight;
+    //private final IDigitalOutput ringLight;
 
     private Driver driver;
 
@@ -34,9 +34,6 @@ public class OffboardVisionManager implements IMechanism
     private Double distance;
     private Double horizontalAngle;
 
-    private double powercellX;
-    private double powercellY;
-
     /**
      * Initializes a new OffboardVisionManager
      * @param logger for logging to smart dashboard
@@ -48,7 +45,7 @@ public class OffboardVisionManager implements IMechanism
         this.logger = logger;
 
         this.networkTable = provider.getNetworkTableProvider();
-        this.ringLight = provider.getDigitalOutput(ElectronicsConstants.VISION_RING_LIGHT_DIO);
+        //this.ringLight = provider.getDigitalOutput(ElectronicsConstants.VISION_RING_LIGHT_DIO);
 
         this.centerX = 0.0;
         this.centerY = 0.0;
@@ -101,7 +98,9 @@ public class OffboardVisionManager implements IMechanism
     @Override
     public void update()
     {
-        boolean enableVision = this.driver.getDigital(DigitalOperation.VisionEnable) && !this.driver.getDigital(DigitalOperation.VisionForceDisable);
+        boolean enableVision = this.driver.getDigital(DigitalOperation.VisionEnableStream) && !this.driver.getDigital(DigitalOperation.VisionForceDisable);
+        System.out.println(this.driver.getDigital(DigitalOperation.VisionForceDisable));
+        System.out.println(this.driver.getDigital(DigitalOperation.VisionEnablePowercellProcessing));
         boolean enableVideoStream = !this.driver.getDigital(DigitalOperation.VisionDisableStream);
         boolean enablePowercellProcessing = this.driver.getDigital(DigitalOperation.VisionEnablePowercellProcessing);
         boolean enableRetroreflectiveProcessing = this.driver.getDigital(DigitalOperation.VisionEnableRetroreflectiveProcessing);
@@ -122,14 +121,15 @@ public class OffboardVisionManager implements IMechanism
         this.logger.logBoolean(LoggingKey.OffboardVisionEnableVision, enableVision);
         this.logger.logBoolean(LoggingKey.OffboardVisionEnableStream, enableVideoStream);
         this.logger.logNumber(LoggingKey.OffboardVisionEnableProcessing, visionProcessingMode);
+        System.out.println(visionProcessingMode);
 
-        this.ringLight.set(enableVision && enableRetroreflectiveProcessing);
+        //this.ringLight.set(enableVision && enableRetroreflectiveProcessing);
     }
 
     @Override
     public void stop()
     {
-        this.ringLight.set(false);
+        //this.ringLight.set(false);
 
         this.logger.logBoolean(LoggingKey.OffboardVisionEnableVision, false);
         this.logger.logBoolean(LoggingKey.OffboardVisionEnableStream, false);
@@ -154,11 +154,11 @@ public class OffboardVisionManager implements IMechanism
 
     public double getPowercellX() 
     {
-        return this.powercellX;
+        return this.centerX;
     }
 
     public double getPowercellY() 
     {
-        return this.powercellY;
+        return this.centerY;
     }
 }

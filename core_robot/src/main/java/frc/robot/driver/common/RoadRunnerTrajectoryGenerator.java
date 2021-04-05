@@ -107,9 +107,9 @@ public class RoadRunnerTrajectoryGenerator
 
         Path redPathA = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
             .lineToLinearHeading(new Pose2d(45.0, 0.0)) // C3
-            .splineToConstantHeading(new Vector2d(105.0, -30.0), 0.0) // D5 
-            .splineToConstantHeading(new Vector2d(135.0, 60.0), 0.0) // A6
-            .lineToLinearHeading(new Pose2d(295.0, 60.0, 0.0)) // end
+            .splineToConstantHeading(new Vector2d(105.0, -60.0), 0.0) // D5 
+            .splineToConstantHeading(new Vector2d(135.0, 50.0), 0.0) // A6
+            .splineToConstantHeading(new Vector2d(295.0, 50.0), 0.0) // end
             .build();
         pathManager.addPath( 
             "redPathA",
@@ -117,9 +117,9 @@ public class RoadRunnerTrajectoryGenerator
 
         Path bluePathA = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
             .lineToLinearHeading(new Pose2d(135.0, 0.0)) // E6
-            .splineToConstantHeading(new Vector2d(165.0, 90.0), 0.0) // B7
-            .splineToConstantHeading(new Vector2d(225.0, 60.0), 0.0) // C9
-            .lineToLinearHeading(new Pose2d(295.0, 60.0)) // end
+            .splineToConstantHeading(new Vector2d(170.0, 99.0), 0.0) // B7
+            .splineToConstantHeading(new Vector2d(225.0, 50.0), 0.0) // C9
+            .splineToConstantHeading(new Vector2d(290.0, 50.0), 0.0) // end
             .build();
         pathManager.addPath( 
             "bluePathA",
@@ -130,7 +130,7 @@ public class RoadRunnerTrajectoryGenerator
             .lineToLinearHeading(new Pose2d(45.0, 0.0)) // B3
             .splineToConstantHeading(new Vector2d(105.0, -60.0), 0.0) // D5
             .splineToConstantHeading(new Vector2d(165.0, 0.0), 0.0) // B7
-            .lineToLinearHeading(new Pose2d(295.0, 0.0)) // end
+            .splineToConstantHeading(new Vector2d(295.0, 0.0), 0.0) // end
             .build();
         pathManager.addPath( 
             "redPathB",
@@ -140,7 +140,7 @@ public class RoadRunnerTrajectoryGenerator
             .lineToLinearHeading(new Pose2d(135.0, 0.0)) // D6
             .splineToConstantHeading(new Vector2d(195.0, 60.0), 0.0) // B8
             .splineToConstantHeading(new Vector2d(225.0, 0.0), 0.0) // D10
-            .lineToLinearHeading(new Pose2d(295.0, 0.0)) // end
+            .splineToConstantHeading(new Vector2d(295.0, 0.0), 0.0) // end
             .build();
         pathManager.addPath( 
             "bluePathB",

@@ -168,11 +168,16 @@ public class ButtonMap implements IButtonMap
             Shift.DriverDebug,
             ButtonType.Toggle,
             () -> SequentialTask.Sequence(
-                new FollowPathTask("bounce1"),
-                new FollowPathTask("bounce2"),
-                new FollowPathTask("bounce3"),
-                new FollowPathTask("bounce4")
-            ),
+                ConcurrentTask.AllTasks(
+                    new IntakeOuttakeTask(8, true),
+                    new VisionPowercellDecisionTask( 
+                        new FollowPathTask("bluePathA"),
+                        new FollowPathTask("redPathA")),
+                    new IntakePositionTask(true)
+                    ),
+                    new IntakePositionTask(false)
+                )
+            ,
             new IOperation[]
             {
                 AnalogOperation.DriveTrainMoveForward,
@@ -190,6 +195,15 @@ public class ButtonMap implements IButtonMap
                 DigitalOperation.DriveTrainReset,
                 DigitalOperation.DriveTrainEnableFieldOrientation,
                 DigitalOperation.DriveTrainDisableFieldOrientation,
+                DigitalOperation.VisionForceDisable,
+                DigitalOperation.VisionEnableStream,
+                DigitalOperation.VisionDisableStream,
+                DigitalOperation.VisionEnablePowercellProcessing,
+                DigitalOperation.VisionEnableRetroreflectiveProcessing,
+                DigitalOperation.PowerCellIntakeExtend,
+                DigitalOperation.PowerCellIntakeRetract,
+                DigitalOperation.PowerCellIntake,
+                DigitalOperation.PowerCellOuttake,
             }),
         new MacroOperationDescription(
             MacroOperation.VisionCenter,
