@@ -480,6 +480,8 @@ public class DriveTrainMechanism implements IMechanism
             }
         }
 
+        System.out.println(omega);
+
         double maxModuleDriveVelocityGoal = 0.0;
         for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
         {

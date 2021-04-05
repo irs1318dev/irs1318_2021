@@ -27,7 +27,7 @@ public class VisionPowercellDecisionTask extends DecisionSequentialTask
     {
         this.visionManager = this.getInjector().getInstance(OffboardVisionManager.class);
 
-        if (visionManager.getPowercellY() >= VisionConstants.VISION_POWERCELL_LOCATION_Y)
+        if (visionManager.getPowercellY() <= VisionConstants.VISION_POWERCELL_LOCATION_Y)
         {
             this.AppendTask(routineBlue);
         }
