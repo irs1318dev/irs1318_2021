@@ -344,6 +344,8 @@ public class DriveTrainMechanism implements IMechanism
                 this.steerMotors[i].set(steerSetpoint);
             }
         }
+
+        //this.logger.logNumber();
     }
 
     @Override

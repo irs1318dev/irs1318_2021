@@ -31,6 +31,9 @@ public class AutonomousRoutineSelector
         None,
         PathA,
         PathB,
+        Slalom,
+        Barrel,
+        Bounce
     }
 
     /**
@@ -52,6 +55,9 @@ public class AutonomousRoutineSelector
         this.routineChooser.addDefault("None", AutoRoutine.None);
         this.routineChooser.addObject("Path A", AutoRoutine.PathA);
         this.routineChooser.addObject("Path B", AutoRoutine.PathB);
+        this.routineChooser.addObject("Slalom", AutoRoutine.Slalom);
+        this.routineChooser.addObject("Barrel", AutoRoutine.Barrel);
+        this.routineChooser.addObject("Bounce", AutoRoutine.Bounce);
         networkTableProvider.addChooser("Auto Routine", this.routineChooser);
 
         this.positionChooser = networkTableProvider.getSendableChooser();
@@ -81,13 +87,25 @@ public class AutonomousRoutineSelector
         {
             routine = AutoRoutine.None;
         }
-        if (routine == AutoRoutine.PathA)
+        else if (routine == AutoRoutine.PathA)
         {
             return DecidePaths("redPathA", "bluePathA"); 
         }
-        if (routine == AutoRoutine.PathB)
+        else if (routine == AutoRoutine.PathB)
         {
             return DecidePaths("redPathB", "bluePathB"); 
+        }
+        else if (routine == AutoRoutine.Slalom)
+        {
+            return FollowOnePath("slalom");
+        }
+        else if (routine == AutoRoutine.Barrel)
+        {
+            return FollowOnePath("barrelRace");
+        }
+        else if (routine == AutoRoutine.Bounce)
+        {
+            return BouncePath("bounce1", "bounce2", "bounce3", "bounce4");
         }
 
         this.logger.logString(LoggingKey.AutonomousSelection, startPosition.toString() + "." + routine.toString());
@@ -128,6 +146,12 @@ public class AutonomousRoutineSelector
             new FollowPathTask(bounce4)
         );
     }
+
+    private static IControlTask FollowOnePath(String path)
+    {
+        return new FollowPathTask(path);
+    }
+
 } // yaaaaaAAAaaaAaaaAAAAaa
 
 

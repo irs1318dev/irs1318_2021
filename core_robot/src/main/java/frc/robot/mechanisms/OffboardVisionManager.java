@@ -99,8 +99,8 @@ public class OffboardVisionManager implements IMechanism
     public void update()
     {
         boolean enableVision = this.driver.getDigital(DigitalOperation.VisionEnableStream) && !this.driver.getDigital(DigitalOperation.VisionForceDisable);
-        System.out.println(this.driver.getDigital(DigitalOperation.VisionForceDisable));
-        System.out.println(this.driver.getDigital(DigitalOperation.VisionEnablePowercellProcessing));
+        //System.out.println(this.driver.getDigital(DigitalOperation.VisionForceDisable));
+        //System.out.println(this.driver.getDigital(DigitalOperation.VisionEnablePowercellProcessing));
         boolean enableVideoStream = !this.driver.getDigital(DigitalOperation.VisionDisableStream);
         boolean enablePowercellProcessing = this.driver.getDigital(DigitalOperation.VisionEnablePowercellProcessing);
         boolean enableRetroreflectiveProcessing = this.driver.getDigital(DigitalOperation.VisionEnableRetroreflectiveProcessing);
@@ -118,10 +118,10 @@ public class OffboardVisionManager implements IMechanism
             }
         }
 
-        this.logger.logBoolean(LoggingKey.OffboardVisionEnableVision, enableVision);
-        this.logger.logBoolean(LoggingKey.OffboardVisionEnableStream, enableVideoStream);
-        this.logger.logNumber(LoggingKey.OffboardVisionEnableProcessing, visionProcessingMode);
-        System.out.println(visionProcessingMode);
+        this.logger.logBoolean(LoggingKey.OffboardVisionEnableVision, true);
+        this.logger.logBoolean(LoggingKey.OffboardVisionEnableStream, true);
+        this.logger.logNumber(LoggingKey.OffboardVisionEnableProcessing, 2.0);
+        //System.out.println(visionProcessingMode);
 
         //this.ringLight.set(enableVision && enableRetroreflectiveProcessing);
     }

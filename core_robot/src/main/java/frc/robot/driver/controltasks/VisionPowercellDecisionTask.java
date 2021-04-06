@@ -34,7 +34,7 @@ public class VisionPowercellDecisionTask extends DecisionSequentialTask
         this.setDigitalOperationState(DigitalOperation.VisionEnableStream, true);
         this.setDigitalOperationState(DigitalOperation.VisionEnablePowercellProcessing, true);
 
-        System.out.println(visionManager.getPowercellY() + " VISION Y VALUE");
+        //System.out.println(visionManager.getPowercellY() + " VISION Y VALUE");
         //System.out.println(this.driver.getDigital(DigitalOperation.VisionForceDisable));
         if (visionManager.getPowercellY() <= VisionConstants.VISION_POWERCELL_LOCATION_Y)
         {

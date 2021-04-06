@@ -107,8 +107,8 @@ public class RoadRunnerTrajectoryGenerator
 
         Path redPathA = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
             .lineToLinearHeading(new Pose2d(45.0, 0.0)) // C3
-            .splineToConstantHeading(new Vector2d(105.0, -60.0), 0.0) // D5 
-            .splineToConstantHeading(new Vector2d(135.0, 50.0), 0.0) // A6
+            .splineToConstantHeading(new Vector2d(105.0, -19.0), 0.0) // D5 
+            .splineToConstantHeading(new Vector2d(135.0, 58.0), 0.0) // A6
             .splineToConstantHeading(new Vector2d(295.0, 50.0), 0.0) // end
             .build();
         pathManager.addPath( 
@@ -128,9 +128,9 @@ public class RoadRunnerTrajectoryGenerator
             
         Path redPathB = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
             .lineToLinearHeading(new Pose2d(45.0, 0.0)) // B3
-            .splineToConstantHeading(new Vector2d(105.0, -60.0), 0.0) // D5
-            .splineToConstantHeading(new Vector2d(165.0, 0.0), 0.0) // B7
-            .splineToConstantHeading(new Vector2d(295.0, 0.0), 0.0) // end
+            .splineToConstantHeading(new Vector2d(105.0, -58.0), 0.0) // D5
+            .splineToConstantHeading(new Vector2d(165.0, 2.0), 0.0) // B7
+            .splineToConstantHeading(new Vector2d(295.0, 2.0), 0.0) // end
             .build();
         pathManager.addPath( 
             "redPathB",
@@ -221,17 +221,17 @@ public class RoadRunnerTrajectoryGenerator
         //     .splineToConstantHeading(new Vector2d(scaleConstant * 0.0, 40.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
         //     .build();
         Path slalom = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
-            .splineToConstantHeading(new Vector2d(30.0, 0), 0.0)
-            .splineToConstantHeading(new Vector2d(70.0, 50.0), 0.0)
-            .splineToConstantHeading(new Vector2d(225.0, 50.0), 0.0)
-            .splineToConstantHeading(new Vector2d(293.0, -7.0), 0.0)
-            .splineToConstantHeading(new Vector2d(370.0, 25.0), 90.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(300.0, 45.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(220.0, -10.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(70.0, 0.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(30.0, 50.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(0.0, 50.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(-20.0, 50.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(30, 0), 0.0)
+            .splineToConstantHeading(new Vector2d(40.0, 50.0), 0.0)
+            .splineToConstantHeading(new Vector2d(180.0, 50.0), 0.0)
+            .splineToConstantHeading(new Vector2d(213.0, -10.0), 0.0)
+            .splineToConstantHeading(new Vector2d(266.0, 17.0), 90.0 * Helpers.DEGREES_TO_RADIANS)
+            //.splineToConstantHeading(new Vector2d(265.0, 40.0), 90.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(213.0, 54.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(190.0, -10.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(48.5, -10.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(47.5, 49.0), -180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(0.0, 49.0), 180.0 * Helpers.DEGREES_TO_RADIANS)
             .build();
         pathManager.addPath( 
             "slalom",
@@ -240,16 +240,19 @@ public class RoadRunnerTrajectoryGenerator
         // ----------------------- barrel race paths ------------------ 
     
         Path barrelRace = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
-            .splineToConstantHeading(new Vector2d(scaleConstant * 105.0, scaleConstant * 0.0), 0.0)
-            .splineToConstantHeading(new Vector2d(scaleConstant * 127, scaleConstant * -20), -90.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(scaleConstant * 105, scaleConstant * -40), 180.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(scaleConstant * 94, scaleConstant * -20), 90.0 * Helpers.DEGREES_TO_RADIANS) // behind D5
-            .splineToConstantHeading(new Vector2d(scaleConstant * 227, scaleConstant * 45), 90.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(scaleConstant * 205, scaleConstant * 65), 180.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(scaleConstant * 184, scaleConstant * 45), -90.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(scaleConstant * 254, scaleConstant * -40), 0.0)
-            .splineToConstantHeading(new Vector2d(scaleConstant * 276, scaleConstant * 0), 90.0 * Helpers.DEGREES_TO_RADIANS)
-            .splineToConstantHeading(new Vector2d(scaleConstant * -10, scaleConstant * 28), 180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(scaleConstant * 120.0, scaleConstant * 3.0), 0.0)
+            .splineToConstantHeading(new Vector2d(scaleConstant * 137, scaleConstant * -20), -90.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(scaleConstant * 105, scaleConstant * -52), 180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(scaleConstant * 85, scaleConstant * -52), 180 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(scaleConstant * 65, scaleConstant * -20), 90.0 * Helpers.DEGREES_TO_RADIANS) // behind D5
+            .splineToConstantHeading(new Vector2d(scaleConstant * 217, scaleConstant * 45), 90.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(scaleConstant * 180, scaleConstant * 65), 180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(scaleConstant * 135, scaleConstant * 45), -90.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(scaleConstant * 206, scaleConstant * -35), -90.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(scaleConstant * 238, scaleConstant * -45), 0.0)
+            .splineToConstantHeading(new Vector2d(scaleConstant * 270, scaleConstant * -25), 90.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(scaleConstant * 268, scaleConstant * 10), 180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(scaleConstant * -10, scaleConstant * 10), 180.0 * Helpers.DEGREES_TO_RADIANS)
             .build();
         pathManager.addPath(
             "barrelRace",
