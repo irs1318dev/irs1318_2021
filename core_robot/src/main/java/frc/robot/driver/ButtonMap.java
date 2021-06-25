@@ -168,10 +168,7 @@ public class ButtonMap implements IButtonMap
             Shift.DriverDebug,
             ButtonType.Toggle,
             () -> SequentialTask.Sequence(
-                new FollowPathTask("bounce1"),
-                new FollowPathTask("bounce2")
-                //new FollowPathTask("bounce3"),
-                //new FollowPathTask("bounce4")
+                new FollowPathTask("slalom")
 
             ),
 
