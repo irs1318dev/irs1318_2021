@@ -341,6 +341,29 @@ public class TuningConstants
 
     public static final double POWERCELL_ROLLER_MOTOR_INTAKE_POWER = 0.5;
     public static final double POWERCELL_ROLLER_MOTOR_OUTTAKE_POWER = -0.5;
+    public static final double POWERCELL_KICKER_MOTOR_OUTTAKE_POWER = 0.5;
 
-    public static final double STHOPE_BLEASE = 0.0;
+    public static final double PERRY_THE_PLATYPUS = 0.0;
+
+    public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KP = 0.55;
+    public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KI = 0.0;
+    public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KD = 0.75;
+    public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KF = 0.0113666; // 90000 / 1023
+    public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KS = 85000.0;
+
+    public static final int POWERCELL_FLYWHEEL_VELOCITY_PERIOD = 10;
+    public static final int POWERCELL_FLYWHEEL_VELOCITY_WINDOWSIZE = 32;
+    public static final boolean POWERCELL_FLYWHEEL_MASTER_VELOCITY_VOLTAGE_COMPENSATION_ENABLED = true;
+    public static final boolean POWERCELL_FLYWHEEL_FOLLOWER_VELOCITY_VOLTAGE_COMPENSATION_ENABLED = true;
+    public static final double POWERCELL_FLYWHEEL_MASTER_VELOCITY_VOLTAGE_COMPENSATION_MAXVOLTAGE = 12.0;
+    public static final double POWERCELL_FLYWHEEL_FOLLOWER_VELOCITY_VOLTAGE_COMPENSATION_MAXVOLTAGE = 12.0;
+
+    public static final double POWERCELL_THROUGHBEAM_CUTOFF = 2.7;
+    public static final double POWERCELL_GENEVA_COUNT_THRESHOLD = 5.0;
+    public static final double POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING = 0.3;
+    public static final double POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING = 0.3;
+    public static final double POWERCELL_GENEVA_MECHANISM_INDEXING_TIMEOUT = 2.0;
+    public static final double POWERCELL_FLYWHEEL_ALLOWABLE_ERROR_RANGE = 500; // ticks per 100ms
+
+    public static final boolean POWERCELL_HAS_THROUGH_BEAM_SENSOR = true;
 }

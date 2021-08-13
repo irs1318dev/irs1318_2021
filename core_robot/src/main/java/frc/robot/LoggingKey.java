@@ -8,6 +8,7 @@ public enum LoggingKey
     RobotState("r.state", true),
     RobotTime("r.time", true),
     RobotMatch("r.match"),
+    RobotTimer("r.timer"),
     DriverIsAuto("driver.isAuto"),
     DriverActiveMacros("driver.activeMacros", true),
     DriverActiveShifts("driver.activeShifts"),
@@ -79,8 +80,16 @@ public enum LoggingKey
     DriveTrainSteerPositionGoal4("dt.steer_goal4"),
 
     PowerCellIsIntaking("pc.intaking", false),
-    PowerCellIntakeExtended("pc.intake_extended", false);
-
+    PowerCellIntakeExtended("pc.intake_extended", false),
+    PowerCellFlywheelVelocity("pc.flywheel_vel"),
+    PowerCellFlywheelPosition("pc.flywheel_pos"),
+    PowerCellFlywheelError("pc.flywheel_err"),
+    PowerCellCarouselCount("pc.carousel_count"),
+    PowerCellCarouselCurrentIndex("pc.carousel_index"),
+    PowerCellThroughBeamVoltage("pc.tb_vol"),
+    PowerCellThroughBeamBroken("pc.tb_broken"),
+    PowerCellHasPowerCell("pc.has_pc"),
+    PowerCellFlywheelVelocitySetpoint("pc.flywheel_vel_sp");
     
 
     public final String value;

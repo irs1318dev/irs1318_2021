@@ -99,6 +99,7 @@ public class DriveTrainMechanism implements IMechanism
     private double desiredYaw;
 
     private double time;
+    private double startTime;
     private double angle;
     private double xPosition;
     private double yPosition;
@@ -225,6 +226,7 @@ public class DriveTrainMechanism implements IMechanism
         this.angle = 0.0;
         this.xPosition = 0.0;
         this.yPosition = 0.0;
+        this.startTime = 0.0;
 
         this.fieldOriented = false;
         this.maintainOrientation = true;
@@ -345,7 +347,7 @@ public class DriveTrainMechanism implements IMechanism
             }
         }
 
-        //this.logger.logNumber();
+        this.logger.logNumber(LoggingKey.RobotTimer, this.timer.get() - this.startTime);
     }
 
     @Override

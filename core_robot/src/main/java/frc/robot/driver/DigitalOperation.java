@@ -27,4 +27,13 @@ public enum DigitalOperation implements IOperation
     PowerCellIntakeRetract,
     PowerCellIntake,
     PowerCellOuttake,
+
+    PowerCellHoodPointBlank,
+    PowerCellHoodShort,
+    PowerCellHoodMedium,
+    PowerCellHoodLong,
+
+    PowerCellKick,
+    PowerCellMoveToNextSlotInator,
+    PowerCellMoveToPreviousSlot,
 }

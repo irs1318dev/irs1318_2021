@@ -61,6 +61,19 @@ public class ElectronicsConstants
 
     public static final int POWERCELL_INTAKE_FORWARD_PCM = 0;
     public static final int POWERCELL_INTAKE_REVERSE_PCM = 1;
+    public static final int POWERCELL_KICKER_FORWARD_PCM = 2;
+    public static final int POWERCELL_KICKER_REVERSE_PCM = 3;
+    public static final int POWERCELL_OUTER_HOOD_FORWARD_PCM = 4;
+    public static final int POWERCELL_OUTER_HOOD_REVERSE_PCM = 5;
+    public static final int POWERCELL_INNER_HOOD_FORWARD_PCM = 6;
+    public static final int POWERCELL_INNER_HOOD_REVERSE_PCM = 7;
 
     public static final int POWERCELL_ROLLER_MOTOR_CAN_ID = 10;
+    public static final int POWERCELL_FLYWHEEL_MASTER_CAN_ID = 9; 
+    public static final int POWERCELL_FLYWHEEL_FOLLOWER_CAN_ID = 11;
+    public static final int POWERCELL_SNOWBLOWER_MOTOR_CAN_ID = 12;
+    public static final int POWERCELL_KICKER_MOTOR_CAN_ID = 13;
+
+    public static final int POWERCELL_CAROUSEL_COUNTER_DIO = 0;
+    public static final int POWERCELL_THROUGHBEAM_ANALOG_INPUT = 0;
 }

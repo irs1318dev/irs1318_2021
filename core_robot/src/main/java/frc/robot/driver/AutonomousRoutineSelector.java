@@ -33,7 +33,9 @@ public class AutonomousRoutineSelector
         PathB,
         Slalom,
         Barrel,
-        Bounce
+        Bounce,
+        ShootAndTrenchShoot,
+        ShootAndShieldShoot,
     }
 
     /**
@@ -42,7 +44,7 @@ public class AutonomousRoutineSelector
     @Inject
     public AutonomousRoutineSelector(
         LoggingManager logger,
-        PathManager pathManager,
+        PathManager pathManager, 
         IRobotProvider provider)
     {
         // initialize robot parts that are used to select autonomous routine (e.g. dipswitches) here...
@@ -58,6 +60,8 @@ public class AutonomousRoutineSelector
         this.routineChooser.addObject("Slalom", AutoRoutine.Slalom);
         this.routineChooser.addObject("Barrel", AutoRoutine.Barrel);
         this.routineChooser.addObject("Bounce", AutoRoutine.Bounce);
+        this.routineChooser.addObject("Shoot and Trench Shoot", AutoRoutine.ShootAndTrenchShoot);
+        this.routineChooser.addObject("Shoot and Shield Shoot", AutoRoutine.ShootAndShieldShoot);
         networkTableProvider.addChooser("Auto Routine", this.routineChooser);
 
         this.positionChooser = networkTableProvider.getSendableChooser();
@@ -107,6 +111,18 @@ public class AutonomousRoutineSelector
         {
             return BouncePath("bounce1", "bounce2", "bounce3", "bounce4");
         }
+        else if (routine == AutoRoutine.ShootAndTrenchShoot && startPosition == StartPosition.Right) 
+        {
+            return ShootAndMove("rightShootTrenchShootInator", "rotate180");
+        }
+        else if (routine == AutoRoutine.ShootAndTrenchShoot && startPosition == StartPosition.Center) 
+        {
+            return ShootAndMove("centerShootTrenchShoot", "rotate180");
+        }
+        else if (routine == AutoRoutine.ShootAndShieldShoot && startPosition == StartPosition.Center) 
+        {
+            return ShootAndMove("centerShootShieldShoot", "rotate1808");
+        }
 
         this.logger.logString(LoggingKey.AutonomousSelection, startPosition.toString() + "." + routine.toString());
 
@@ -131,8 +147,8 @@ public class AutonomousRoutineSelector
             ConcurrentTask.AllTasks(
                 new IntakeOuttakeTask(15.0, true),
                 new VisionPowercellDecisionTask( 
-                    new FollowPathTask(redPath),
-                    new FollowPathTask(bluePath))
+                    new FollowPathTask(bluePath),
+                    new FollowPathTask(redPath))
             )
         );
     }
@@ -152,6 +168,24 @@ public class AutonomousRoutineSelector
         return new FollowPathTask(path);
     }
 
+    private static IControlTask ShootAndMove(String goToPowerCell, String rotate)
+    {
+        return SequentialTask.Sequence(
+            ConcurrentTask.AllTasks(
+                new VisionCenteringTask(),
+                new FlywheelVisionSpinTask()),
+            new FullHopperShotTask(),
+            ConcurrentTask.AllTasks(
+                new FollowPathTask(goToPowerCell),
+                new IntakePositionTask(true),
+                new IntakeOuttakeTask(9, true)),
+            new FollowPathTask(rotate),
+            ConcurrentTask.AllTasks(
+                new VisionCenteringTask(),
+                new FlywheelVisionSpinTask()),
+            new FullHopperShotTask()
+        );
+    }
 } // yaaaaaAAAaaaAaaaAAAAaa
 
 

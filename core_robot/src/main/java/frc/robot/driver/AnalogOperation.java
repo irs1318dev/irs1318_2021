@@ -16,5 +16,7 @@ public enum AnalogOperation implements IOperation
     DriveTrainPathYGoal,
     DriveTrainPathXVelocityGoal,
     DriveTrainPathYVelocityGoal,
-    DriveTrainPathAngleVelocityGoal;
+    DriveTrainPathAngleVelocityGoal,
+    PowerCellFlywheelVelocity,
+    PowerCellCarousel;
 }

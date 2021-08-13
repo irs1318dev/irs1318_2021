@@ -74,7 +74,7 @@ public class RoadRunnerTrajectoryGenerator
             new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(turnArcLeft, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
 
         Path forward5ft = new PathBuilder(new Pose2d(0.0, 0.0, 0.0))
-            .lineToLinearHeading(new Pose2d(120, 0.0))
+            .lineToLinearHeading(new Pose2d(60, 0.0))
             .build();
         pathManager.addPath(
             "forward5ft",
@@ -306,5 +306,36 @@ public class RoadRunnerTrajectoryGenerator
             "bounce4",
             new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(bounce4, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
 
+        Path rightShootTrenchShootInator = new PathBuilder(new Pose2d(0, 0, 29.143 * Helpers.DEGREES_TO_RADIANS))
+            .splineToConstantHeading(new Vector2d(86.62, 0), -180.0 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(195, 0), -180.0 * Helpers.DEGREES_TO_RADIANS)
+            .build();
+        pathManager.addPath(
+            "rightShootTrenchShootInator",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(rightShootTrenchShootInator, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+
+        Path rotate180 = new PathBuilder(new Pose2d(0, 0, 0 * Helpers.DEGREES_TO_RADIANS))
+            .splineToConstantHeading(new Vector2d(-1, 0), -180.0 * Helpers.DEGREES_TO_RADIANS)
+            .build();
+        pathManager.addPath(
+            "rotate180",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(rotate180, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+
+        Path centerShootTrenchShoot = new PathBuilder(new Pose2d(0, 0, 0))
+            .splineToConstantHeading(new Vector2d(-86.62, -66.91), 180 * Helpers.DEGREES_TO_RADIANS)
+            .build();
+        pathManager.addPath(
+            "centerShootTrenchShoot",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(centerShootTrenchShoot, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+    
+        Path centerShootShieldShoot = new PathBuilder(new Pose2d(0, 0, 0))
+            .splineTo(new Vector2d(-123, 0), 110 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(-156, 0), 180 * Helpers.DEGREES_TO_RADIANS)
+            .splineToConstantHeading(new Vector2d(-150, 14), 180 * Helpers.DEGREES_TO_RADIANS)
+            .build();
+        pathManager.addPath(
+            "centerShootShieldShoot",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(centerShootShieldShoot, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+    
     }
 }
