@@ -1,5 +1,7 @@
 package frc.robot.driver;
 
+import frc.robot.mechanisms.ControlPanelMechanism;
+
 public enum AnalogOperation implements IOperation
 {
     PositionStartingAngle,
@@ -17,6 +19,14 @@ public enum AnalogOperation implements IOperation
     DriveTrainPathXVelocityGoal,
     DriveTrainPathYVelocityGoal,
     DriveTrainPathAngleVelocityGoal,
+
+    // Powercell Operations
     PowerCellFlywheelVelocity,
-    PowerCellCarousel;
+    PowerCellCarousel,
+
+    // Climber operations
+    ClimberWinch,
+
+    // Control Panel operations
+    ControlPanelSpinSpeed;
 }

@@ -89,7 +89,9 @@ public enum LoggingKey
     PowerCellThroughBeamVoltage("pc.tb_vol"),
     PowerCellThroughBeamBroken("pc.tb_broken"),
     PowerCellHasPowerCell("pc.has_pc"),
-    PowerCellFlywheelVelocitySetpoint("pc.flywheel_vel_sp");
+    PowerCellFlywheelVelocitySetpoint("pc.flywheel_vel_sp"),
+
+    ControlPanelExtend("cp.extend");
     
 
     public final String value;

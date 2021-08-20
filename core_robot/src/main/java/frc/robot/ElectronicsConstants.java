@@ -76,4 +76,20 @@ public class ElectronicsConstants
 
     public static final int POWERCELL_CAROUSEL_COUNTER_DIO = 0;
     public static final int POWERCELL_THROUGHBEAM_ANALOG_INPUT = 0;
+
+    //================================================== Climber ==============================================================
+
+    public static final int CLIMBER_EXTEND_FORWARD_PCM = 42;
+    public static final int CLIMBER_EXTEND_REVERSE_PCM = 43;
+    public static final int CLIMBER_GRAB_FORWARD_PCM = 44;
+    public static final int CLIMBER_GRAB_REVERSE_PCM = 45;
+
+    public static final int CLIMBER_WINCH_MASTER_CAN_ID = 13;
+
+    //================================================== Control Panel Spinner ==============================================================
+
+    public static final int CONTROLPANEL_SPINNER_CAN_ID = 10;
+    public static final int CONTROLPANEL_EXTENDER_FORWARD_PCM = 10;
+    public static final int CONTROLPANEL_EXTENDER_REVERSE_PCM = 11;
+
 }

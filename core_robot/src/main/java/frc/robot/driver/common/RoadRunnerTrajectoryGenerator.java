@@ -337,5 +337,29 @@ public class RoadRunnerTrajectoryGenerator
             "centerShootShieldShoot",
             new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(centerShootShieldShoot, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
     
+        Path doofenshmirtzinator4ft = new PathBuilder(new Pose2d(0, 0, 0))
+            .splineTo(new Vector2d(42, 0), 0)
+            .build();
+        pathManager.addPath(
+            "doofenshmirtzinator4ft",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(doofenshmirtzinator4ft, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+
+        Path leftToOpTrench = new PathBuilder(new Pose2d(0, 0, 0))
+            .splineTo(new Vector2d(133, 0), 0)
+            .build();
+        pathManager.addPath(
+            "leftToOpTrench",
+            new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(leftToOpTrench, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+        
+        // Path slideToTheRight = new PathBuilder(new Pose2d(0, 0, 0))
+        //     .splineTo(new Vector2d(133, 0), 0)
+        //     .build();
+        // pathManager.addPath(
+        //     "leftToOpTrench",
+        //     new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(leftToOpTrench, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
+        
+        
+        
+        
     }
 }

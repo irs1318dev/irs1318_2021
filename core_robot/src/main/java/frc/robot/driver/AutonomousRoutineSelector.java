@@ -36,6 +36,8 @@ public class AutonomousRoutineSelector
         Bounce,
         ShootAndTrenchShoot,
         ShootAndShieldShoot,
+        ShootAndMove,
+        Move,
     }
 
     /**
@@ -62,6 +64,7 @@ public class AutonomousRoutineSelector
         this.routineChooser.addObject("Bounce", AutoRoutine.Bounce);
         this.routineChooser.addObject("Shoot and Trench Shoot", AutoRoutine.ShootAndTrenchShoot);
         this.routineChooser.addObject("Shoot and Shield Shoot", AutoRoutine.ShootAndShieldShoot);
+        this.routineChooser.addObject("Shoot and Move", AutoRoutine.ShootAndMove);
         networkTableProvider.addChooser("Auto Routine", this.routineChooser);
 
         this.positionChooser = networkTableProvider.getSendableChooser();
@@ -122,6 +125,18 @@ public class AutonomousRoutineSelector
         else if (routine == AutoRoutine.ShootAndShieldShoot && startPosition == StartPosition.Center) 
         {
             return ShootAndMove("centerShootShieldShoot", "rotate1808");
+        }
+        else if (routine == AutoRoutine.ShootAndMove) 
+        {
+            return Shoot("doofenshmirtzinator4ft");
+        }
+        else if (routine == AutoRoutine.Move) 
+        {
+            return Move("doofenshmirtzinator4ft");
+        }
+        else if (routine == AutoRoutine.ShootAndShieldShoot && startPosition == StartPosition.Left) 
+        {
+            return ShootAndMove("leftToOpTrench", "rotate1808");
         }
 
         this.logger.logString(LoggingKey.AutonomousSelection, startPosition.toString() + "." + routine.toString());
@@ -185,6 +200,21 @@ public class AutonomousRoutineSelector
                 new FlywheelVisionSpinTask()),
             new FullHopperShotTask()
         );
+    }
+
+    private static IControlTask Shoot(String path)
+    {
+        return SequentialTask.Sequence(
+            ConcurrentTask.AllTasks(
+                new VisionCenteringTask(),
+                new FlywheelVisionSpinTask()),
+            new FullHopperShotTask(),
+            new FollowPathTask(path));
+    }
+
+    private static IControlTask Move(String path)
+    {
+        return new FollowPathTask(path);
     }
 } // yaaaaaAAAaaaAaaaAAAAaa
 

@@ -61,5 +61,12 @@ public class HardwareConstants
     public static final boolean POWERCELL_KICKER_MOTOR_INVERT_OUTPUT = false;
 
     public static final int POWERCELL_CAROUSEL_SLOT_COUNT = 5;
+
+    //================================================== Climber ==============================================================
+
+    public static final boolean CLIMBER_WINCH_MASTER_INVERT_OUTPUT = false;
     
+    //================================================== Control Panel Spinner ==============================================================
+
+    public static final boolean CONTROLPANEL_SPINNER_INVERT_OUTPUT = false;
 }
