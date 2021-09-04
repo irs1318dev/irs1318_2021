@@ -26,7 +26,7 @@ public class FullHopperShotTask extends ControlTaskBase
     {
         this.powerCellMechanism = this.getInjector().getInstance(PowerCellMechanism.class);
         this.timer = this.getInjector().getInstance(ITimer.class);
-        this.previousSlot = this.powerCellMechanism.getCurrentCarouselIndex();
+        //this.previousSlot = this.powerCellMechanism.getCurrentCarouselIndex();
 
         this.currentState = ShotState.Moving;
         this.shotsShot = 0;
@@ -37,10 +37,10 @@ public class FullHopperShotTask extends ControlTaskBase
     {
         if (this.currentState == ShotState.Moving)
         {
-            int currentSlot = this.powerCellMechanism.getCurrentCarouselIndex();
+            int currentSlot = 0;//this.powerCellMechanism.getCurrentCarouselIndex();
             if (TuningConstants.POWERCELL_HAS_THROUGH_BEAM_SENSOR)
             {
-                if (this.powerCellMechanism.hasPowerCell(currentSlot))
+                if (false) //this.powerCellMechanism.hasPowerCell(currentSlot))
                 {
                     this.setDigitalOperationState(DigitalOperation.PowerCellKick, false);
                     this.setDigitalOperationState(DigitalOperation.PowerCellMoveToNextSlotInator, false);
@@ -126,7 +126,7 @@ public class FullHopperShotTask extends ControlTaskBase
     public boolean hasCompleted()
     {
         if (TuningConstants.POWERCELL_HAS_THROUGH_BEAM_SENSOR &&
-            !this.powerCellMechanism.hasAnyPowerCell() &&
+            //!this.powerCellMechanism.hasAnyPowerCell() &&
             this.currentState == ShotState.Moving)
         {
             return true;

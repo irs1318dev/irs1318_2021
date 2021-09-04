@@ -26,12 +26,12 @@ public class PowerCellMechanism implements IMechanism
 
     private final IDoubleSolenoid outerHood;
     private final IDoubleSolenoid innerHood;
-    private final IDoubleSolenoid kickerSolenoid;
     private final ITalonSRX flyWheel;
 
     private final IVictorSPX carouselMotor;
+
+    private final IDoubleSolenoid kickerSolenoid;
     private final ITalonSRX kickerMotor;
-    private final ITimer timer;
 
     private Driver driver;
 
@@ -39,31 +39,25 @@ public class PowerCellMechanism implements IMechanism
     private double flywheelVelocity;
     private double flywheelError;
 
-    private int currentCarouselIndex;
-
     private boolean intakeExtended;
 
-    //private CarouselState carouselState;
-    private double lastIntakeTime;
     private double flywheelVelocitySetpoint;
 
     @Inject
-    public PowerCellMechanism(LoggingManager logger, IRobotProvider provider, ITimer timer)
+    public PowerCellMechanism(LoggingManager logger, IRobotProvider provider)
     {
         this.logger = logger;
 
-        //this.throughBeamSensor = provider.getAnalogInput(ElectronicsConstants.POWERCELL_THROUGHBEAM_ANALOG_INPUT);
-
+        // intake components:
         this.intakeSolenoid = provider.getDoubleSolenoid(ElectronicsConstants.PCM_A_MODULE, ElectronicsConstants.POWERCELL_INTAKE_FORWARD_PCM, ElectronicsConstants.POWERCELL_INTAKE_REVERSE_PCM);
-        this.kickerSolenoid = provider.getDoubleSolenoid(ElectronicsConstants.PCM_A_MODULE, ElectronicsConstants.POWERCELL_KICKER_FORWARD_PCM, ElectronicsConstants.POWERCELL_KICKER_REVERSE_PCM);
-        this.outerHood = provider.getDoubleSolenoid(ElectronicsConstants.PCM_B_MODULE, ElectronicsConstants.POWERCELL_OUTER_HOOD_FORWARD_PCM, ElectronicsConstants.POWERCELL_OUTER_HOOD_REVERSE_PCM);
-        this.innerHood = provider.getDoubleSolenoid(ElectronicsConstants.PCM_B_MODULE, ElectronicsConstants.POWERCELL_INNER_HOOD_FORWARD_PCM, ElectronicsConstants.POWERCELL_INNER_HOOD_REVERSE_PCM);
-
         this.rollerMotor = provider.getSparkMax(ElectronicsConstants.POWERCELL_ROLLER_MOTOR_CAN_ID, SparkMaxMotorType.Brushless);
         this.rollerMotor.setInvertOutput(HardwareConstants.POWERCELL_ROLLER_MOTOR_INVERT_OUTPUT);
         this.rollerMotor.setControlMode(SparkMaxControlMode.PercentOutput);
         this.rollerMotor.setNeutralMode(MotorNeutralMode.Brake);
 
+        // shooter components:
+        this.outerHood = provider.getDoubleSolenoid(ElectronicsConstants.PCM_B_MODULE, ElectronicsConstants.POWERCELL_OUTER_HOOD_FORWARD_PCM, ElectronicsConstants.POWERCELL_OUTER_HOOD_REVERSE_PCM);
+        this.innerHood = provider.getDoubleSolenoid(ElectronicsConstants.PCM_B_MODULE, ElectronicsConstants.POWERCELL_INNER_HOOD_FORWARD_PCM, ElectronicsConstants.POWERCELL_INNER_HOOD_REVERSE_PCM);
         this.flyWheel = provider.getTalonSRX(ElectronicsConstants.POWERCELL_FLYWHEEL_MASTER_CAN_ID);
         this.flyWheel.setInvertOutput(HardwareConstants.POWERCELL_FLYWHEEL_MASTER_INVERT_OUTPUT);
         this.flyWheel.setInvertSensor(HardwareConstants.POWERCELL_FLYWHEEL_MASTER_INVERT_SENSOR);
@@ -86,69 +80,38 @@ public class PowerCellMechanism implements IMechanism
         flyWheelFollower.setInvertOutput(HardwareConstants.POWERCELL_FLYWHEEL_FOLLOWER_INVERT_OUTPUT);
         flyWheelFollower.setVoltageCompensation(TuningConstants.POWERCELL_FLYWHEEL_FOLLOWER_VELOCITY_VOLTAGE_COMPENSATION_ENABLED, TuningConstants.POWERCELL_FLYWHEEL_FOLLOWER_VELOCITY_VOLTAGE_COMPENSATION_MAXVOLTAGE);
 
+        // carousel components:
         this.carouselMotor = provider.getVictorSPX(ElectronicsConstants.POWERCELL_CAROUSEL_MOTOR_CAN_ID);
         this.carouselMotor.setInvertOutput(HardwareConstants.POWERCELL_CAROUSEL_MOTOR_INVERT_OUTPUT);
         this.carouselMotor.setControlMode(TalonSRXControlMode.PercentOutput);
         this.carouselMotor.setNeutralMode(MotorNeutralMode.Brake);
 
+        // kicker components:
+        this.kickerSolenoid = provider.getDoubleSolenoid(ElectronicsConstants.PCM_A_MODULE, ElectronicsConstants.POWERCELL_KICKER_FORWARD_PCM, ElectronicsConstants.POWERCELL_KICKER_REVERSE_PCM);
         this.kickerMotor = provider.getTalonSRX(ElectronicsConstants.POWERCELL_KICKER_MOTOR_CAN_ID);
         this.kickerMotor.setInvertOutput(HardwareConstants.POWERCELL_KICKER_MOTOR_INVERT_OUTPUT);
         this.kickerMotor.setControlMode(TalonSRXControlMode.Velocity);
         this.kickerMotor.setNeutralMode(MotorNeutralMode.Coast);
 
-        this.timer = timer;
-
-        // this.carouselState = CarouselState.Stationary;
-        this.lastIntakeTime = -2.0;
-
-        this.currentCarouselIndex = 0;
-
         this.intakeExtended = false;
         this.flywheelVelocitySetpoint = 0.0;
-
     }
 
     @Override
     public void readSensors()
     {
-        double currentTime = this.timer.get();
-
         this.flywheelPosition = this.flyWheel.getPosition();
         this.flywheelVelocity = this.flyWheel.getVelocity();
         this.flywheelError = this.flyWheel.getError();
 
-        // int newCarouselCount = this.carouselCounter.get();
-        // if (newCarouselCount > this.carouselCount &&
-        //    currentTime - this.lastCarouselCountTime > TuningConstants.POWERCELL_CAROUSEL_COUNT_THRESHOLD)
-        // {
-        //    int slotsToAdvance = 1;
-        //    if (this.carouselState == CarouselState.MovingToPrevious)
-        //    {
-        //        // use (#slots - 1) instead of just (-1) to keep the modulo positive
-        //        slotsToAdvance = HardwareConstants.POWERCELL_CAROUSEL_SLOT_COUNT - 1;
-        //    }
-
-        //    this.currentCarouselIndex = (currentCarouselIndex + slotsToAdvance) % HardwareConstants.POWERCELL_CAROUSEL_SLOT_COUNT;
-        //    this.lastCarouselCountTime = currentTime;
-
-        //    // only register whether throughbeam is broken when we are switching to a new slot
-        //    this.hasPowerCell[this.currentCarouselIndex] = throughBeamBroken;
-        // }
-
-        // this.carouselCount = newCarouselCount;
-
         this.logger.logNumber(LoggingKey.PowerCellFlywheelVelocity, this.flywheelVelocity);
         this.logger.logNumber(LoggingKey.PowerCellFlywheelPosition, this.flywheelPosition);
         this.logger.logNumber(LoggingKey.PowerCellFlywheelError, this.flywheelError);
-        this.logger.logInteger(LoggingKey.PowerCellCarouselCurrentIndex, this.currentCarouselIndex);
-
     }
 
     @Override
     public void update()
     {
-        double currentTime = this.timer.get();
-
         if (this.driver.getDigital(DigitalOperation.PowerCellHoodPointBlank))
         {
            this.innerHood.set(DoubleSolenoidValue.Reverse);
@@ -169,6 +132,7 @@ public class PowerCellMechanism implements IMechanism
            this.innerHood.set(DoubleSolenoidValue.Forward);
            this.outerHood.set(DoubleSolenoidValue.Forward);
         }
+
         /*
         boolean kick = this.driver.getDigital(DigitalOperation.PowerCellKick);
         if (kick)
@@ -182,6 +146,7 @@ public class PowerCellMechanism implements IMechanism
            this.kickerMotor.set(TuningConstants.PERRY_THE_PLATYPUS);
         }
         */
+
         boolean intakeExtend = this.driver.getDigital(DigitalOperation.PowerCellIntakeExtend);
         boolean intakeRetract = !intakeExtend && this.driver.getDigital(DigitalOperation.PowerCellIntakeRetract);
         if (intakeExtend)
@@ -234,111 +199,10 @@ public class PowerCellMechanism implements IMechanism
 
         this.logger.logNumber(LoggingKey.PowerCellFlywheelVelocitySetpoint, this.flywheelVelocitySetpoint);
 
-        /*
-        // determine if we should make any transition from our current carousel state:
-        switch (this.carouselState)
-        {
-            case Stationary:
-                if (!this.intakeExtended || kick)
-                {
-                    // don't change state if the intake is retracted
-                }
-                else if (this.driver.getDigital(DigitalOperation.PowerCellMoveToNextSlotInator))
-                {
-                    this.lastCarouselCountTime = currentTime;
-                    this.previousIndex = this.currentCarouselIndex;
-                    this.carouselState = CarouselState.MovingToNext;
-                }
-                else if (this.driver.getDigital(DigitalOperation.PowerCellMoveToPreviousSlot))
-                {
-                    this.lastCarouselCountTime = currentTime;
-                    this.previousIndex = this.currentCarouselIndex;
-                    this.carouselState = CarouselState.MovingToPrevious;
-                }
-                // else if (isIntaking)
-                // {
-                //     // if intaking, start automatically indexing
-                //     this.lastCarouselCountTime = currentTime;
-                //     this.carouselState = CarouselState.Indexing;
-                //     this.lastIntakeTime = currentTime;
-                // }
-
-                break;
-
-            case Indexing:
-                if (!this.intakeExtended || kick)
-                {
-                    // become stationary if intake is retracted, or we're kicking
-                    this.carouselState = CarouselState.Stationary;
-                }
-                else if (this.driver.getDigital(DigitalOperation.PowerCellMoveToNextSlotInator))
-                {
-                    this.previousIndex = this.currentCarouselIndex;
-                    this.carouselState = CarouselState.MovingToNext;
-                }
-                else if (this.driver.getDigital(DigitalOperation.PowerCellMoveToPreviousSlot))
-                {
-                    this.previousIndex = this.currentCarouselIndex;
-                    this.carouselState = CarouselState.MovingToPrevious;
-                }
-                else if (isIntaking)
-                {
-                    // if intaking, keep track of time
-                    this.lastIntakeTime = currentTime;
-                }
-                else if (currentTime - this.lastIntakeTime > TuningConstants.POWERCELL_CAROUSEL_MECHANISM_INDEXING_TIMEOUT)
-                {
-                    // switch to move-to-next to avoid stopping when we are not fully turned
-                    this.previousIndex = this.currentCarouselIndex;
-                    this.carouselState = CarouselState.MovingToNext;
-                }
-
-                break;
-
-            case MovingToNext:
-                if (!this.intakeExtended || kick)
-                {
-                    // become stationary if intake is retracted, or we're kicking
-                    this.carouselState = CarouselState.Stationary;
-                }
-                else if (this.driver.getDigital(DigitalOperation.PowerCellMoveToPreviousSlot))
-                {
-                    this.previousIndex = this.currentCarouselIndex + 1;
-                    this.carouselState = CarouselState.MovingToPrevious;
-                }
-                else if (this.currentCarouselIndex != this.previousIndex)
-                {
-                    this.carouselState = CarouselState.Stationary;
-                }
-
-                break;
-
-            case MovingToPrevious:
-                if (!this.intakeExtended || kick)
-                {
-                    // become stationary if intake is retracted, or we're kicking
-                    this.carouselState = CarouselState.Stationary;
-                }
-                else if (this.driver.getDigital(DigitalOperation.PowerCellMoveToNextSlotInator))
-                {
-                    this.previousIndex = this.currentCarouselIndex - 1;
-                    this.carouselState = CarouselState.MovingToNext;
-                }
-                else if (this.currentCarouselIndex != this.previousIndex)
-                {
-                    this.carouselState = CarouselState.Stationary;
-                }
-
-                break;
-        }
-*/
-
-
         double desiredCarouselMotorPower = TuningConstants.PERRY_THE_PLATYPUS;
         double debugCarouselMotorPower = this.driver.getAnalog(AnalogOperation.PowerCellCarousel);
         if (debugCarouselMotorPower != TuningConstants.MAGIC_NULL_VALUE)
         {
-            //this.carouselState = CarouselState.Stationary;
             desiredCarouselMotorPower = debugCarouselMotorPower;
         }
         else 
@@ -348,7 +212,7 @@ public class PowerCellMechanism implements IMechanism
                 desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING;
 
                 this.kickerSolenoid.set(DoubleSolenoidValue.Forward);
-                this.kickerMotor.set(TuningConstants.POWERCELL_KICKER_MOTOR_OUTTAKE_POWER);
+                this.kickerMotor.set(TuningConstants.POWERCELL_KICKER_MOTOR_FEED_POWER);
             }
             else
             {
@@ -362,51 +226,9 @@ public class PowerCellMechanism implements IMechanism
             }
         }
 
-        
-
-        /*
-        // perform what we should do based on our current hopper state, or debug override:
-        double desiredCarouselMotorPower = TuningConstants.PERRY_THE_PLATYPUS;
-        double debugCarouselMotorPower = this.driver.getAnalog(AnalogOperation.PowerCellCarousel);
-        if (debugCarouselMotorPower != TuningConstants.MAGIC_NULL_VALUE)
-        {
-            this.carouselState = CarouselState.Stationary;
-            desiredCarouselMotorPower = debugCarouselMotorPower;
-        }
-        else
-        {
-            switch (this.carouselState)
-            {
-                case Indexing:
-                    desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
-                    break;
-
-                case MovingToNext:
-                    if (this.flywheelVelocitySetpoint != 0.0)
-                    {
-                        desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING;
-                    }
-                    else
-                    {
-                        desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
-                    }
-
-                    break;
-
-                case MovingToPrevious:
-                    desiredCarouselMotorPower = -TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
-                    break;
-
-                case Stationary:
-                    desiredCarouselMotorPower = TuningConstants.PERRY_THE_PLATYPUS;
-                    break;
-            }
-        }
-        */
         this.carouselMotor.set(desiredCarouselMotorPower);
 
-        //this.logger.logString(LoggingKey.PowerCellCarouselState, this.carouselState.toString());
-        //this.logger.logNumber(LoggingKey.PowerCellCarouselPower, desiredCarouselMotorPower);
+        this.logger.logNumber(LoggingKey.PowerCellCarouselPower, desiredCarouselMotorPower);
         this.logger.logBoolean(LoggingKey.PowerCellIsIntaking, isIntaking);
         this.logger.logBoolean(LoggingKey.PowerCellIntakeExtended, this.intakeExtended);
     }
@@ -414,13 +236,16 @@ public class PowerCellMechanism implements IMechanism
     @Override
     public void stop()
     {
-        this.carouselMotor.stop();
+        this.intakeSolenoid.set(DoubleSolenoidValue.Off);
         this.rollerMotor.stop();
+
         this.innerHood.set(DoubleSolenoidValue.Off);
         this.outerHood.set(DoubleSolenoidValue.Off);
-        this.kickerSolenoid.set(DoubleSolenoidValue.Off);
-        this.intakeSolenoid.set(DoubleSolenoidValue.Off);
         this.flyWheel.stop();
+
+        this.carouselMotor.stop();
+
+        this.kickerSolenoid.set(DoubleSolenoidValue.Off);
         this.kickerMotor.stop();
     }
 
@@ -440,51 +265,8 @@ public class PowerCellMechanism implements IMechanism
         return this.flywheelVelocitySetpoint;
     }
 
-    public int getCurrentCarouselIndex()
-    {
-        return this.currentCarouselIndex;
-    }
-
     public boolean isFlywheelSpunUp()
     {
         return this.flywheelVelocitySetpoint > 0.0 && Math.abs(this.flywheelError) <= TuningConstants.POWERCELL_FLYWHEEL_ALLOWABLE_ERROR_RANGE;
     }
-
-    // private double getClosestAngleInRange(double desiredAngle, double currentAngle, double minRangeValue, double maxRangeValue)
-    // {
-    //     double multiplicand = Math.floor(currentAngle / 360.0);
-
-    //     double[] closeRotations =
-    //     {
-    //         (desiredAngle + 360.0 * (multiplicand - 1.0)),
-    //         (desiredAngle + 360.0 * multiplicand),
-    //         (desiredAngle + 360.0 * (multiplicand + 1.0)),
-    //     };
-
-    //     double best = currentAngle;
-    //     double bestDistance = Double.POSITIVE_INFINITY;
-    //     for (int i = 0; i < 3; i++)
-    //     {
-    //         double angle = closeRotations[i];
-    //         if (Helpers.WithinRange(angle, minRangeValue, maxRangeValue))
-    //         {
-    //             double angleDistance = Math.abs(currentAngle - angle);
-    //             if (angleDistance < bestDistance)
-    //             {
-    //                 best = angle;
-    //                 bestDistance = angleDistance;
-    //             }
-    //         }
-    //     }
-
-    //     return best;
-    // }
-
-    // private enum CarouselState
-    // {
-    //     Indexing,
-    //     Stationary,
-    //     MovingToNext,
-    //     MovingToPrevious,
-    // }
 }

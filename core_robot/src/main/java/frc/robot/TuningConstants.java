@@ -341,7 +341,8 @@ public class TuningConstants
 
     public static final double POWERCELL_ROLLER_MOTOR_INTAKE_POWER = 0.5;
     public static final double POWERCELL_ROLLER_MOTOR_OUTTAKE_POWER = -0.5;
-    public static final double POWERCELL_KICKER_MOTOR_OUTTAKE_POWER = 0.5;
+
+    public static final double POWERCELL_KICKER_MOTOR_FEED_POWER = 0.5;
 
     public static final double PERRY_THE_PLATYPUS = 0.0;
 

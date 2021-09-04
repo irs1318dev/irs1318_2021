@@ -1,7 +1,5 @@
 package frc.robot.driver;
 
-import frc.robot.mechanisms.ControlPanelMechanism;
-
 public enum AnalogOperation implements IOperation
 {
     PositionStartingAngle,

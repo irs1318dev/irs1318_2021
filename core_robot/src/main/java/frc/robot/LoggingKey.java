@@ -84,11 +84,7 @@ public enum LoggingKey
     PowerCellFlywheelVelocity("pc.flywheel_vel"),
     PowerCellFlywheelPosition("pc.flywheel_pos"),
     PowerCellFlywheelError("pc.flywheel_err"),
-    PowerCellCarouselCount("pc.carousel_count"),
-    PowerCellCarouselCurrentIndex("pc.carousel_index"),
-    PowerCellThroughBeamVoltage("pc.tb_vol"),
-    PowerCellThroughBeamBroken("pc.tb_broken"),
-    PowerCellHasPowerCell("pc.has_pc"),
+    PowerCellCarouselPower("pc.carousel_power"),
     PowerCellFlywheelVelocitySetpoint("pc.flywheel_vel_sp"),
 
     ControlPanelExtend("cp.extend");
