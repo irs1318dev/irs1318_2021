@@ -57,7 +57,7 @@ public class HardwareConstants
     public static final boolean POWERCELL_FLYWHEEL_MASTER_INVERT_OUTPUT = true;
     public static final boolean POWERCELL_FLYWHEEL_MASTER_INVERT_SENSOR = true;
     public static final boolean POWERCELL_FLYWHEEL_FOLLOWER_INVERT_OUTPUT = true;
-    public static final boolean POWERCELL_SNOWBLOWER_MOTOR_INVERT_OUTPUT = true;
+    public static final boolean POWERCELL_CAROUSEL_MOTOR_INVERT_OUTPUT = true;
     public static final boolean POWERCELL_KICKER_MOTOR_INVERT_OUTPUT = false;
 
     public static final int POWERCELL_CAROUSEL_SLOT_COUNT = 5;

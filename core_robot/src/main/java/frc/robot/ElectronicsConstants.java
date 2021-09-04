@@ -71,7 +71,7 @@ public class ElectronicsConstants
     public static final int POWERCELL_ROLLER_MOTOR_CAN_ID = 10;
     public static final int POWERCELL_FLYWHEEL_MASTER_CAN_ID = 9; 
     public static final int POWERCELL_FLYWHEEL_FOLLOWER_CAN_ID = 11;
-    public static final int POWERCELL_SNOWBLOWER_MOTOR_CAN_ID = 12;
+    public static final int POWERCELL_CAROUSEL_MOTOR_CAN_ID = 12;
     public static final int POWERCELL_KICKER_MOTOR_CAN_ID = 13;
 
     public static final int POWERCELL_CAROUSEL_COUNTER_DIO = 0;

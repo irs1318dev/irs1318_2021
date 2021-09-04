@@ -29,28 +29,21 @@ public class PowerCellMechanism implements IMechanism
     private final IDoubleSolenoid kickerSolenoid;
     private final ITalonSRX flyWheel;
 
-    private final IVictorSPX snowblowerMotor;
+    private final IVictorSPX carouselMotor;
     private final ITalonSRX kickerMotor;
     private final ITimer timer;
-
-    private final ICounter carouselCounter;
-    private final IAnalogInput throughBeamSensor;
 
     private Driver driver;
 
     private double flywheelPosition;
     private double flywheelVelocity;
     private double flywheelError;
-    private int carouselCount;
 
-    private boolean[] hasPowerCell;
     private int currentCarouselIndex;
-    private double lastCarouselCountTime;
 
     private boolean intakeExtended;
 
-    private CarouselState carouselState;
-    private int previousIndex;
+    //private CarouselState carouselState;
     private double lastIntakeTime;
     private double flywheelVelocitySetpoint;
 
@@ -93,10 +86,10 @@ public class PowerCellMechanism implements IMechanism
         flyWheelFollower.setInvertOutput(HardwareConstants.POWERCELL_FLYWHEEL_FOLLOWER_INVERT_OUTPUT);
         flyWheelFollower.setVoltageCompensation(TuningConstants.POWERCELL_FLYWHEEL_FOLLOWER_VELOCITY_VOLTAGE_COMPENSATION_ENABLED, TuningConstants.POWERCELL_FLYWHEEL_FOLLOWER_VELOCITY_VOLTAGE_COMPENSATION_MAXVOLTAGE);
 
-        this.snowblowerMotor = provider.getVictorSPX(ElectronicsConstants.POWERCELL_SNOWBLOWER_MOTOR_CAN_ID);
-        this.snowblowerMotor.setInvertOutput(HardwareConstants.POWERCELL_SNOWBLOWER_MOTOR_INVERT_OUTPUT);
-        this.snowblowerMotor.setControlMode(TalonSRXControlMode.PercentOutput);
-        this.snowblowerMotor.setNeutralMode(MotorNeutralMode.Brake);
+        this.carouselMotor = provider.getVictorSPX(ElectronicsConstants.POWERCELL_CAROUSEL_MOTOR_CAN_ID);
+        this.carouselMotor.setInvertOutput(HardwareConstants.POWERCELL_CAROUSEL_MOTOR_INVERT_OUTPUT);
+        this.carouselMotor.setControlMode(TalonSRXControlMode.PercentOutput);
+        this.carouselMotor.setNeutralMode(MotorNeutralMode.Brake);
 
         this.kickerMotor = provider.getTalonSRX(ElectronicsConstants.POWERCELL_KICKER_MOTOR_CAN_ID);
         this.kickerMotor.setInvertOutput(HardwareConstants.POWERCELL_KICKER_MOTOR_INVERT_OUTPUT);
@@ -105,20 +98,14 @@ public class PowerCellMechanism implements IMechanism
 
         this.timer = timer;
 
-        this.carouselCounter = provider.getCounter(ElectronicsConstants.POWERCELL_CAROUSEL_COUNTER_DIO);
-
-        this.carouselState = CarouselState.Stationary;
-        this.previousIndex = 0;
+        // this.carouselState = CarouselState.Stationary;
         this.lastIntakeTime = -2.0;
-        this.lastCarouselCountTime = -2.0;
 
-        this.hasPowerCell = new boolean[5];
         this.currentCarouselIndex = 0;
 
         this.intakeExtended = false;
         this.flywheelVelocitySetpoint = 0.0;
 
-        this.throughBeamSensor = provider.getAnalogInput(ElectronicsConstants.POWERCELL_THROUGHBEAM_ANALOG_INPUT);
     }
 
     @Override
@@ -126,45 +113,34 @@ public class PowerCellMechanism implements IMechanism
     {
         double currentTime = this.timer.get();
 
-        boolean throughBeamBroken = false;
-        double throughBeamVoltage = this.throughBeamSensor.getVoltage();
-        if (throughBeamVoltage < TuningConstants.POWERCELL_THROUGHBEAM_CUTOFF)
-        {
-           throughBeamBroken = true;
-        }
-
         this.flywheelPosition = this.flyWheel.getPosition();
         this.flywheelVelocity = this.flyWheel.getVelocity();
         this.flywheelError = this.flyWheel.getError();
 
-        int newCarouselCount = this.carouselCounter.get();
-        if (newCarouselCount > this.carouselCount &&
-           currentTime - this.lastCarouselCountTime > TuningConstants.POWERCELL_GENEVA_COUNT_THRESHOLD)
-        {
-           int slotsToAdvance = 1;
-           if (this.carouselState == CarouselState.MovingToPrevious)
-           {
-               // use (#slots - 1) instead of just (-1) to keep the modulo positive
-               slotsToAdvance = HardwareConstants.POWERCELL_CAROUSEL_SLOT_COUNT - 1;
-           }
+        // int newCarouselCount = this.carouselCounter.get();
+        // if (newCarouselCount > this.carouselCount &&
+        //    currentTime - this.lastCarouselCountTime > TuningConstants.POWERCELL_CAROUSEL_COUNT_THRESHOLD)
+        // {
+        //    int slotsToAdvance = 1;
+        //    if (this.carouselState == CarouselState.MovingToPrevious)
+        //    {
+        //        // use (#slots - 1) instead of just (-1) to keep the modulo positive
+        //        slotsToAdvance = HardwareConstants.POWERCELL_CAROUSEL_SLOT_COUNT - 1;
+        //    }
 
-           this.currentCarouselIndex = (currentCarouselIndex + slotsToAdvance) % HardwareConstants.POWERCELL_CAROUSEL_SLOT_COUNT;
-           this.lastCarouselCountTime = currentTime;
+        //    this.currentCarouselIndex = (currentCarouselIndex + slotsToAdvance) % HardwareConstants.POWERCELL_CAROUSEL_SLOT_COUNT;
+        //    this.lastCarouselCountTime = currentTime;
 
-           // only register whether throughbeam is broken when we are switching to a new slot
-           this.hasPowerCell[this.currentCarouselIndex] = throughBeamBroken;
-        }
+        //    // only register whether throughbeam is broken when we are switching to a new slot
+        //    this.hasPowerCell[this.currentCarouselIndex] = throughBeamBroken;
+        // }
 
-        this.carouselCount = newCarouselCount;
+        // this.carouselCount = newCarouselCount;
 
         this.logger.logNumber(LoggingKey.PowerCellFlywheelVelocity, this.flywheelVelocity);
         this.logger.logNumber(LoggingKey.PowerCellFlywheelPosition, this.flywheelPosition);
         this.logger.logNumber(LoggingKey.PowerCellFlywheelError, this.flywheelError);
-        this.logger.logInteger(LoggingKey.PowerCellCarouselCount, this.carouselCount);
         this.logger.logInteger(LoggingKey.PowerCellCarouselCurrentIndex, this.currentCarouselIndex);
-        this.logger.logNumber(LoggingKey.PowerCellThroughBeamVoltage, throughBeamVoltage);
-        this.logger.logBoolean(LoggingKey.PowerCellThroughBeamBroken, throughBeamBroken);
-        this.logger.logBooleanArray(LoggingKey.PowerCellHasPowerCell, this.hasPowerCell);
 
     }
 
@@ -193,11 +169,10 @@ public class PowerCellMechanism implements IMechanism
            this.innerHood.set(DoubleSolenoidValue.Forward);
            this.outerHood.set(DoubleSolenoidValue.Forward);
         }
-
+        /*
         boolean kick = this.driver.getDigital(DigitalOperation.PowerCellKick);
         if (kick)
         {
-           this.hasPowerCell[this.currentCarouselIndex] = false;
            this.kickerSolenoid.set(DoubleSolenoidValue.Forward);
            this.kickerMotor.set(TuningConstants.POWERCELL_KICKER_MOTOR_OUTTAKE_POWER);
         }
@@ -206,7 +181,7 @@ public class PowerCellMechanism implements IMechanism
            this.kickerSolenoid.set(DoubleSolenoidValue.Reverse);
            this.kickerMotor.set(TuningConstants.PERRY_THE_PLATYPUS);
         }
-
+        */
         boolean intakeExtend = this.driver.getDigital(DigitalOperation.PowerCellIntakeExtend);
         boolean intakeRetract = !intakeExtend && this.driver.getDigital(DigitalOperation.PowerCellIntakeRetract);
         if (intakeExtend)
@@ -259,6 +234,7 @@ public class PowerCellMechanism implements IMechanism
 
         this.logger.logNumber(LoggingKey.PowerCellFlywheelVelocitySetpoint, this.flywheelVelocitySetpoint);
 
+        /*
         // determine if we should make any transition from our current carousel state:
         switch (this.carouselState)
         {
@@ -310,7 +286,7 @@ public class PowerCellMechanism implements IMechanism
                     // if intaking, keep track of time
                     this.lastIntakeTime = currentTime;
                 }
-                else if (currentTime - this.lastIntakeTime > TuningConstants.POWERCELL_GENEVA_MECHANISM_INDEXING_TIMEOUT)
+                else if (currentTime - this.lastIntakeTime > TuningConstants.POWERCELL_CAROUSEL_MECHANISM_INDEXING_TIMEOUT)
                 {
                     // switch to move-to-next to avoid stopping when we are not fully turned
                     this.previousIndex = this.currentCarouselIndex;
@@ -355,49 +331,82 @@ public class PowerCellMechanism implements IMechanism
 
                 break;
         }
+*/
 
+
+        double desiredCarouselMotorPower = TuningConstants.PERRY_THE_PLATYPUS;
+        double debugCarouselMotorPower = this.driver.getAnalog(AnalogOperation.PowerCellCarousel);
+        if (debugCarouselMotorPower != TuningConstants.MAGIC_NULL_VALUE)
+        {
+            //this.carouselState = CarouselState.Stationary;
+            desiredCarouselMotorPower = debugCarouselMotorPower;
+        }
+        else 
+        {
+            if (this.driver.getDigital(DigitalOperation.PowerCellRotateCarousel) && this.flywheelVelocitySetpoint != 0.0) 
+            {
+                desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING;
+
+                this.kickerSolenoid.set(DoubleSolenoidValue.Forward);
+                this.kickerMotor.set(TuningConstants.POWERCELL_KICKER_MOTOR_OUTTAKE_POWER);
+            }
+            else
+            {
+                this.kickerSolenoid.set(DoubleSolenoidValue.Reverse);
+                this.kickerMotor.set(TuningConstants.PERRY_THE_PLATYPUS);
+            }
+
+            if (isIntaking)
+            {
+                desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
+            }
+        }
+
+        
+
+        /*
         // perform what we should do based on our current hopper state, or debug override:
-        double desiredGenevaMotorPower = TuningConstants.PERRY_THE_PLATYPUS;
-        double debugGenevaMotorPower = this.driver.getAnalog(AnalogOperation.PowerCellCarousel);
-        if (debugGenevaMotorPower != TuningConstants.MAGIC_NULL_VALUE)
+        double desiredCarouselMotorPower = TuningConstants.PERRY_THE_PLATYPUS;
+        double debugCarouselMotorPower = this.driver.getAnalog(AnalogOperation.PowerCellCarousel);
+        if (debugCarouselMotorPower != TuningConstants.MAGIC_NULL_VALUE)
         {
             this.carouselState = CarouselState.Stationary;
-            desiredGenevaMotorPower = debugGenevaMotorPower;
+            desiredCarouselMotorPower = debugCarouselMotorPower;
         }
         else
         {
             switch (this.carouselState)
             {
                 case Indexing:
-                    desiredGenevaMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
+                    desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
                     break;
 
                 case MovingToNext:
                     if (this.flywheelVelocitySetpoint != 0.0)
                     {
-                        desiredGenevaMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING;
+                        desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING;
                     }
                     else
                     {
-                        desiredGenevaMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
+                        desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
                     }
 
                     break;
 
                 case MovingToPrevious:
-                    desiredGenevaMotorPower = -TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
+                    desiredCarouselMotorPower = -TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
                     break;
 
                 case Stationary:
-                    desiredGenevaMotorPower = TuningConstants.PERRY_THE_PLATYPUS;
+                    desiredCarouselMotorPower = TuningConstants.PERRY_THE_PLATYPUS;
                     break;
             }
         }
-
-        this.snowblowerMotor.set(desiredGenevaMotorPower);
+        */
+        this.carouselMotor.set(desiredCarouselMotorPower);
 
         //this.logger.logString(LoggingKey.PowerCellCarouselState, this.carouselState.toString());
-        //this.logger.logNumber(LoggingKey.PowerCellGenevaPower, desiredGenevaMotorPower);
+        //this.logger.logNumber(LoggingKey.PowerCellCarouselPower, desiredCarouselMotorPower);
         this.logger.logBoolean(LoggingKey.PowerCellIsIntaking, isIntaking);
         this.logger.logBoolean(LoggingKey.PowerCellIntakeExtended, this.intakeExtended);
     }
@@ -405,7 +414,7 @@ public class PowerCellMechanism implements IMechanism
     @Override
     public void stop()
     {
-        this.snowblowerMotor.stop();
+        this.carouselMotor.stop();
         this.rollerMotor.stop();
         this.innerHood.set(DoubleSolenoidValue.Off);
         this.outerHood.set(DoubleSolenoidValue.Off);
@@ -436,64 +445,46 @@ public class PowerCellMechanism implements IMechanism
         return this.currentCarouselIndex;
     }
 
-    public boolean hasPowerCell(int index)
-    {
-        return this.hasPowerCell[index];
-    }
-
-    public boolean hasAnyPowerCell()
-    {
-        for (boolean slotHasPowerCell : this.hasPowerCell)
-        {
-            if (slotHasPowerCell)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-    
     public boolean isFlywheelSpunUp()
     {
         return this.flywheelVelocitySetpoint > 0.0 && Math.abs(this.flywheelError) <= TuningConstants.POWERCELL_FLYWHEEL_ALLOWABLE_ERROR_RANGE;
     }
 
-    private double getClosestAngleInRange(double desiredAngle, double currentAngle, double minRangeValue, double maxRangeValue)
-    {
-        double multiplicand = Math.floor(currentAngle / 360.0);
+    // private double getClosestAngleInRange(double desiredAngle, double currentAngle, double minRangeValue, double maxRangeValue)
+    // {
+    //     double multiplicand = Math.floor(currentAngle / 360.0);
 
-        double[] closeRotations =
-        {
-            (desiredAngle + 360.0 * (multiplicand - 1.0)),
-            (desiredAngle + 360.0 * multiplicand),
-            (desiredAngle + 360.0 * (multiplicand + 1.0)),
-        };
+    //     double[] closeRotations =
+    //     {
+    //         (desiredAngle + 360.0 * (multiplicand - 1.0)),
+    //         (desiredAngle + 360.0 * multiplicand),
+    //         (desiredAngle + 360.0 * (multiplicand + 1.0)),
+    //     };
 
-        double best = currentAngle;
-        double bestDistance = Double.POSITIVE_INFINITY;
-        for (int i = 0; i < 3; i++)
-        {
-            double angle = closeRotations[i];
-            if (Helpers.WithinRange(angle, minRangeValue, maxRangeValue))
-            {
-                double angleDistance = Math.abs(currentAngle - angle);
-                if (angleDistance < bestDistance)
-                {
-                    best = angle;
-                    bestDistance = angleDistance;
-                }
-            }
-        }
+    //     double best = currentAngle;
+    //     double bestDistance = Double.POSITIVE_INFINITY;
+    //     for (int i = 0; i < 3; i++)
+    //     {
+    //         double angle = closeRotations[i];
+    //         if (Helpers.WithinRange(angle, minRangeValue, maxRangeValue))
+    //         {
+    //             double angleDistance = Math.abs(currentAngle - angle);
+    //             if (angleDistance < bestDistance)
+    //             {
+    //                 best = angle;
+    //                 bestDistance = angleDistance;
+    //             }
+    //         }
+    //     }
 
-        return best;
-    }
+    //     return best;
+    // }
 
-    private enum CarouselState
-    {
-        Indexing,
-        Stationary,
-        MovingToNext,
-        MovingToPrevious,
-    }
+    // private enum CarouselState
+    // {
+    //     Indexing,
+    //     Stationary,
+    //     MovingToNext,
+    //     MovingToPrevious,
+    // }
 }

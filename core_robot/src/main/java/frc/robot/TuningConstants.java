@@ -359,10 +359,10 @@ public class TuningConstants
     public static final double POWERCELL_FLYWHEEL_FOLLOWER_VELOCITY_VOLTAGE_COMPENSATION_MAXVOLTAGE = 12.0;
 
     public static final double POWERCELL_THROUGHBEAM_CUTOFF = 2.7;
-    public static final double POWERCELL_GENEVA_COUNT_THRESHOLD = 5.0;
+    public static final double POWERCELL_CAROUSEL_COUNT_THRESHOLD = 5.0;
     public static final double POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING = 0.3;
     public static final double POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING = 0.3;
-    public static final double POWERCELL_GENEVA_MECHANISM_INDEXING_TIMEOUT = 2.0;
+    public static final double POWERCELL_CAROUSEL_MECHANISM_INDEXING_TIMEOUT = 2.0;
     public static final double POWERCELL_FLYWHEEL_ALLOWABLE_ERROR_RANGE = 500; // ticks per 100ms
 
     public static final boolean POWERCELL_HAS_THROUGH_BEAM_SENSOR = true;
