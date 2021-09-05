@@ -4,7 +4,6 @@ import frc.robot.common.ComplementaryFilter;
 import frc.robot.common.IMechanism;
 import frc.robot.common.robotprovider.IPowerDistributionPanel;
 import frc.robot.common.robotprovider.IRobotProvider;
-import frc.robot.driver.common.Driver;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -59,11 +58,5 @@ public class PowerManager implements IMechanism
     public void stop()
     {
         this.batteryVoltageFilter.reset();
-    }
-
-    @Override
-    public void setDriver(Driver driver)
-    {
-        // no-op
     }
 }

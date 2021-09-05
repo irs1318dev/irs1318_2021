@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Singleton;
+
 import frc.robot.ElectronicsConstants;
 import frc.robot.LoggingKey;
 import frc.robot.TuningConstants;
@@ -22,7 +24,8 @@ import com.google.inject.Injector;
  * Driver that represents something that operates the robot.  This is either autonomous or teleop/user driver.
  *
  */
-public class Driver
+@Singleton
+public class Driver implements IDriver
 {
     private final ILogger logger;
 
@@ -300,6 +303,9 @@ public class Driver
         }
     }
 
+    /**
+     * Starts the autonomous period of the match (e.g. begins auto routine)
+     */
     public void startAutonomous()
     {
         this.isAutonomous = true;

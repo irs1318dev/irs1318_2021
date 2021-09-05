@@ -12,19 +12,21 @@ import com.google.inject.Singleton;
 @Singleton
 public class ClimberMechanism implements IMechanism
 {
+    private final IDriver driver;
+
     private final IDoubleSolenoid climberExtendSolenoid;
     private final IDoubleSolenoid climberGrabSolenoid;
 
     private final ITalonSRX winchMotorMaster;
 
-    private Driver driver;
-
     private boolean isExtended;
     private boolean hasReleased;
 
     @Inject
-    public ClimberMechanism(IRobotProvider provider)
+    public ClimberMechanism(IDriver driver, IRobotProvider provider)
     {
+        this.driver = driver;
+
         this.climberExtendSolenoid = provider.getDoubleSolenoid(ElectronicsConstants.PCM_B_MODULE, ElectronicsConstants.CLIMBER_EXTEND_FORWARD_PCM, ElectronicsConstants.CLIMBER_EXTEND_REVERSE_PCM);
         this.climberGrabSolenoid = provider.getDoubleSolenoid(ElectronicsConstants.PCM_A_MODULE, ElectronicsConstants.CLIMBER_GRAB_FORWARD_PCM, ElectronicsConstants.CLIMBER_GRAB_REVERSE_PCM);
 
@@ -32,7 +34,7 @@ public class ClimberMechanism implements IMechanism
         this.winchMotorMaster.setInvertOutput(HardwareConstants.CLIMBER_WINCH_MASTER_INVERT_OUTPUT);
         this.winchMotorMaster.setControlMode(TalonSRXControlMode.PercentOutput);
         this.winchMotorMaster.setNeutralMode(MotorNeutralMode.Brake);
-        
+
         this.isExtended = false;
         this.hasReleased = false;
     }
@@ -79,11 +81,5 @@ public class ClimberMechanism implements IMechanism
         this.climberExtendSolenoid.set(DoubleSolenoidValue.Off);
         this.climberGrabSolenoid.set(DoubleSolenoidValue.Off);
         this.winchMotorMaster.stop();
-    }
-
-    @Override
-    public void setDriver(Driver driver)
-    {
-        this.driver = driver;
     }
 }

@@ -16,6 +16,7 @@ public class RobotModule extends AbstractModule
     @Override
     protected void configure()
     {
+        this.bind(IDriver.class).to(Driver.class);
         this.bind(IRobotProvider.class).to(RobotProvider.class);
         this.bind(ITimer.class).to(TimerWrapper.class);
         this.bind(IButtonMap.class).to(ButtonMap.class);

@@ -12,20 +12,21 @@ import com.google.inject.Singleton;
 @Singleton
 public class ControlPanelMechanism implements IMechanism
 {
+    private final IDriver driver;
+
     private final ILogger logger;
 
     private final IDoubleSolenoid extender;
     private final IVictorSPX spinnerMotor;
 
-    private Driver driver;
     private boolean isExtended;
 
 
     @Inject
-    public ControlPanelMechanism(LoggingManager logger, IRobotProvider provider)
+    public ControlPanelMechanism(IDriver driver, LoggingManager logger, IRobotProvider provider)
     {
+        this.driver = driver;
         this.logger = logger;
-
 
         this.extender = provider.getDoubleSolenoid(ElectronicsConstants.PCM_A_MODULE, ElectronicsConstants.CONTROLPANEL_EXTENDER_FORWARD_PCM, ElectronicsConstants.CONTROLPANEL_EXTENDER_REVERSE_PCM);
 
@@ -73,11 +74,5 @@ public class ControlPanelMechanism implements IMechanism
     {
         this.extender.set(DoubleSolenoidValue.Off);
         this.spinnerMotor.stop();
-    }
-
-    @Override
-    public void setDriver(Driver driver)
-    {
-        this.driver = driver;
     }
 }

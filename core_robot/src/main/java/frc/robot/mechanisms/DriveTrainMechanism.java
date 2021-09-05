@@ -15,7 +15,7 @@ import frc.robot.*;
 import frc.robot.common.*;
 import frc.robot.common.robotprovider.*;
 import frc.robot.driver.*;
-import frc.robot.driver.common.Driver;
+import frc.robot.driver.common.IDriver;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -39,11 +39,6 @@ public class DriveTrainMechanism implements IMechanism
     private final LoggingKey[] DRIVE_GOAL_LOGGING_KEYS = { LoggingKey.DriveTrainDriveVelocityGoal1, LoggingKey.DriveTrainDriveVelocityGoal2, LoggingKey.DriveTrainDriveVelocityGoal3, LoggingKey.DriveTrainDriveVelocityGoal4 };
     private final LoggingKey[] STEER_GOAL_LOGGING_KEYS = { LoggingKey.DriveTrainSteerPositionGoal1, LoggingKey.DriveTrainSteerPositionGoal2, LoggingKey.DriveTrainSteerPositionGoal3, LoggingKey.DriveTrainSteerPositionGoal4 };
 
-    double a1 = -HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE;
-    double a2 = HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE;
-    double b1 = -HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
-    double b2 = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE;
-
     // the x offsets of the swerve modules from the default center of rotation
     public static final double[] MODULE_OFFSET_X =
         new double[]
@@ -64,9 +59,11 @@ public class DriveTrainMechanism implements IMechanism
             HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE // module 4 (back-right)
         };
 
-    private final NavxManager navxManager;
+    private final IDriver driver;
     private final ILogger logger;
     private final ITimer timer;
+
+    private final NavxManager navxManager;
 
     private final ITalonFX[] steerMotors;
     private final ITalonFX[] driveMotors;
@@ -90,7 +87,6 @@ public class DriveTrainMechanism implements IMechanism
 
     private final Setpoint[] result;
 
-    private Driver driver;
     private boolean firstRun;
 
     private boolean fieldOriented;
@@ -105,17 +101,20 @@ public class DriveTrainMechanism implements IMechanism
     private double yPosition;
     private double deltaT;
 
-    private double robotNavxYaw;
+    private double robotYaw;
 
     @Inject
     public DriveTrainMechanism(
+        IDriver driver,
         LoggingManager logger,
         IRobotProvider provider,
         NavxManager navxManager,
         ITimer timer)
     {
-        this.timer = timer;
+        this.driver = driver;
         this.logger = logger;
+        this.timer = timer;
+
         this.navxManager = navxManager;
 
         this.steerMotors = new ITalonFX[DriveTrainMechanism.NUM_MODULES];
@@ -234,13 +233,6 @@ public class DriveTrainMechanism implements IMechanism
     }
 
     @Override
-    public void setDriver(Driver driver)
-    {
-        this.driver = driver;
-        this.time = timer.get();
-    }
-
-    @Override
     public void readSensors()
     {
         for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
@@ -265,15 +257,15 @@ public class DriveTrainMechanism implements IMechanism
             this.logger.logNumber(this.ENCODER_ANGLE_LOGGING_KEYS[i], this.encoderAngles[i]);
         }
 
-        double prevNavxYaw = this.robotNavxYaw;
+        double prevYaw = this.robotYaw;
         double prevTime = this.time;
-        this.robotNavxYaw = this.navxManager.getAngle();
+        this.robotYaw = this.navxManager.getAngle();
         this.time = this.timer.get();
 
         this.deltaT = this.time - prevTime;
         if (TuningConstants.DRIVETRAIN_USE_ODOMETRY)
         {
-            double deltaNavxYaw = (this.robotNavxYaw - prevNavxYaw) / this.deltaT;
+            double deltaNavxYaw = (this.robotYaw - prevYaw) / this.deltaT;
             this.calculateOdometry(deltaNavxYaw);
             this.logger.logNumber(LoggingKey.DriveTrainXPosition, this.xPosition);
             this.logger.logNumber(LoggingKey.DriveTrainYPosition, this.yPosition);
@@ -287,7 +279,7 @@ public class DriveTrainMechanism implements IMechanism
         if (this.driver.getDigital(DigitalOperation.DriveTrainEnableFieldOrientation))
         {
             this.fieldOriented = true;
-            this.desiredYaw = this.robotNavxYaw;
+            this.desiredYaw = this.robotYaw;
         }
 
         if (this.driver.getDigital(DigitalOperation.DriveTrainDisableFieldOrientation) ||
@@ -309,8 +301,8 @@ public class DriveTrainMechanism implements IMechanism
 
         if (this.driver.getDigital(DigitalOperation.PositionResetFieldOrientation))
         {
-            this.robotNavxYaw = this.navxManager.getAngle();
-            this.desiredYaw = this.robotNavxYaw;
+            this.robotYaw = this.navxManager.getAngle();
+            this.desiredYaw = this.robotYaw;
         }
 
         if (this.firstRun || this.driver.getDigital(DigitalOperation.DriveTrainReset))
@@ -363,7 +355,7 @@ public class DriveTrainMechanism implements IMechanism
 
     public Pose2d getPose()
     {
-        return new Pose2d(this.xPosition, this.yPosition, this.robotNavxYaw);
+        return new Pose2d(this.xPosition, this.yPosition, this.robotYaw);
     }
 
     private void calculateSetpoints()
@@ -400,15 +392,15 @@ public class DriveTrainMechanism implements IMechanism
                 yVelocityGoal += this.pathYOffsetPID.calculatePosition(yGoal, this.yPosition);
 
                 // convert velocity to be robot-oriented
-                centerVelocityRight = Helpers.cosd(this.robotNavxYaw) * xVelocityGoal + Helpers.sind(this.robotNavxYaw) * yVelocityGoal;
-                centerVelocityForward = Helpers.cosd(this.robotNavxYaw) * yVelocityGoal - Helpers.sind(this.robotNavxYaw) * xVelocityGoal;
+                centerVelocityRight = Helpers.cosd(this.robotYaw) * xVelocityGoal + Helpers.sind(this.robotYaw) * yVelocityGoal;
+                centerVelocityForward = Helpers.cosd(this.robotYaw) * yVelocityGoal - Helpers.sind(this.robotYaw) * xVelocityGoal;
 
                 // add correction for angle drift
-                AnglePair anglePair = AnglePair.getClosestAngle(angleGoal + angleReference, this.robotNavxYaw, false);
+                AnglePair anglePair = AnglePair.getClosestAngle(angleGoal + angleReference, this.robotYaw, false);
                 this.desiredYaw = anglePair.getAngle();
 
                 this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);
-                omega += this.pathOmegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw);
+                omega += this.pathOmegaPID.calculatePosition(this.desiredYaw, this.robotYaw);
             }
             else
             {
@@ -428,8 +420,8 @@ public class DriveTrainMechanism implements IMechanism
 
             if (this.fieldOriented)
             {
-                centerVelocityRight = Helpers.cosd(this.robotNavxYaw) * centerVelocityRightRaw + Helpers.sind(this.robotNavxYaw) * centerVelocityForwardRaw;
-                centerVelocityForward = Helpers.cosd(this.robotNavxYaw) * centerVelocityForwardRaw - Helpers.sind(this.robotNavxYaw) * centerVelocityRightRaw;
+                centerVelocityRight = Helpers.cosd(this.robotYaw) * centerVelocityRightRaw + Helpers.sind(this.robotYaw) * centerVelocityForwardRaw;
+                centerVelocityForward = Helpers.cosd(this.robotYaw) * centerVelocityForwardRaw - Helpers.sind(this.robotYaw) * centerVelocityRightRaw;
 
                 boolean hadUpdatedOrientation = this.updatedOrientation;
                 this.updatedOrientation = false;
@@ -438,7 +430,7 @@ public class DriveTrainMechanism implements IMechanism
                 {
                     this.updatedOrientation = true;
 
-                    AnglePair anglePair = AnglePair.getClosestAngle(yawGoal, this.robotNavxYaw, false);
+                    AnglePair anglePair = AnglePair.getClosestAngle(yawGoal, this.robotYaw, false);
                     this.desiredYaw = anglePair.getAngle();
                 }
                 else
@@ -449,7 +441,7 @@ public class DriveTrainMechanism implements IMechanism
                         this.updatedOrientation = true;
                         if (!hadUpdatedOrientation)
                         {
-                            this.desiredYaw = this.robotNavxYaw;
+                            this.desiredYaw = this.robotYaw;
                         }
 
                         this.desiredYaw += turnSpeed * TuningConstants.DRIVETRAIN_TURN_GOAL_VELOCITY;
@@ -460,7 +452,7 @@ public class DriveTrainMechanism implements IMechanism
                 {
                     if (!this.updatedOrientation &&
                         TuningConstants.DRIVETRAIN_TURN_APPROXIMATION != 0.0 &&
-                        Helpers.WithinDelta(this.desiredYaw, this.robotNavxYaw, TuningConstants.DRIVETRAIN_TURN_APPROXIMATION))
+                        Helpers.WithinDelta(this.desiredYaw, this.robotYaw, TuningConstants.DRIVETRAIN_TURN_APPROXIMATION))
                     {
                         // don't turn aggressively if we are within a very small delta from our goal angle
                         omega = 0.0;
@@ -468,7 +460,7 @@ public class DriveTrainMechanism implements IMechanism
                     else
                     {
                         this.logger.logNumber(LoggingKey.DriveTrainDesiredAngle, this.desiredYaw);
-                        omega = this.omegaPID.calculatePosition(this.desiredYaw, this.robotNavxYaw);
+                        omega = this.omegaPID.calculatePosition(this.desiredYaw, this.robotYaw);
                     }
                 }
                 else
@@ -577,8 +569,8 @@ public class DriveTrainMechanism implements IMechanism
 
         this.angle += omegaRadians * Helpers.RADIANS_TO_DEGREES * this.deltaT;
 
-        double rightFieldVelocity = rightRobotVelocity * Helpers.cosd(this.robotNavxYaw) - forwardRobotVelocity * Helpers.sind(this.robotNavxYaw);
-        double forwardFieldVelocity = rightRobotVelocity * Helpers.sind(this.robotNavxYaw) + forwardRobotVelocity * Helpers.cosd(this.robotNavxYaw);
+        double rightFieldVelocity = rightRobotVelocity * Helpers.cosd(this.robotYaw) - forwardRobotVelocity * Helpers.sind(this.robotYaw);
+        double forwardFieldVelocity = rightRobotVelocity * Helpers.sind(this.robotYaw) + forwardRobotVelocity * Helpers.cosd(this.robotYaw);
         this.xPosition += rightFieldVelocity * this.deltaT;
         this.yPosition += forwardFieldVelocity * this.deltaT;
     }

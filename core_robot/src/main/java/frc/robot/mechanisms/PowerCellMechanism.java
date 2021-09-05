@@ -19,6 +19,7 @@ public class PowerCellMechanism implements IMechanism
 {
     private static final int slotId = 0;
 
+    private final IDriver driver;
     private final ILogger logger;
 
     private final IDoubleSolenoid intakeSolenoid;
@@ -33,8 +34,6 @@ public class PowerCellMechanism implements IMechanism
     private final IDoubleSolenoid kickerSolenoid;
     private final ITalonSRX kickerMotor;
 
-    private Driver driver;
-
     private double flywheelPosition;
     private double flywheelVelocity;
     private double flywheelError;
@@ -44,8 +43,9 @@ public class PowerCellMechanism implements IMechanism
     private double flywheelVelocitySetpoint;
 
     @Inject
-    public PowerCellMechanism(LoggingManager logger, IRobotProvider provider)
+    public PowerCellMechanism(IDriver driver, LoggingManager logger, IRobotProvider provider)
     {
+        this.driver = driver;
         this.logger = logger;
 
         // intake components:
@@ -247,12 +247,6 @@ public class PowerCellMechanism implements IMechanism
 
         this.kickerSolenoid.set(DoubleSolenoidValue.Off);
         this.kickerMotor.stop();
-    }
-
-    @Override
-    public void setDriver(Driver driver)
-    {
-        this.driver = driver;
     }
 
     public double getFlywheelVelocity()

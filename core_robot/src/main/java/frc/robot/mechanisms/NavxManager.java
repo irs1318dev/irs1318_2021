@@ -5,22 +5,21 @@ import frc.robot.common.*;
 import frc.robot.common.robotprovider.*;
 import frc.robot.driver.AnalogOperation;
 import frc.robot.driver.DigitalOperation;
-import frc.robot.driver.common.Driver;
+import frc.robot.driver.common.IDriver;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 /**
  * Navx manager
- * 
  */
 @Singleton
 public class NavxManager implements IMechanism
 {
+    private final IDriver driver;
     private final ILogger logger;
-    private final INavx navx;
 
-    private Driver driver;
+    private final INavx navx;
 
     private boolean isConnected;
 
@@ -40,12 +39,14 @@ public class NavxManager implements IMechanism
      */
     @Inject
     public NavxManager(
+        IDriver driver,
         LoggingManager logger,
         IRobotProvider provider)
     {
+        this.driver = driver;
         this.logger = logger;
+
         this.navx = provider.getNavx();
-        this.driver = null;
 
         this.isConnected = false;
 
@@ -55,21 +56,6 @@ public class NavxManager implements IMechanism
 
         this.angle = 0.0;
         this.startAngle = 0.0;
-    }
-
-    /**
-     * set the driver that the mechanism should use
-     * @param driver to use
-     */
-    @Override
-    public void setDriver(Driver driver)
-    {
-        // At the beginning of autonomous, reset the position manager so that we consider ourself at the origin (0,0) and facing the 0 direction.
-        this.driver = driver;
-        if (this.driver.isAutonomous())
-        {
-            this.reset();
-        }
     }
 
     /**
@@ -109,7 +95,8 @@ public class NavxManager implements IMechanism
 
         if (this.driver.getDigital(DigitalOperation.PositionResetFieldOrientation))
         {
-            this.reset();
+            // clear the startAngle too if we are not actively setting it
+            this.reset(angle == 0.0);
         }
     }
 
@@ -136,7 +123,7 @@ public class NavxManager implements IMechanism
      */
     public double getAngle()
     {
-        return this.angle;
+        return this.angle + this.startAngle;
     }
 
     /**
@@ -168,15 +155,19 @@ public class NavxManager implements IMechanism
 
     /**
      * reset the position manager so it considers the current location to be "0"
+     * @param resetStartAngle - whether to reset the start angle as well
      */
-    public void reset()
+    public void reset(boolean resetStartAngle)
     {
         this.x = 0.0;
         this.y = 0.0;
         this.z = 0.0;
 
         this.angle = 0.0;
-        this.startAngle = 0.0;
+        if (resetStartAngle)
+        {
+            this.startAngle = 0.0;
+        }
 
         this.navx.reset();
         this.navx.resetDisplacement();

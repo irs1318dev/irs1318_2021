@@ -18,12 +18,11 @@ import com.google.inject.Singleton;
 @Singleton
 public class OffboardVisionManager implements IMechanism
 {
+    private final IDriver driver;
     private final INetworkTableProvider networkTable;
     private final ILogger logger;
 
     //private final IDigitalOutput ringLight;
-
-    private Driver driver;
 
     private double centerX;
     private double centerY;
@@ -36,12 +35,14 @@ public class OffboardVisionManager implements IMechanism
 
     /**
      * Initializes a new OffboardVisionManager
+     * @param driver for obtaining operations
      * @param logger for logging to smart dashboard
      * @param provider for obtaining electronics objects
      */
     @Inject
-    public OffboardVisionManager(LoggingManager logger, IRobotProvider provider)
+    public OffboardVisionManager(IDriver driver, LoggingManager logger, IRobotProvider provider)
     {
+        this.driver = driver;
         this.logger = logger;
 
         this.networkTable = provider.getNetworkTableProvider();
@@ -92,7 +93,6 @@ public class OffboardVisionManager implements IMechanism
 
         this.logger.logNumber(LoggingKey.OffboardVisionDistance, this.distance);
         this.logger.logNumber(LoggingKey.OffboardVisionHorizontalAngle, this.horizontalAngle);
-        
     }
 
     @Override
@@ -134,12 +134,6 @@ public class OffboardVisionManager implements IMechanism
         this.logger.logBoolean(LoggingKey.OffboardVisionEnableVision, false);
         this.logger.logBoolean(LoggingKey.OffboardVisionEnableStream, false);
         this.logger.logNumber(LoggingKey.OffboardVisionEnableProcessing, 0.0);
-    }
-
-    @Override
-    public void setDriver(Driver driver)
-    {
-        this.driver = driver;
     }
 
     public Double getHorizontalAngle()

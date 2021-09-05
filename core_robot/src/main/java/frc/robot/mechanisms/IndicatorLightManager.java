@@ -3,7 +3,6 @@ package frc.robot.mechanisms;
 import frc.robot.*;
 import frc.robot.common.*;
 import frc.robot.common.robotprovider.*;
-import frc.robot.driver.common.Driver;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -39,15 +38,6 @@ public class IndicatorLightManager implements IMechanism
         this.timer = timer;
 
         this.xIndicator = provider.getDigitalOutput(ElectronicsConstants.INDICATOR_LIGHT_X_DIO);
-    }
-
-    /**
-     * set the driver that the mechanism should use
-     * @param driver to use
-     */
-    @Override
-    public void setDriver(Driver driver)
-    {
     }
 
     @Override

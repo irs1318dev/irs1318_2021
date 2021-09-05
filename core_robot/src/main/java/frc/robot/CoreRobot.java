@@ -58,6 +58,10 @@ public class CoreRobot<T extends AbstractModule>
     {
         // create mechanisms
         Injector injector = this.getInjector();
+
+        // create driver
+        this.driver = injector.getInstance(Driver.class);
+
         this.mechanisms = injector.getInstance(MechanismManager.class);
         this.logger = injector.getInstance(LoggingManager.class);
         this.logger.refresh(injector);
@@ -67,9 +71,6 @@ public class CoreRobot<T extends AbstractModule>
         this.timer = injector.getInstance(ITimer.class);
         this.logger.logNumber(LoggingKey.RobotTime, this.timer.get());
         this.timerStarted = false;
-
-        // create driver
-        this.driver = injector.getInstance(Driver.class);
 
         // reset number of logger updates
         this.loggerUpdates = 0;
@@ -177,9 +178,6 @@ public class CoreRobot<T extends AbstractModule>
         // log match information
         IRobotProvider robotProvider = injector.getInstance(IRobotProvider.class);
         this.logger.logString(LoggingKey.RobotMatch, this.generateMatchString(robotProvider.getDriverStation()));
-
-        // apply the driver to the mechanisms
-        this.mechanisms.setDriver(this.driver);
 
         if (!this.timerStarted)
         {

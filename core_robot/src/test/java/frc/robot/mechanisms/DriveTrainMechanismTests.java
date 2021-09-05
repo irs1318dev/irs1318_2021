@@ -16,6 +16,10 @@ import frc.robot.common.robotprovider.Pose2d;
 import frc.robot.common.robotprovider.TalonSRXControlMode;
 import frc.robot.common.robotprovider.TalonXFeedbackDevice;
 import frc.robot.common.robotprovider.TalonXLimitSwitchStatus;
+import frc.robot.driver.AnalogOperation;
+import frc.robot.driver.DigitalOperation;
+import frc.robot.driver.common.Driver;
+import frc.robot.driver.common.IDriver;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -44,8 +48,9 @@ public class DriveTrainMechanismTests
         }
 
         LoggingManager logger = new LoggingManager(new NullLogger());
-        NavxManager navxManager = new NavxManager(logger, provider);
+        NavxManager navxManager = new NavxManager(new MockDriver(), logger, provider);
         DriveTrainMechanism driveTrain = new DriveTrainMechanism(
+            new MockDriver(), 
             logger,
             provider,
             navxManager,
@@ -85,8 +90,9 @@ public class DriveTrainMechanismTests
         }
 
         LoggingManager logger = new LoggingManager(new NullLogger());
-        NavxManager navxManager = new NavxManager(logger, provider);
+        NavxManager navxManager = new NavxManager(new MockDriver(), logger, provider);
         DriveTrainMechanism driveTrain = new DriveTrainMechanism(
+            new MockDriver(), 
             logger,
             provider,
             navxManager,
@@ -132,8 +138,9 @@ public class DriveTrainMechanismTests
         }
 
         LoggingManager logger = new LoggingManager(new NullLogger());
-        NavxManager navxManager = new NavxManager(logger, provider);
+        NavxManager navxManager = new NavxManager(new MockDriver(), logger, provider);
         DriveTrainMechanism driveTrain = new DriveTrainMechanism(
+            new MockDriver(), 
             logger,
             provider,
             navxManager,
@@ -180,8 +187,9 @@ public class DriveTrainMechanismTests
         }
 
         LoggingManager logger = new LoggingManager(new NullLogger());
-        NavxManager navxManager = new NavxManager(logger, provider);
+        NavxManager navxManager = new NavxManager(new MockDriver(), logger, provider);
         DriveTrainMechanism driveTrain = new DriveTrainMechanism(
+            new MockDriver(), 
             logger,
             provider,
             navxManager,
@@ -229,8 +237,9 @@ public class DriveTrainMechanismTests
         }
 
         LoggingManager logger = new LoggingManager(new NullLogger());
-        NavxManager navxManager = new NavxManager(logger, provider);
+        NavxManager navxManager = new NavxManager(new MockDriver(), logger, provider);
         DriveTrainMechanism driveTrain = new DriveTrainMechanism(
+            new MockDriver(), 
             logger,
             provider,
             navxManager,
@@ -277,8 +286,9 @@ public class DriveTrainMechanismTests
         }
 
         LoggingManager logger = new LoggingManager(new NullLogger());
-        NavxManager navxManager = new NavxManager(logger, provider);
+        NavxManager navxManager = new NavxManager(new MockDriver(), logger, provider);
         DriveTrainMechanism driveTrain = new DriveTrainMechanism(
+            new MockDriver(), 
             logger,
             provider,
             navxManager,
@@ -566,6 +576,42 @@ public class DriveTrainMechanismTests
         @Override
         public void setSupplyCurrentLimit(boolean enabled, double currentLimit, double triggerThresholdCurrent, double triggerThresholdTime)
         {
+        }
+    }
+
+    private class MockDriver implements IDriver
+    {
+        @Override
+        public boolean isAutonomous()
+        {
+            return false;
+        }
+
+        @Override
+        public void update()
+        {
+        }
+
+        @Override
+        public void stop()
+        {
+        }
+
+        @Override
+        public void startAutonomous()
+        {
+        }
+
+        @Override
+        public boolean getDigital(DigitalOperation digitalOperation)
+        {
+            return false;
+        }
+
+        @Override
+        public double getAnalog(AnalogOperation analogOperation)
+        {
+            return 0.0;
         }
     }
 }

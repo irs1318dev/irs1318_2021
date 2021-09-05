@@ -104,11 +104,11 @@ public class AutonomousRoutineSelector
         }
         else if (routine == AutoRoutine.Slalom)
         {
-            return FollowOnePath("slalom");
+            return Move("slalom");
         }
         else if (routine == AutoRoutine.Barrel)
         {
-            return FollowOnePath("barrelRace");
+            return Move("barrelRace");
         }
         else if (routine == AutoRoutine.Bounce)
         {
@@ -149,7 +149,7 @@ public class AutonomousRoutineSelector
      */
     private static IControlTask GetFillerRoutine()
     {
-        return new WaitTask(0);
+        return new PositionStartingTask(0.0, true, true);
     }
 
     /**
@@ -158,6 +158,7 @@ public class AutonomousRoutineSelector
     private static IControlTask DecidePaths(String redPath, String bluePath)
     {
         return SequentialTask.Sequence(
+            new PositionStartingTask(0.0, true, true),
             new IntakePositionTask(true),
             ConcurrentTask.AllTasks(
                 new IntakeOuttakeTask(15.0, true),
@@ -171,6 +172,7 @@ public class AutonomousRoutineSelector
     private static IControlTask BouncePath(String bounce1, String bounce2, String bounce3, String bounce4)
     {
         return SequentialTask.Sequence(
+            new PositionStartingTask(0.0, true, true),
             new FollowPathTask(bounce1),
             new FollowPathTask(bounce2),
             new FollowPathTask(bounce3),
@@ -178,14 +180,10 @@ public class AutonomousRoutineSelector
         );
     }
 
-    private static IControlTask FollowOnePath(String path)
-    {
-        return new FollowPathTask(path);
-    }
-
     private static IControlTask ShootAndMove(String goToPowerCell, String rotate)
     {
         return SequentialTask.Sequence(
+            new PositionStartingTask(0.0, true, true),
             ConcurrentTask.AllTasks(
                 new VisionCenteringTask(),
                 new FlywheelVisionSpinTask()),
@@ -205,6 +203,7 @@ public class AutonomousRoutineSelector
     private static IControlTask Shoot(String path)
     {
         return SequentialTask.Sequence(
+            new PositionStartingTask(0.0, true, true),
             ConcurrentTask.AllTasks(
                 new VisionCenteringTask(),
                 new FlywheelVisionSpinTask()),
@@ -214,7 +213,9 @@ public class AutonomousRoutineSelector
 
     private static IControlTask Move(String path)
     {
-        return new FollowPathTask(path);
+        return SequentialTask.Sequence(
+            new PositionStartingTask(0.0, true, true),
+            new FollowPathTask(path));
     }
 } // yaaaaaAAAaaaAaaaAAAAaa
 
