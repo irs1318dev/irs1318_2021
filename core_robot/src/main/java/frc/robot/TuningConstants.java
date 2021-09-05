@@ -6,15 +6,7 @@ import java.util.*;
 import com.google.inject.Injector;
 
 import frc.robot.common.*;
-import frc.robot.common.robotprovider.Alliance;
-import frc.robot.common.robotprovider.CSVLogger;
-import frc.robot.common.robotprovider.IDriverStation;
-import frc.robot.common.robotprovider.IFile;
-import frc.robot.common.robotprovider.ILogger;
-import frc.robot.common.robotprovider.IRobotProvider;
-import frc.robot.common.robotprovider.ISmartDashboardLogger;
-import frc.robot.common.robotprovider.MatchType;
-import frc.robot.common.robotprovider.MultiLogger;
+import frc.robot.common.robotprovider.*;
 import frc.robot.mechanisms.*;
 
 /**
@@ -117,7 +109,7 @@ public class TuningConstants
             directory.mkdir();
 
             // name the file a la "/U/2020 - Glacier Peak/Q03 (R2).auto.csv" or "/U/2020 - Glacier Peak/Q12R1 (B3).tele.csv"
-            boolean isAuto = driverStation.isAutonomous();
+            RobotMode mode = driverStation.getMode();
             file = injector.getInstance(IFile.class);
             String fileName =
                 String.format(
@@ -128,7 +120,7 @@ public class TuningConstants
                     replayNumber == 0 ? "" : String.format("R%1$d", replayNumber),
                     alliance.value,
                     location,
-                    isAuto ? "auto" : "tele");
+                    mode.toString().toLowerCase());
 
             file.open(fileName);
             if (file.exists())
@@ -145,7 +137,7 @@ public class TuningConstants
                             replayNumber == 0 ? "" : String.format("R%1$d", replayNumber),
                             alliance.value,
                             location,
-                            isAuto ? "auto" : "tele",
+                            mode.toString().toLowerCase(),
                             i);
 
                     file.open(fileName);

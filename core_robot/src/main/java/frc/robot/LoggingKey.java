@@ -9,7 +9,7 @@ public enum LoggingKey
     RobotTime("r.time", true),
     RobotMatch("r.match"),
     RobotTimer("r.timer"),
-    DriverIsAuto("driver.isAuto"),
+    DriverMode("driver.mode"),
     DriverActiveMacros("driver.activeMacros", true),
     DriverActiveShifts("driver.activeShifts"),
     AutonomousSelection("auto.selected"),

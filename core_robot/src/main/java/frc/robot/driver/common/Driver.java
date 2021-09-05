@@ -41,7 +41,7 @@ public class Driver implements IDriver
     private final AutonomousRoutineSelector routineSelector;
     private IControlTask autonomousTask;
 
-    private boolean isAutonomous;
+    private RobotMode currentMode;
 
     /**
      * Initializes a new Driver
@@ -123,7 +123,7 @@ public class Driver implements IDriver
 
         ButtonMapVerifier.Verify(buttonMap);
 
-        this.isAutonomous = false;
+        this.currentMode = RobotMode.Disabled;
 
         // initialize the path manager and load all of the paths
         injector.getInstance(PathManager.class);
@@ -132,17 +132,19 @@ public class Driver implements IDriver
     /**
      * Checks whether the driver is in autonomous mode
      */
-    public boolean isAutonomous()
+    @Override
+    public RobotMode getMode()
     {
-        return this.isAutonomous;
+        return this.currentMode;
     }
 
     /**
      * Tell the driver that some time has passed
      */
+    @Override
     public void update()
     {
-        this.logger.logBoolean(LoggingKey.DriverIsAuto, this.isAutonomous);
+        this.logger.logString(LoggingKey.DriverMode, this.currentMode.toString());
 
         // keep track of macros that were running before we checked user input...
         Set<MacroOperation> previouslyActiveMacroOperations = new HashSet<MacroOperation>();
@@ -161,7 +163,7 @@ public class Driver implements IDriver
         for (Shift shift : this.shiftMap.keySet())
         {
             ShiftDescription shiftDescription = this.shiftMap.get(shift);
-            if (!this.isAutonomous && shiftDescription.checkInput(this.joystickDriver, this.joystickOperator))
+            if (this.currentMode != RobotMode.Autonomous && shiftDescription.checkInput(this.joystickDriver, this.joystickOperator))
             {
                 activeShiftList[shiftIndex++] = shift;
             }
@@ -176,7 +178,7 @@ public class Driver implements IDriver
         for (IOperation operation : this.operationStateMap.keySet())
         {
             OperationState opState = this.operationStateMap.get(operation);
-            boolean receivedInput = !this.isAutonomous && opState.checkInput(this.joystickDriver, this.joystickOperator, activeShifts);
+            boolean receivedInput = this.currentMode != RobotMode.Autonomous && opState.checkInput(this.joystickDriver, this.joystickOperator, activeShifts);
             if (receivedInput)
             {
                 modifiedOperations.add(operation);
@@ -195,7 +197,7 @@ public class Driver implements IDriver
         for (MacroOperation macroOperation : this.macroStateMap.keySet())
         {
             IMacroOperationState macroState = this.macroStateMap.get(macroOperation);
-            if (!this.isAutonomous)
+            if (this.currentMode != RobotMode.Autonomous)
             {
                 macroState.checkInput(this.joystickDriver, this.joystickOperator, activeShifts);
             }
@@ -280,9 +282,10 @@ public class Driver implements IDriver
     /**
      * Tell the driver that operation is stopping
      */
+    @Override
     public void stop()
     {
-        this.isAutonomous = false;
+        this.currentMode = RobotMode.Disabled;
 
         if (TuningConstants.CANCEL_AUTONOMOUS_ROUTINE_ON_DISABLE &&
             this.macroStateMap.containsKey(MacroOperation.AutonomousRoutine))
@@ -306,20 +309,25 @@ public class Driver implements IDriver
     /**
      * Starts the autonomous period of the match (e.g. begins auto routine)
      */
-    public void startAutonomous()
+    @Override
+    public void startMode(RobotMode mode)
     {
-        this.isAutonomous = true;
-        this.autonomousTask = this.routineSelector.selectRoutine();
-        this.autonomousTask.initialize(this.operationStateMap, injector);
-        if (!TuningConstants.CANCEL_AUTONOMOUS_ROUTINE_ON_DISABLE &&
-            this.macroStateMap.containsKey(MacroOperation.AutonomousRoutine))
-        {
-            this.macroStateMap.remove(MacroOperation.AutonomousRoutine);
-        }
+        this.currentMode = mode;
 
-        this.macroStateMap.put(
-            MacroOperation.AutonomousRoutine,
-            new AutonomousOperationState(this.autonomousTask, this.operationStateMap));
+        this.autonomousTask = this.routineSelector.selectRoutine(mode);
+        if (this.autonomousTask != null)
+        {
+            this.autonomousTask.initialize(this.operationStateMap, injector);
+            if (!TuningConstants.CANCEL_AUTONOMOUS_ROUTINE_ON_DISABLE &&
+                this.macroStateMap.containsKey(MacroOperation.AutonomousRoutine))
+            {
+                this.macroStateMap.remove(MacroOperation.AutonomousRoutine);
+            }
+
+            this.macroStateMap.put(
+                MacroOperation.AutonomousRoutine,
+                new AutonomousOperationState(this.autonomousTask, this.operationStateMap));
+        }
     }
 
     /**

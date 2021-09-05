@@ -78,11 +78,21 @@ public class AutonomousRoutineSelector
 
     /**
      * Check what routine we want to use and return it
-     * 
+     * @param mode that is starting
      * @return autonomous routine to execute during autonomous mode
      */
-    public IControlTask selectRoutine()
+    public IControlTask selectRoutine(RobotMode mode)
     {
+        if (mode == RobotMode.Test)
+        {
+            return AutonomousRoutineSelector.GetFillerRoutine();
+        }
+
+        if (mode != RobotMode.Autonomous)
+        {
+            return null;
+        }
+
         StartPosition startPosition = this.positionChooser.getSelected();
         if (startPosition == null)
         {
@@ -94,7 +104,10 @@ public class AutonomousRoutineSelector
         {
             routine = AutoRoutine.None;
         }
-        else if (routine == AutoRoutine.PathA)
+
+        this.logger.logString(LoggingKey.AutonomousSelection, startPosition.toString() + "." + routine.toString());
+
+        if (routine == AutoRoutine.PathA)
         {
             return DecidePaths("redPathA", "bluePathA"); 
         }
@@ -139,9 +152,7 @@ public class AutonomousRoutineSelector
             return ShootAndMove("leftToOpTrench", "rotate1808");
         }
 
-        this.logger.logString(LoggingKey.AutonomousSelection, startPosition.toString() + "." + routine.toString());
-
-        return AutonomousRoutineSelector.GetFillerRoutine();
+        return new PositionStartingTask(0.0, true, true);
     }
 
     /**
@@ -149,7 +160,7 @@ public class AutonomousRoutineSelector
      */
     private static IControlTask GetFillerRoutine()
     {
-        return new PositionStartingTask(0.0, true, true);
+        return new WaitTask(0.0);
     }
 
     /**

@@ -1,5 +1,6 @@
 package frc.robot.driver.common;
 
+import frc.robot.common.robotprovider.*;
 import frc.robot.driver.*;
 
 /**
@@ -11,7 +12,7 @@ public interface IDriver
     /**
      * Checks whether the driver is in autonomous mode
      */
-    public boolean isAutonomous();
+    public RobotMode getMode();
 
     /**
      * Tell the driver that some time has passed
@@ -25,8 +26,9 @@ public interface IDriver
 
     /**
      * Starts the autonomous period of the match (e.g. begins auto routine)
+     * @param mode that is starting
      */
-    public void startAutonomous();
+    public void startMode(RobotMode mode);
 
     /**
      * Get a boolean indicating whether the current digital operation is enabled

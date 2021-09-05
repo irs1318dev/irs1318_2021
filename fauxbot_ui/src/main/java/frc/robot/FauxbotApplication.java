@@ -177,7 +177,9 @@ public class FauxbotApplication extends Application
             {
                 public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue)
                 {
-                    runner.setMode((RobotMode)newValue.getUserData());
+                    RobotMode newMode = (RobotMode)newValue.getUserData();
+                    FauxbotDriverStation.Instance.setMode(newMode);
+                    runner.setMode(newMode);
                 }
             });
 

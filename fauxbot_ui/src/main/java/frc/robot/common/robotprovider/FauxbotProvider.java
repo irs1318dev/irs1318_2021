@@ -176,7 +176,7 @@ public class FauxbotProvider implements IRobotProvider
     @Override
     public IDriverStation getDriverStation()
     {
-        return new FauxbotDriverStation();
+        return FauxbotDriverStation.Instance;
     }
 
     @Override

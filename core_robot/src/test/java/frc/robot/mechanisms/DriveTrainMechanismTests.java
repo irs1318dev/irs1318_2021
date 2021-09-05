@@ -13,6 +13,7 @@ import frc.robot.common.robotprovider.IVictorSPX;
 import frc.robot.common.robotprovider.MotorNeutralMode;
 import frc.robot.common.robotprovider.NullLogger;
 import frc.robot.common.robotprovider.Pose2d;
+import frc.robot.common.robotprovider.RobotMode;
 import frc.robot.common.robotprovider.TalonSRXControlMode;
 import frc.robot.common.robotprovider.TalonXFeedbackDevice;
 import frc.robot.common.robotprovider.TalonXLimitSwitchStatus;
@@ -581,10 +582,12 @@ public class DriveTrainMechanismTests
 
     private class MockDriver implements IDriver
     {
+        private RobotMode currentMode = RobotMode.Teleop;
+
         @Override
-        public boolean isAutonomous()
+        public RobotMode getMode()
         {
-            return false;
+            return this.currentMode;
         }
 
         @Override
@@ -598,8 +601,9 @@ public class DriveTrainMechanismTests
         }
 
         @Override
-        public void startAutonomous()
+        public void startMode(RobotMode mode)
         {
+            this.currentMode = mode;
         }
 
         @Override
