@@ -15,6 +15,7 @@ public class AutonomousRoutineSelector
     private final ILogger logger;
 
     private final PathManager pathManager;
+    private final IDriverStation driverStation;
 
     private final ISendableChooser<StartPosition> positionChooser;
     private final ISendableChooser<AutoRoutine> routineChooser;
@@ -53,6 +54,8 @@ public class AutonomousRoutineSelector
         this.logger = logger;
         this.pathManager = pathManager;
 
+        this.driverStation = provider.getDriverStation();
+
         INetworkTableProvider networkTableProvider = provider.getNetworkTableProvider();
 
         this.routineChooser = networkTableProvider.getSendableChooser();
@@ -83,6 +86,8 @@ public class AutonomousRoutineSelector
      */
     public IControlTask selectRoutine(RobotMode mode)
     {
+        String driverStationMessage = this.driverStation.getGameSpecificMessage();
+        this.logger.logString(LoggingKey.AutonomousDSMessage, driverStationMessage);
         if (mode == RobotMode.Test)
         {
             return AutonomousRoutineSelector.GetFillerRoutine();

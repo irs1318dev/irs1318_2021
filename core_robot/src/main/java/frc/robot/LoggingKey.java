@@ -13,6 +13,7 @@ public enum LoggingKey
     DriverActiveMacros("driver.activeMacros", true),
     DriverActiveShifts("driver.activeShifts"),
     AutonomousSelection("auto.selected"),
+    AutonomousDSMessage("auto.dsMessage"),
     OffboardVisionX("rpi.x", true),
     OffboardVisionY("rpi.y", true),
     OffboardVisionWidth("rpi.width", true),
