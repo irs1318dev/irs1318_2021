@@ -29,7 +29,8 @@ public class HardwareConstants
     public static final boolean[] DRIVETRAIN_DRIVE_MOTOR_INVERT_SENSOR = new boolean[] { false, false, false, false };
 
     //public static final double[] DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSET = new double[] { -101.0, 68.0, -101.0, -65.0 };
-    public static final double[] DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSET = new double[] { -136.0, 66.0, -94.0, -80.0 };
+    //public static final double[] DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSET = new double[] { -136.0, 66.0, -94.0, -80.0 };
+    public static final double[] DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSET = new double[] { 49.0, -118.0, 87.0, 131.0 };
 
     public static final double DRIVETRAIN_STEER_ENCODER_PULSES_PER_REVOLUTION = 2048.0;
     public static final double DRIVETRAIN_STEER_GEAR_RATIO = 18.0; // set correctly
