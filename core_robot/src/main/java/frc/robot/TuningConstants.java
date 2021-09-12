@@ -338,6 +338,8 @@ public class TuningConstants
 
     public static final double PERRY_THE_PLATYPUS = 0.0;
 
+    public static final double POWERCELL_KICKER_MOTOR_OUTTAKE_POWER = 0.5;
+
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KP = 0.55;
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KI = 0.0;
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KD = 0.75;
