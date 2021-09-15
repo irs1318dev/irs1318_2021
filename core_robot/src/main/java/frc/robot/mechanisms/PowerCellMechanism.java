@@ -17,10 +17,10 @@ import com.google.inject.Singleton;
 @Singleton
 public class PowerCellMechanism implements IMechanism
 {
-    private static final boolean HAS_CAROUSEL_MOTOR = false;
-    private static final boolean HAS_INTAKE_MOTOR = false;
-    private static final boolean HAS_KICKER_MOTOR = false;
-    private static final boolean HAS_SHOOTER_MOTOR = false;
+    private static final boolean HAS_CAROUSEL_MOTOR = true;
+    private static final boolean HAS_INTAKE_MOTOR = true;
+    private static final boolean HAS_KICKER_MOTOR = true;
+    private static final boolean HAS_SHOOTER_MOTOR = true;
     private static final boolean HAS_PNEUMATICS = true;
 
     private static final int slotId = 0;

@@ -30,7 +30,7 @@ public class ElectronicsConstants
 
     //================================================== Vision ==============================================================
 
-    public static final int VISION_RING_LIGHT_DIO = -1;
+    public static final int VISION_RING_LIGHT_DIO = 0;
 
     //================================================== Indicator Lights ==============================================================
 
@@ -68,8 +68,8 @@ public class ElectronicsConstants
     public static final int POWERCELL_INNER_HOOD_FORWARD_PCM = 6;
     public static final int POWERCELL_INNER_HOOD_REVERSE_PCM = 7;
 
-    public static final int POWERCELL_ROLLER_MOTOR_CAN_ID = 10;
-    public static final int POWERCELL_FLYWHEEL_MASTER_CAN_ID = 9; 
+    public static final int POWERCELL_ROLLER_MOTOR_CAN_ID = 9;
+    public static final int POWERCELL_FLYWHEEL_MASTER_CAN_ID = 10;
     public static final int POWERCELL_FLYWHEEL_FOLLOWER_CAN_ID = 11;
     public static final int POWERCELL_CAROUSEL_MOTOR_CAN_ID = 12;
     public static final int POWERCELL_KICKER_MOTOR_CAN_ID = 13;

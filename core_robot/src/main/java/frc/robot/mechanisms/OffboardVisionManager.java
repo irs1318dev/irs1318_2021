@@ -18,7 +18,7 @@ import com.google.inject.Singleton;
 @Singleton
 public class OffboardVisionManager implements IMechanism
 {
-    private static final boolean HAS_RING_LIGHT = false;
+    private static final boolean HAS_RING_LIGHT = true;
 
     private final IDriver driver;
     private final INetworkTableProvider networkTable;
