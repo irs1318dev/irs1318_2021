@@ -34,8 +34,7 @@ public enum DigitalOperation implements IOperation
     PowerCellHoodLong,
 
     PowerCellKick,
-    PowerCellMoveToNextSlotInator,
-    PowerCellMoveToPreviousSlot,
+    PowerCellKickerSpin,
     PowerCellRotateCarousel,
 
     // Climber operations:

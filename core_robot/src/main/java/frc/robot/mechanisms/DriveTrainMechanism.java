@@ -227,6 +227,7 @@ public class DriveTrainMechanism implements IMechanism
         this.yPosition = 0.0;
         this.startTime = 0.0;
 
+        this.firstRun = TuningConstants.DRIVETRAIN_RESET_ON_ROBOT_START;
         this.fieldOriented = false;
         this.maintainOrientation = true;
         this.updatedOrientation = false;

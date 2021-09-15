@@ -254,6 +254,7 @@ public class TuningConstants
 
     public static final boolean DRIVETRAIN_USE_PID = true;
 	public static final boolean DRIVETRAIN_USE_ODOMETRY = true;
+    public static final boolean DRIVETRAIN_RESET_ON_ROBOT_START = true;
 
     // Position PID (angle) per-module
     public static final double[] DRIVETRAIN_STEER_MOTOR_POSITION_PID_KP = new double[] { 1.0, 1.0, 1.0, 1.0 };
@@ -338,8 +339,6 @@ public class TuningConstants
 
     public static final double PERRY_THE_PLATYPUS = 0.0;
 
-    public static final double POWERCELL_KICKER_MOTOR_OUTTAKE_POWER = 0.5;
-
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KP = 0.55;
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KI = 0.0;
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KD = 0.75;
@@ -359,6 +358,4 @@ public class TuningConstants
     public static final double POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING = 0.3;
     public static final double POWERCELL_CAROUSEL_MECHANISM_INDEXING_TIMEOUT = 2.0;
     public static final double POWERCELL_FLYWHEEL_ALLOWABLE_ERROR_RANGE = 500; // ticks per 100ms
-
-    public static final boolean POWERCELL_HAS_THROUGH_BEAM_SENSOR = true;
 }

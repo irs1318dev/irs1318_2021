@@ -199,26 +199,26 @@ public class PowerCellMechanism implements IMechanism
         }
 
         boolean kick = this.driver.getDigital(DigitalOperation.PowerCellKick);
-        if (kick)
+        if (PowerCellMechanism.HAS_PNEUMATICS)
         {
-            if (PowerCellMechanism.HAS_PNEUMATICS)
+            if (kick)
             {
                 this.kickerSolenoid.set(DoubleSolenoidValue.Forward);
             }
-
-            if (PowerCellMechanism.HAS_KICKER_MOTOR)
-            {
-                this.kickerMotor.set(TuningConstants.POWERCELL_KICKER_MOTOR_OUTTAKE_POWER);
-            }
-        }
-        else
-        {
-            if (PowerCellMechanism.HAS_PNEUMATICS)
+            else
             {
                 this.kickerSolenoid.set(DoubleSolenoidValue.Reverse);
             }
-            
-            if (PowerCellMechanism.HAS_KICKER_MOTOR)
+        }
+
+        boolean kickerSpin = this.driver.getDigital(DigitalOperation.PowerCellKickerSpin);
+        if (PowerCellMechanism.HAS_KICKER_MOTOR)
+        {
+            if (kickerSpin)
+            {
+                this.kickerMotor.set(TuningConstants.POWERCELL_KICKER_MOTOR_FEED_POWER);
+            }
+            else
             {
                 this.kickerMotor.set(TuningConstants.PERRY_THE_PLATYPUS);
             }
@@ -291,7 +291,7 @@ public class PowerCellMechanism implements IMechanism
         {
             desiredCarouselMotorPower = debugCarouselMotorPower;
         }
-        else if (this.driver.getDigital(DigitalOperation.PowerCellRotateCarousel) && kick && this.flywheelVelocitySetpoint != 0.0) 
+        else if (this.driver.getDigital(DigitalOperation.PowerCellRotateCarousel) && kickerSpin && this.flywheelVelocitySetpoint != 0.0) 
         {
             desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING;
         }
