@@ -291,8 +291,7 @@ public class PowerCellMechanism implements IMechanism
         {
             desiredCarouselMotorPower = debugCarouselMotorPower;
         }
-        else if (this.driver.getDigital(DigitalOperation.PowerCellRotateCarousel)
-         && kickerSpin && this.flywheelVelocitySetpoint != 0.0) 
+        else if (this.driver.getDigital(DigitalOperation.PowerCellRotateCarousel) && kickerSpin && this.flywheelVelocitySetpoint != 0.0) 
         {
             desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING;
         }
