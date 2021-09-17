@@ -35,10 +35,10 @@ public class PowerCellMechanism implements IMechanism
     private final IDoubleSolenoid innerHood;
     private final ITalonSRX flyWheel;
 
-    private final IVictorSPX carouselMotor;
+    private final ITalonSRX carouselMotor;
 
     private final IDoubleSolenoid kickerSolenoid;
-    private final ITalonSRX kickerMotor;
+    private final IVictorSPX kickerMotor;
 
     private double flywheelPosition;
     private double flywheelVelocity;
@@ -79,8 +79,8 @@ public class PowerCellMechanism implements IMechanism
         // shooter components:
         if (PowerCellMechanism.HAS_PNEUMATICS)
         {
-            this.outerHood = provider.getDoubleSolenoid(ElectronicsConstants.PCM_B_MODULE, ElectronicsConstants.POWERCELL_OUTER_HOOD_FORWARD_PCM, ElectronicsConstants.POWERCELL_OUTER_HOOD_REVERSE_PCM);
-            this.innerHood = provider.getDoubleSolenoid(ElectronicsConstants.PCM_B_MODULE, ElectronicsConstants.POWERCELL_INNER_HOOD_FORWARD_PCM, ElectronicsConstants.POWERCELL_INNER_HOOD_REVERSE_PCM);
+            this.outerHood = provider.getDoubleSolenoid(ElectronicsConstants.PCM_A_MODULE, ElectronicsConstants.POWERCELL_OUTER_HOOD_FORWARD_PCM, ElectronicsConstants.POWERCELL_OUTER_HOOD_REVERSE_PCM);
+            this.innerHood = provider.getDoubleSolenoid(ElectronicsConstants.PCM_A_MODULE, ElectronicsConstants.POWERCELL_INNER_HOOD_FORWARD_PCM, ElectronicsConstants.POWERCELL_INNER_HOOD_REVERSE_PCM);
         }
         else
         {
@@ -120,7 +120,7 @@ public class PowerCellMechanism implements IMechanism
         // carousel components:
         if (PowerCellMechanism.HAS_CAROUSEL_MOTOR)
         {
-            this.carouselMotor = provider.getVictorSPX(ElectronicsConstants.POWERCELL_CAROUSEL_MOTOR_CAN_ID);
+            this.carouselMotor = provider.getTalonSRX(ElectronicsConstants.POWERCELL_CAROUSEL_MOTOR_CAN_ID);
             this.carouselMotor.setInvertOutput(HardwareConstants.POWERCELL_CAROUSEL_MOTOR_INVERT_OUTPUT);
             this.carouselMotor.setControlMode(TalonSRXControlMode.PercentOutput);
             this.carouselMotor.setNeutralMode(MotorNeutralMode.Brake);
@@ -142,7 +142,7 @@ public class PowerCellMechanism implements IMechanism
 
         if (PowerCellMechanism.HAS_SHOOTER_MOTOR)
         {
-            this.kickerMotor = provider.getTalonSRX(ElectronicsConstants.POWERCELL_KICKER_MOTOR_CAN_ID);
+            this.kickerMotor = provider.getVictorSPX(ElectronicsConstants.POWERCELL_KICKER_MOTOR_CAN_ID);
             this.kickerMotor.setInvertOutput(HardwareConstants.POWERCELL_KICKER_MOTOR_INVERT_OUTPUT);
             this.kickerMotor.setControlMode(TalonSRXControlMode.Velocity);
             this.kickerMotor.setNeutralMode(MotorNeutralMode.Coast);
@@ -291,7 +291,8 @@ public class PowerCellMechanism implements IMechanism
         {
             desiredCarouselMotorPower = debugCarouselMotorPower;
         }
-        else if (this.driver.getDigital(DigitalOperation.PowerCellRotateCarousel) && kickerSpin && this.flywheelVelocitySetpoint != 0.0) 
+        else if (this.driver.getDigital(DigitalOperation.PowerCellRotateCarousel)
+         && kickerSpin && this.flywheelVelocitySetpoint != 0.0) 
         {
             desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING;
         }

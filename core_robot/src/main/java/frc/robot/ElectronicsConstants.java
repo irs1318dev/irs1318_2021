@@ -67,10 +67,10 @@ public class ElectronicsConstants
 
     //================================================== Intake ==============================================================
 
-    public static final int POWERCELL_INTAKE_FORWARD_PCM = 0;
-    public static final int POWERCELL_INTAKE_REVERSE_PCM = 1;
-    public static final int POWERCELL_KICKER_FORWARD_PCM = 2;
-    public static final int POWERCELL_KICKER_REVERSE_PCM = 3;
+    public static final int POWERCELL_INTAKE_FORWARD_PCM = 3;
+    public static final int POWERCELL_INTAKE_REVERSE_PCM = 2;
+    public static final int POWERCELL_KICKER_FORWARD_PCM = 1;
+    public static final int POWERCELL_KICKER_REVERSE_PCM = 0;
     public static final int POWERCELL_OUTER_HOOD_FORWARD_PCM = 4;
     public static final int POWERCELL_OUTER_HOOD_REVERSE_PCM = 5;
     public static final int POWERCELL_INNER_HOOD_FORWARD_PCM = 6;

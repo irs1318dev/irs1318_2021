@@ -96,7 +96,16 @@ public class ButtonMap implements IButtonMap
             true,
             1.0,
             0,
-            (x, y) -> (Helpers.atan2d(x, y) + 180.0) / 360),    
+            (x, y) -> (Helpers.atan2d(x, y) + 180.0) / 360),
+        new AnalogOperationDescription(
+            AnalogOperation.PowerCellCarousel,
+            UserInputDevice.Operator,
+            AnalogAxis.PS4_RT,
+            Shift.OperatorDebug,
+            Shift.OperatorDebug,
+            ElectronicsConstants.INVERT_TRIGGER_AXIS,
+            -TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB,
+            TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB),   
     };
 
     public static DigitalOperationDescription[] DigitalOperationSchema = new DigitalOperationDescription[]
@@ -210,13 +219,6 @@ public class ButtonMap implements IButtonMap
             DigitalOperation.PowerCellKickerSpin,
             UserInputDevice.Operator,
             UserInputDeviceButton.PS4_X_BUTTON,
-            Shift.OperatorDebug,
-            Shift.OperatorDebug,
-            ButtonType.Simple),
-        new DigitalOperationDescription(
-            DigitalOperation.PowerCellRotateCarousel,
-            UserInputDevice.Operator,
-            UserInputDeviceButton.PS4_CIRCLE_BUTTON,
             Shift.OperatorDebug,
             Shift.OperatorDebug,
             ButtonType.Simple),
