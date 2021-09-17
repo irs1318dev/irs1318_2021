@@ -137,13 +137,13 @@ public class DriveTrainMechanism implements IMechanism
                 TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KF[i],
                 DriveTrainMechanism.pidSlotId);
             this.driveMotors[i].setVoltageCompensation(
-                TuningConstants.DRIVETRAIN_VOLTAGE_COMPENSATION_ENABLED,
-                TuningConstants.DRIVETRAIN_VOLTAGE_COMPENSATION);
+                TuningConstants.DRIVETRAIN_DRIVE_VOLTAGE_COMPENSATION_ENABLED,
+                TuningConstants.DRIVETRAIN_DRIVE_VOLTAGE_COMPENSATION);
             this.driveMotors[i].setSupplyCurrentLimit(
-                TuningConstants.DRIVETRAIN_SUPPLY_CURRENT_LIMITING_ENABLED,
-                TuningConstants.DRIVETRAIN_SUPPLY_CURRENT_MAX,
-                TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_CURRENT,
-                TuningConstants.DRIVETRAIN_SUPPLY_TRIGGER_DURATION);
+                TuningConstants.DRIVETRAIN_DRIVE_SUPPLY_CURRENT_LIMITING_ENABLED,
+                TuningConstants.DRIVETRAIN_DRIVE_SUPPLY_CURRENT_MAX,
+                TuningConstants.DRIVETRAIN_DRIVE_SUPPLY_TRIGGER_CURRENT,
+                TuningConstants.DRIVETRAIN_DRIVE_SUPPLY_TRIGGER_DURATION);
             this.driveMotors[i].setControlMode(TalonSRXControlMode.Velocity);
 
             this.steerMotors[i] = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_STEER_MOTOR_CAN_ID[i]);
@@ -157,6 +157,14 @@ public class DriveTrainMechanism implements IMechanism
                 TuningConstants.DRIVETRAIN_STEER_MOTOR_POSITION_PID_KD[i],
                 TuningConstants.DRIVETRAIN_STEER_MOTOR_POSITION_PID_KF[i],
                 DriveTrainMechanism.pidSlotId);
+            this.steerMotors[i].setVoltageCompensation(
+                TuningConstants.DRIVETRAIN_STEER_VOLTAGE_COMPENSATION_ENABLED,
+                TuningConstants.DRIVETRAIN_STEER_VOLTAGE_COMPENSATION);
+            this.steerMotors[i].setSupplyCurrentLimit(
+                TuningConstants.DRIVETRAIN_STEER_SUPPLY_CURRENT_LIMITING_ENABLED,
+                TuningConstants.DRIVETRAIN_STEER_SUPPLY_CURRENT_MAX,
+                TuningConstants.DRIVETRAIN_STEER_SUPPLY_TRIGGER_CURRENT,
+                TuningConstants.DRIVETRAIN_STEER_SUPPLY_TRIGGER_DURATION);
 
             this.steerMotors[i].setControlMode(TalonSRXControlMode.Position);
 

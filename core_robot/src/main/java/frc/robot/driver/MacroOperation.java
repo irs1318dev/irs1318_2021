@@ -13,4 +13,6 @@ public enum MacroOperation implements IOperation
     FollowSomePath,
     FollowAnotherPath,
     FollowADifferentPath,
+    ShootHopper,
+    SpinFlywheel,
 }

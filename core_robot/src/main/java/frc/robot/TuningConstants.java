@@ -302,12 +302,19 @@ public class TuningConstants
     public static final double DRIVETRAIN_PATH_Y_MAX_OUTPUT = 10.0;
     public static final double DRIVETRAIN_PATH_Y_MIN_OUTPUT = -10.0;
 
-    public static final boolean DRIVETRAIN_VOLTAGE_COMPENSATION_ENABLED = false;
-    public static final double DRIVETRAIN_VOLTAGE_COMPENSATION = 0.0;
-    public static final boolean DRIVETRAIN_SUPPLY_CURRENT_LIMITING_ENABLED = false;
-    public static final double DRIVETRAIN_SUPPLY_CURRENT_MAX = 0.0;
-    public static final double DRIVETRAIN_SUPPLY_TRIGGER_CURRENT = 0.0;
-    public static final double DRIVETRAIN_SUPPLY_TRIGGER_DURATION = 0.0;
+    public static final boolean DRIVETRAIN_DRIVE_VOLTAGE_COMPENSATION_ENABLED = true;
+    public static final double DRIVETRAIN_DRIVE_VOLTAGE_COMPENSATION = 11.0;
+    public static final boolean DRIVETRAIN_DRIVE_SUPPLY_CURRENT_LIMITING_ENABLED = true;
+    public static final double DRIVETRAIN_DRIVE_SUPPLY_CURRENT_MAX = 30.0;
+    public static final double DRIVETRAIN_DRIVE_SUPPLY_TRIGGER_CURRENT = 40.0;
+    public static final double DRIVETRAIN_DRIVE_SUPPLY_TRIGGER_DURATION = 100.0;
+
+    public static final boolean DRIVETRAIN_STEER_VOLTAGE_COMPENSATION_ENABLED = true;
+    public static final double DRIVETRAIN_STEER_VOLTAGE_COMPENSATION = 11.0;
+    public static final boolean DRIVETRAIN_STEER_SUPPLY_CURRENT_LIMITING_ENABLED = true;
+    public static final double DRIVETRAIN_STEER_SUPPLY_CURRENT_MAX = 30.0;
+    public static final double DRIVETRAIN_STEER_SUPPLY_TRIGGER_CURRENT = 40.0;
+    public static final double DRIVETRAIN_STEER_SUPPLY_TRIGGER_DURATION = 100.0;
 
     public static final boolean DRIVETRAIN_SKIP_ANGLE_ON_ZERO_VELOCITY = true;
     public static final double DRIVETRAIN_SKIP_ANGLE_ON_ZERO_DELTA = 0.001;
