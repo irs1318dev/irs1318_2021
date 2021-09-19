@@ -6,13 +6,23 @@ public class FlywheelFixedSpinTask extends TimedTask
 {
     private final double speed;
 
+
     /**
      * Initializes a new FlywheelFixedSpinTask
      * @param speed to spin the flywheel
      */
     public FlywheelFixedSpinTask(double speed)
     {
-        super(0.1);
+        this(speed, 10.0);
+    }
+
+    /**
+     * Initializes a new FlywheelFixedSpinTask
+     * @param speed to spin the flywheel
+     */
+    public FlywheelFixedSpinTask(double speed, double duration)
+    {
+        super(duration);
 
         this.speed = speed;
     }

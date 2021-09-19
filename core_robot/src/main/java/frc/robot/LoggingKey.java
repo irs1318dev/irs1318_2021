@@ -26,6 +26,9 @@ public enum LoggingKey
     OffboardVisionEnableProcessing("rpi.enableProcessing", true), // why do some have True?
     NavxConnected("navx.connected", true),
     NavxAngle("navx.angle", true),
+    NavxPitch("navx.pitch", true),
+    NavxRoll("navx.roll", true),
+    NavxYaw("navx.yaw", true),
     NavxX("navx.x"),
     NavxY("navx.y"),
     NavxZ("navx.z"),

@@ -209,13 +209,13 @@ public class TuningConstants
     public static final double MAX_VISION_ACCEPTABLE_FORWARD_DISTANCE = 3.25;
 
     // PID settings for Centering the robot on a vision target from one stationary place
-    public static final double VISION_STATIONARY_CENTERING_PID_KP = 0.02;
+    public static final double VISION_STATIONARY_CENTERING_PID_KP = 0.025;
     public static final double VISION_STATIONARY_CENTERING_PID_KI = 0.0;
     public static final double VISION_STATIONARY_CENTERING_PID_KD = 0.02;
     public static final double VISION_STATIONARY_CENTERING_PID_KF = 0.0;
     public static final double VISION_STATIONARY_CENTERING_PID_KS = 1.0;
-    public static final double VISION_STATIONARY_CENTERING_PID_MIN = -0.3;
-    public static final double VISION_STATIONARY_CENTERING_PID_MAX = 0.3;
+    public static final double VISION_STATIONARY_CENTERING_PID_MIN = -0.4;
+    public static final double VISION_STATIONARY_CENTERING_PID_MAX = 0.4;
 
     // PID settings for Centering the robot on a vision target
     public static final double VISION_MOVING_CENTERING_PID_KP = 0.02;
@@ -254,7 +254,7 @@ public class TuningConstants
 
     public static final boolean DRIVETRAIN_USE_PID = true;
 	public static final boolean DRIVETRAIN_USE_ODOMETRY = true;
-    public static final boolean DRIVETRAIN_RESET_ON_ROBOT_START = true;
+    public static final boolean DRIVETRAIN_RESET_ON_ROBOT_START = false;
 
     // Position PID (angle) per-module
     public static final double[] DRIVETRAIN_STEER_MOTOR_POSITION_PID_KP = new double[] { 1.0, 1.0, 1.0, 1.0 };
@@ -329,7 +329,7 @@ public class TuningConstants
 
     public static final double DRIVETRAIN_MAX_VELOCITY = TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS * HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND; // max velocity in inches per second
     public static final double DRIVETRAIN_VELOCITY_TO_PERCENTAGE = 1.0 / TuningConstants.DRIVETRAIN_MAX_VELOCITY;
-    public static final double DRIVETRAIN_TURN_GOAL_VELOCITY = 45.0; // degrees per second for turn goal
+    public static final double DRIVETRAIN_TURN_GOAL_VELOCITY = 10.0; // degrees per second for turn goal
     public static final double DRIVETRAIN_TURN_SCALE = 2.0; // radians per second
     public static final double DRIVETRAIN_TURN_APPROXIMATION = 0.5; // number of degrees off at which point we give up trying to face an angle when uncommanded
     public static final double DRIVETRAIN_MAX_MODULE_PATH_VELOCITY = 0.85 * TuningConstants.DRIVETRAIN_MAX_VELOCITY; // up to x% of our max controllable speed
@@ -342,9 +342,12 @@ public class TuningConstants
     public static final double POWERCELL_ROLLER_MOTOR_INTAKE_POWER = 0.5;
     public static final double POWERCELL_ROLLER_MOTOR_OUTTAKE_POWER = -0.5;
 
-    public static final double POWERCELL_KICKER_MOTOR_FEED_POWER = 0.5;
+    public static final double POWERCELL_KICKER_MOTOR_FEED_POWER = 0.35;
+    public static final double POWERCELL_KICKER_MOTOR_FEED_REVERSE_POWER = -0.5;
 
     public static final double PERRY_THE_PLATYPUS = 0.0;
+
+    public static final double POWERCELL_FLYWHEEL_REVERSE_POWER = -0.4;
 
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KP = 0.55;
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KI = 0.0;
@@ -361,8 +364,8 @@ public class TuningConstants
 
     public static final double POWERCELL_THROUGHBEAM_CUTOFF = 2.7;
     public static final double POWERCELL_CAROUSEL_COUNT_THRESHOLD = 5.0;
-    public static final double POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING = 0.3;
-    public static final double POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING = 0.3;
+    public static final double POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING = 0.4;
+    public static final double POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING = 0.4;
     public static final double POWERCELL_CAROUSEL_MECHANISM_INDEXING_TIMEOUT = 2.0;
     public static final double POWERCELL_FLYWHEEL_ALLOWABLE_ERROR_RANGE = 500; // ticks per 100ms
 }

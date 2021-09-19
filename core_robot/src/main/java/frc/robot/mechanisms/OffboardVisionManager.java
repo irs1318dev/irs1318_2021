@@ -18,8 +18,6 @@ import com.google.inject.Singleton;
 @Singleton
 public class OffboardVisionManager implements IMechanism
 {
-    private static final boolean HAS_RING_LIGHT = true;
-
     private final IDriver driver;
     private final INetworkTableProvider networkTable;
     private final ILogger logger;
@@ -48,14 +46,7 @@ public class OffboardVisionManager implements IMechanism
         this.logger = logger;
 
         this.networkTable = provider.getNetworkTableProvider();
-        if (OffboardVisionManager.HAS_RING_LIGHT)
-        {
-            this.ringLight = provider.getDigitalOutput(ElectronicsConstants.VISION_RING_LIGHT_DIO);
-        }
-        else
-        {
-            this.ringLight = null;
-        }
+        this.ringLight = provider.getDigitalOutput(ElectronicsConstants.VISION_RING_LIGHT_DIO);
 
         this.centerX = 0.0;
         this.centerY = 0.0;
@@ -107,7 +98,7 @@ public class OffboardVisionManager implements IMechanism
     @Override
     public void update()
     {
-        boolean enableVision = this.driver.getDigital(DigitalOperation.VisionEnableStream) && !this.driver.getDigital(DigitalOperation.VisionForceDisable);
+        boolean enableVision = !this.driver.getDigital(DigitalOperation.VisionForceDisable);
         boolean enableVideoStream = !this.driver.getDigital(DigitalOperation.VisionDisableStream);
         boolean enablePowercellProcessing = this.driver.getDigital(DigitalOperation.VisionEnablePowercellProcessing);
         boolean enableRetroreflectiveProcessing = this.driver.getDigital(DigitalOperation.VisionEnableRetroreflectiveProcessing);
@@ -129,19 +120,13 @@ public class OffboardVisionManager implements IMechanism
         this.logger.logBoolean(LoggingKey.OffboardVisionEnableStream, enableVideoStream);
         this.logger.logNumber(LoggingKey.OffboardVisionEnableProcessing, visionProcessingMode);
 
-        if (OffboardVisionManager.HAS_RING_LIGHT)
-        {
-            this.ringLight.set(enableVision && enableRetroreflectiveProcessing);
-        }
+        this.ringLight.set(enableVision && enableRetroreflectiveProcessing);
     }
 
     @Override
     public void stop()
     {
-        if (OffboardVisionManager.HAS_RING_LIGHT)
-        {
-            this.ringLight.set(false);
-        }
+        this.ringLight.set(false);
 
         this.logger.logBoolean(LoggingKey.OffboardVisionEnableVision, false);
         this.logger.logBoolean(LoggingKey.OffboardVisionEnableStream, false);

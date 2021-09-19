@@ -66,7 +66,11 @@ public class NavxManager implements IMechanism
     {
         this.isConnected = this.navx.isConnected();
 
-        this.angle = -1.0 * this.navx.getAngle();
+        double pitch = this.navx.getPitch();
+        double roll = this.navx.getRoll();
+        double yaw = this.navx.getYaw();
+        double angle = this.navx.getAngle();
+        this.angle = -1.0 * roll;
         this.x = this.navx.getDisplacementX() * 100.0;
         this.y = this.navx.getDisplacementY() * 100.0;
         this.z = this.navx.getDisplacementZ() * 100.0;
@@ -74,6 +78,9 @@ public class NavxManager implements IMechanism
         // log the current position and orientation
         this.logger.logBoolean(LoggingKey.NavxConnected, this.isConnected);
         this.logger.logNumber(LoggingKey.NavxAngle, this.angle);
+        this.logger.logNumber(LoggingKey.NavxPitch, pitch);
+        this.logger.logNumber(LoggingKey.NavxRoll, roll);
+        this.logger.logNumber(LoggingKey.NavxYaw, yaw);
         this.logger.logNumber(LoggingKey.NavxX, this.x);
         this.logger.logNumber(LoggingKey.NavxY, this.y);
         this.logger.logNumber(LoggingKey.NavxZ, this.z);

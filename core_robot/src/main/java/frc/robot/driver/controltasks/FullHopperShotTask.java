@@ -20,7 +20,7 @@ public class FullHopperShotTask extends ControlTaskBase
     @Override
     public void update()
     {
-        this.setDigitalOperationState(DigitalOperation.PowerCellKick, this.powerCellMechanism.isFlywheelSpunUp());
+        this.setDigitalOperationState(DigitalOperation.PowerCellKick, true); //this.powerCellMechanism.isFlywheelSpunUp());
         this.setDigitalOperationState(DigitalOperation.PowerCellKickerSpin, true);
         this.setDigitalOperationState(DigitalOperation.PowerCellRotateCarousel, true);
     }

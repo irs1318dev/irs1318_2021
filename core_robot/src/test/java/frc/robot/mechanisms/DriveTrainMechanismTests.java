@@ -390,6 +390,24 @@ public class DriveTrainMechanismTests
         }
 
         @Override
+        public double getPitch()
+        {
+            return this.currentAngle;
+        }
+
+        @Override
+        public double getRoll()
+        {
+            return this.currentAngle;
+        }
+
+        @Override
+        public double getYaw()
+        {
+            return this.currentAngle;
+        }
+
+        @Override
         public double getDisplacementX()
         {
             return 0;

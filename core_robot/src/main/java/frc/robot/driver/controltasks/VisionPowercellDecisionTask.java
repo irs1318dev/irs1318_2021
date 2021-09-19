@@ -30,7 +30,7 @@ public class VisionPowercellDecisionTask extends DecisionSequentialTask
     {
         this.visionManager = this.getInjector().getInstance(OffboardVisionManager.class);
 
-        this.setDigitalOperationState(DigitalOperation.VisionEnableStream, true);
+        this.setDigitalOperationState(DigitalOperation.VisionDisableStream, false);
         this.setDigitalOperationState(DigitalOperation.VisionEnablePowercellProcessing, true);
 
         //System.out.println(visionManager.getPowercellY() + " VISION Y VALUE");

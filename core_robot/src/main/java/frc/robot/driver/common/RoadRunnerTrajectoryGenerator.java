@@ -338,7 +338,7 @@ public class RoadRunnerTrajectoryGenerator
             new TrajectoryWrapper(TrajectoryGenerator.INSTANCE.generateTrajectory(centerShootShieldShoot, RoadRunnerTrajectoryGenerator.velocityConstraint, RoadRunnerTrajectoryGenerator.accelerationConstraint)));
     
         Path doofenshmirtzinator4ft = new PathBuilder(new Pose2d(0, 0, 0))
-            .splineTo(new Vector2d(42, 0), 0)
+            .splineTo(new Vector2d(-60, 0), 0)
             .build();
         pathManager.addPath(
             "doofenshmirtzinator4ft",

@@ -6,7 +6,6 @@ public enum DigitalOperation implements IOperation
 
     // Vision operations:
     VisionForceDisable,
-    VisionEnableStream,
     VisionDisableStream,
     VisionEnablePowercellProcessing,
     VisionEnableRetroreflectiveProcessing,
@@ -35,7 +34,9 @@ public enum DigitalOperation implements IOperation
 
     PowerCellKick,
     PowerCellKickerSpin,
+    PowerCellKickerSpinReverse,
     PowerCellRotateCarousel,
+    PowerCellFlywheelReverse,
 
     // Climber operations:
     ClimberExtend,
