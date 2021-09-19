@@ -30,6 +30,9 @@ public class OffboardVisionManager implements IMechanism
     private double height;
     private double angle;
 
+    private int missedHeartbeats;
+    private double prevHeartbeat;
+
     private Double distance;
     private Double horizontalAngle;
 
@@ -54,6 +57,9 @@ public class OffboardVisionManager implements IMechanism
         this.width = 0.0;
         this.height = 0.0;
         this.angle = 0.0;
+
+        this.missedHeartbeats = 0;
+        this.prevHeartbeat = 0.0;
     }
 
     /**
@@ -74,8 +80,20 @@ public class OffboardVisionManager implements IMechanism
         this.logger.logNumber(LoggingKey.OffboardVisionHeight, this.height);
         this.logger.logNumber(LoggingKey.OffboardVisionAngle, this.angle);
 
+        double newHeartbeat = this.networkTable.getSmartDashboardNumber("v.heartbeat");
+        if (this.prevHeartbeat != newHeartbeat)
+        {
+            this.missedHeartbeats = 0;
+        }
+        else
+        {
+            this.missedHeartbeats++;
+        }
+
+        this.logger.logNumber(LoggingKey.OffboardVisionMissedHeartbeats, this.missedHeartbeats);
+
         // return if we couldn't find a vision target
-        if (this.centerX < 0.0 || this.centerY < 0.0)
+        if (this.centerX < 0.0 || this.centerY < 0.0 || this.missedHeartbeats > TuningConstants.VISION_MISSED_HEARTBEAT_THRESHOLD)
         {
             this.distance = null;
             this.horizontalAngle = null;

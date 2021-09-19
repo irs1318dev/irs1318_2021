@@ -245,6 +245,7 @@ public class TuningConstants
     public static final double VISION_FAST_ADVANCING_PID_MAX = 0.45;
 
     public static final boolean VISION_ENABLE_DURING_TELEOP = true;
+    public static final int VISION_MISSED_HEARTBEAT_THRESHOLD = 10000;
 
     //================================================== Indicator Lights ========================================================
 
@@ -364,7 +365,7 @@ public class TuningConstants
 
     public static final double POWERCELL_THROUGHBEAM_CUTOFF = 2.7;
     public static final double POWERCELL_CAROUSEL_COUNT_THRESHOLD = 5.0;
-    public static final double POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING = 0.4;
+    public static final double POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING = -0.4;
     public static final double POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING = 0.4;
     public static final double POWERCELL_CAROUSEL_MECHANISM_INDEXING_TIMEOUT = 2.0;
     public static final double POWERCELL_FLYWHEEL_ALLOWABLE_ERROR_RANGE = 500; // ticks per 100ms

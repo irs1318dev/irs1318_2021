@@ -24,6 +24,7 @@ public enum LoggingKey
     OffboardVisionEnableVision("rpi.enableVision", true),
     OffboardVisionEnableStream("rpi.enableStream", true),
     OffboardVisionEnableProcessing("rpi.enableProcessing", true), // why do some have True?
+    OffboardVisionMissedHeartbeats("rpi.missedHeartbeats", true),
     NavxConnected("navx.connected", true),
     NavxAngle("navx.angle", true),
     NavxPitch("navx.pitch", true),

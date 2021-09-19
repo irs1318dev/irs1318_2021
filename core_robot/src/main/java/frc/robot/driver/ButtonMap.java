@@ -299,7 +299,7 @@ public class ButtonMap implements IButtonMap
             Shift.None,
             ButtonType.Toggle,
             () -> ConcurrentTask.AllTasks( //new FlywheelVisionSpinTask(),
-                new FlywheelFixedSpinTask(0.4, 10.0),
+                new FlywheelFixedSpinTask(0.45, 10.0),
                 new ShooterHoodPositionTask(DigitalOperation.PowerCellHoodShort)),
             new IOperation[]
             {
