@@ -70,7 +70,7 @@ public class NavxManager implements IMechanism
         double roll = this.navx.getRoll();
         double yaw = this.navx.getYaw();
         double angle = this.navx.getAngle();
-        this.angle = -1.0 * roll;
+        this.angle = -1.0 * angle;
         this.x = this.navx.getDisplacementX() * 100.0;
         this.y = this.navx.getDisplacementY() * 100.0;
         this.z = this.navx.getDisplacementZ() * 100.0;
