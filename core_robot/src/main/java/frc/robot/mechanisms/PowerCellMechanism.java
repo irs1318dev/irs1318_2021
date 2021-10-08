@@ -229,9 +229,11 @@ public class PowerCellMechanism implements IMechanism
         {
             desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
         }
-
-        this.carouselMotor.set(desiredCarouselMotorPower);
-
+        else if (this.driver.getDigital(DigitalOperation.PowerCellRotateCarousel))
+        {
+            desiredCarouselMotorPower = -TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
+        }
+        
         this.logger.logNumber(LoggingKey.PowerCellCarouselPower, desiredCarouselMotorPower);
         this.logger.logBoolean(LoggingKey.PowerCellIsIntaking, isIntaking);
         this.logger.logBoolean(LoggingKey.PowerCellIntakeExtended, this.intakeExtended);
