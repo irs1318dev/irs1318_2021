@@ -217,7 +217,7 @@ public class PowerCellMechanism implements IMechanism
 
         double desiredCarouselMotorPower = TuningConstants.PERRY_THE_PLATYPUS;
         double debugCarouselMotorPower = this.driver.getAnalog(AnalogOperation.PowerCellCarousel);
-        if (debugCarouselMotorPower != TuningConstants.PERRY_THE_PLATYPUS) // TuningConstants.MAGIC_NULL_VALUE)
+        if (debugCarouselMotorPower != TuningConstants.PERRY_THE_PLATYPUS)
         {
             desiredCarouselMotorPower = -1.0 * debugCarouselMotorPower * 0.5;
         }
@@ -233,6 +233,8 @@ public class PowerCellMechanism implements IMechanism
         {
             desiredCarouselMotorPower = -TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
         }
+
+        this.carouselMotor.set(desiredCarouselMotorPower);
         
         this.logger.logNumber(LoggingKey.PowerCellCarouselPower, desiredCarouselMotorPower);
         this.logger.logBoolean(LoggingKey.PowerCellIsIntaking, isIntaking);
