@@ -209,9 +209,9 @@ public class TuningConstants
     public static final double MAX_VISION_ACCEPTABLE_FORWARD_DISTANCE = 3.25;
 
     // PID settings for Centering the robot on a vision target from one stationary place
-    public static final double VISION_STATIONARY_CENTERING_PID_KP = 0.025;
+    public static final double VISION_STATIONARY_CENTERING_PID_KP = 0.0125;
     public static final double VISION_STATIONARY_CENTERING_PID_KI = 0.0;
-    public static final double VISION_STATIONARY_CENTERING_PID_KD = 0.02;
+    public static final double VISION_STATIONARY_CENTERING_PID_KD = 0.01;
     public static final double VISION_STATIONARY_CENTERING_PID_KF = 0.0;
     public static final double VISION_STATIONARY_CENTERING_PID_KS = 1.0;
     public static final double VISION_STATIONARY_CENTERING_PID_MIN = -0.4;
@@ -370,11 +370,12 @@ public class TuningConstants
     public static final double POWERCELL_CAROUSEL_MECHANISM_INDEXING_TIMEOUT = 2.0;
     public static final double POWERCELL_FLYWHEEL_ALLOWABLE_ERROR_RANGE = 500; // ticks per 100ms
 
+    public static final boolean POWERCELL_CAROUSEL_USE_PID = false;
 
-    public static final double POWERCELL_CAROUSEL_PID_KP = 0.0; 
-    public static final double POWERCELL_CAROUSEL_PID_KI = 0.0; 
-    public static final double POWERCELL_CAROUSEL_PID_KD = 0.0; 
-    public static final double POWERCELL_CAROUSEL_PID_KF = 0.0; 
-    public static final double POWERCELL_CAROUSEL_PID_KS = 0.0; 
-    public static final double POWERCELL_CAROUSEL_MAX_POWER = 0.6; 
+    public static final double POWERCELL_CAROUSEL_PID_KP = 0.0;
+    public static final double POWERCELL_CAROUSEL_PID_KI = 0.0;
+    public static final double POWERCELL_CAROUSEL_PID_KD = 0.0;
+    public static final double POWERCELL_CAROUSEL_PID_KF = 0.0;
+    public static final double POWERCELL_CAROUSEL_PID_KS = 0.0;
+    public static final double POWERCELL_CAROUSEL_MAX_POWER = 1.0;
 }

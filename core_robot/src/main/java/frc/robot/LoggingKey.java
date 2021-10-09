@@ -97,7 +97,6 @@ public enum LoggingKey
     PowerCellCarouselError("pc.carousel_err"),
 
     ControlPanelExtend("cp.extend");
-    
 
     public final String value;
     public final boolean shouldLog;

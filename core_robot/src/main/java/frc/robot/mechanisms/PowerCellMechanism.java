@@ -45,7 +45,6 @@ public class PowerCellMechanism implements IMechanism
     private double carouselVelocity;
     private double carouselError;
 
-    private double carouselEncoderVelocity;
     private PIDHandler carouselPID;
 
     private boolean intakeExtended;
@@ -99,13 +98,13 @@ public class PowerCellMechanism implements IMechanism
 
         this.carouselEncoder = provider.getEncoder(ElectronicsConstants.POWERCELL_CAROUSEL_ENCODER_CHANNEL_A, ElectronicsConstants.POWERCELL_CAROUSEL_ENCODER_CHANNEL_B);
         this.carouselPID = new PIDHandler(
-            TuningConstants.POWERCELL_CAROUSEL_PID_KP, 
-            TuningConstants.POWERCELL_CAROUSEL_PID_KI, 
-            TuningConstants.POWERCELL_CAROUSEL_PID_KD, 
-            TuningConstants.POWERCELL_CAROUSEL_PID_KF, 
-            TuningConstants.POWERCELL_CAROUSEL_PID_KS, 
-            -TuningConstants.POWERCELL_CAROUSEL_MAX_POWER, 
-            TuningConstants.POWERCELL_CAROUSEL_MAX_POWER, 
+            TuningConstants.POWERCELL_CAROUSEL_PID_KP,
+            TuningConstants.POWERCELL_CAROUSEL_PID_KI,
+            TuningConstants.POWERCELL_CAROUSEL_PID_KD,
+            TuningConstants.POWERCELL_CAROUSEL_PID_KF,
+            TuningConstants.POWERCELL_CAROUSEL_PID_KS,
+            -TuningConstants.POWERCELL_CAROUSEL_MAX_POWER,
+            TuningConstants.POWERCELL_CAROUSEL_MAX_POWER,
             this.timer);
 
         // kicker components:
@@ -126,11 +125,9 @@ public class PowerCellMechanism implements IMechanism
         this.flywheelVelocity = this.flyWheel.getVelocity();
         this.flywheelError = this.flyWheel.getError();
 
-        this.carouselPosition = this.carouselMotor.getPosition();
-        this.carouselVelocity = this.carouselMotor.getVelocity();
-        this.carouselError = this.carouselMotor.getError();
-
-        this.carouselEncoderVelocity = this.carouselEncoder.getRate();
+        this.carouselPosition = this.carouselEncoder.getDistance(); // this.carouselMotor.getPosition();
+        this.carouselVelocity = this.carouselEncoder.getRate(); // this.carouselMotor.getVelocity();
+        //this.carouselError = this.carouselMotor.getError();
 
         this.logger.logNumber(LoggingKey.PowerCellFlywheelVelocity, this.flywheelVelocity);
         this.logger.logNumber(LoggingKey.PowerCellFlywheelPosition, this.flywheelPosition);
@@ -138,7 +135,7 @@ public class PowerCellMechanism implements IMechanism
 
         this.logger.logNumber(LoggingKey.PowerCellCarouselVelocity, this.carouselVelocity);
         this.logger.logNumber(LoggingKey.PowerCellCarouselPosition, this.carouselPosition);
-        this.logger.logNumber(LoggingKey.PowerCellCarouselError, this.carouselError);
+        //this.logger.logNumber(LoggingKey.PowerCellCarouselError, this.carouselError);
     }
 
     @Override
@@ -247,22 +244,31 @@ public class PowerCellMechanism implements IMechanism
 
         this.logger.logNumber(LoggingKey.PowerCellFlywheelVelocitySetpoint, this.flywheelVelocitySetpoint);
 
-        double desiredCarouselMotorPower = TuningConstants.PERRY_THE_PLATYPUS;
-        double debugCarouselMotorPower = this.driver.getAnalog(AnalogOperation.PowerCellCarousel);
-        if (debugCarouselMotorPower != TuningConstants.PERRY_THE_PLATYPUS)
+        double desiredCarouselVelocity = TuningConstants.PERRY_THE_PLATYPUS;
+        double debugCarouselVelocity = this.driver.getAnalog(AnalogOperation.PowerCellCarousel);
+        if (debugCarouselVelocity != TuningConstants.PERRY_THE_PLATYPUS)
         {
-            desiredCarouselMotorPower = 1.0 * debugCarouselMotorPower * 0.5;
+            desiredCarouselVelocity = 1.0 * debugCarouselVelocity * 0.5;
         }
         else if (this.driver.getDigital(DigitalOperation.PowerCellRotateCarousel) && kickerSpin && this.flywheelVelocitySetpoint != 0.0) 
         {
-            desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING;
+            desiredCarouselVelocity = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_SHOOTING;
         }
         else if (isIntaking)
         {
-            desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
+            desiredCarouselVelocity = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
         }
 
-        carouselPID.calculateVelocity(desiredCarouselMotorPower, this.carouselEncoderVelocity);
+        double desiredCarouselMotorPower;
+        if (TuningConstants.POWERCELL_CAROUSEL_USE_PID)
+        {
+            desiredCarouselMotorPower = this.carouselPID.calculateVelocity(desiredCarouselVelocity, this.carouselVelocity);
+        }
+        else
+        {
+            desiredCarouselMotorPower = desiredCarouselVelocity;
+        }
+
         this.carouselMotor.set(desiredCarouselMotorPower);
         
         this.logger.logNumber(LoggingKey.PowerCellCarouselPower, desiredCarouselMotorPower);
