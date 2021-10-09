@@ -90,11 +90,11 @@ public enum LoggingKey
     PowerCellFlywheelPosition("pc.flywheel_pos"),
     PowerCellFlywheelError("pc.flywheel_err"),
     PowerCellCarouselPower("pc.carousel_power"),
+    PowerCellDesiredCarouselVelocity("pc.carousel_des_vel"),
     PowerCellFlywheelVelocitySetpoint("pc.flywheel_vel_sp"),
 
     PowerCellCarouselVelocity("pc.carousel_vel"),
     PowerCellCarouselPosition("pc.carousel_pos"),
-    PowerCellCarouselError("pc.carousel_err"),
 
     ControlPanelExtend("cp.extend");
 

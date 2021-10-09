@@ -104,7 +104,7 @@ public class ButtonMap implements IButtonMap
             Shift.OperatorDebug,
             Shift.OperatorDebug,
             ElectronicsConstants.INVERT_TRIGGER_AXIS,
-            -1.0,
+            -1.01,
             TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB),   
     };
 

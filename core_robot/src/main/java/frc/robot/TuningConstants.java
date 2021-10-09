@@ -370,12 +370,12 @@ public class TuningConstants
     public static final double POWERCELL_CAROUSEL_MECHANISM_INDEXING_TIMEOUT = 2.0;
     public static final double POWERCELL_FLYWHEEL_ALLOWABLE_ERROR_RANGE = 500; // ticks per 100ms
 
-    public static final boolean POWERCELL_CAROUSEL_USE_PID = false;
+    public static final boolean POWERCELL_CAROUSEL_USE_PID = true;
 
-    public static final double POWERCELL_CAROUSEL_PID_KP = 0.0;
+    public static final double POWERCELL_CAROUSEL_PID_KP = 0.0002;
     public static final double POWERCELL_CAROUSEL_PID_KI = 0.0;
     public static final double POWERCELL_CAROUSEL_PID_KD = 0.0;
-    public static final double POWERCELL_CAROUSEL_PID_KF = 0.0;
-    public static final double POWERCELL_CAROUSEL_PID_KS = 0.0;
+    public static final double POWERCELL_CAROUSEL_PID_KF = 1.0;
+    public static final double POWERCELL_CAROUSEL_PID_KS = 3200.0;
     public static final double POWERCELL_CAROUSEL_MAX_POWER = 1.0;
 }

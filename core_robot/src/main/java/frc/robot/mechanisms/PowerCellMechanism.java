@@ -31,7 +31,7 @@ public class PowerCellMechanism implements IMechanism
     private final IDoubleSolenoid innerHood;
     private final ITalonSRX flyWheel;
 
-    private final ITalonSRX carouselMotor; // was this a talonsrx now? which one got switched i forgot
+    private final ITalonSRX carouselMotor;
     private final IEncoder carouselEncoder;
 
     private final IDoubleSolenoid kickerSolenoid;
@@ -43,7 +43,6 @@ public class PowerCellMechanism implements IMechanism
 
     private double carouselPosition;
     private double carouselVelocity;
-    private double carouselError;
 
     private PIDHandler carouselPID;
 
@@ -52,7 +51,7 @@ public class PowerCellMechanism implements IMechanism
     private double flywheelVelocitySetpoint;
 
     @Inject
-    public PowerCellMechanism(IDriver driver, ITimer timer, LoggingManager logger, IRobotProvider provider)
+    public PowerCellMechanism(IDriver driver, LoggingManager logger, ITimer timer, IRobotProvider provider)
     {
         this.driver = driver;
         this.logger = logger;
@@ -125,9 +124,8 @@ public class PowerCellMechanism implements IMechanism
         this.flywheelVelocity = this.flyWheel.getVelocity();
         this.flywheelError = this.flyWheel.getError();
 
-        this.carouselPosition = this.carouselEncoder.getDistance(); // this.carouselMotor.getPosition();
-        this.carouselVelocity = this.carouselEncoder.getRate(); // this.carouselMotor.getVelocity();
-        //this.carouselError = this.carouselMotor.getError();
+        this.carouselPosition = this.carouselEncoder.getDistance();
+        this.carouselVelocity = this.carouselEncoder.getRate();
 
         this.logger.logNumber(LoggingKey.PowerCellFlywheelVelocity, this.flywheelVelocity);
         this.logger.logNumber(LoggingKey.PowerCellFlywheelPosition, this.flywheelPosition);
@@ -135,7 +133,6 @@ public class PowerCellMechanism implements IMechanism
 
         this.logger.logNumber(LoggingKey.PowerCellCarouselVelocity, this.carouselVelocity);
         this.logger.logNumber(LoggingKey.PowerCellCarouselPosition, this.carouselPosition);
-        //this.logger.logNumber(LoggingKey.PowerCellCarouselError, this.carouselError);
     }
 
     @Override
@@ -272,6 +269,7 @@ public class PowerCellMechanism implements IMechanism
         this.carouselMotor.set(desiredCarouselMotorPower);
         
         this.logger.logNumber(LoggingKey.PowerCellCarouselPower, desiredCarouselMotorPower);
+        this.logger.logNumber(LoggingKey.PowerCellDesiredCarouselVelocity, desiredCarouselVelocity);
         this.logger.logBoolean(LoggingKey.PowerCellIsIntaking, isIntaking);
         this.logger.logBoolean(LoggingKey.PowerCellIntakeExtended, this.intakeExtended);
     }
