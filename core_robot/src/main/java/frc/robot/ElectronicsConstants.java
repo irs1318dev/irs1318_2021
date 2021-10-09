@@ -84,6 +84,8 @@ public class ElectronicsConstants
 
     public static final int POWERCELL_CAROUSEL_COUNTER_DIO = 0;
     public static final int POWERCELL_THROUGHBEAM_ANALOG_INPUT = 0;
+    public static final int POWERCELL_CAROUSEL_ENCODER_CHANNEL_A = 2;
+    public static final int POWERCELL_CAROUSEL_ENCODER_CHANNEL_B = 3;
 
     //================================================== Climber ==============================================================
 

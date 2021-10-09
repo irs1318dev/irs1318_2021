@@ -17,6 +17,8 @@ import com.google.inject.Singleton;
 @Singleton
 public class PowerCellMechanism implements IMechanism
 {
+    private final ITimer timer;
+
     private static final int slotId = 0;
 
     private final IDriver driver;
@@ -29,7 +31,8 @@ public class PowerCellMechanism implements IMechanism
     private final IDoubleSolenoid innerHood;
     private final ITalonSRX flyWheel;
 
-    private final ITalonSRX carouselMotor;
+    private final ITalonSRX carouselMotor; // was this a talonsrx now? which one got switched i forgot
+    private final IEncoder carouselEncoder;
 
     private final IDoubleSolenoid kickerSolenoid;
     private final IVictorSPX kickerMotor;
@@ -38,15 +41,23 @@ public class PowerCellMechanism implements IMechanism
     private double flywheelVelocity;
     private double flywheelError;
 
+    private double carouselPosition;
+    private double carouselVelocity;
+    private double carouselError;
+
+    private double carouselEncoderVelocity;
+    private PIDHandler carouselPID;
+
     private boolean intakeExtended;
 
     private double flywheelVelocitySetpoint;
 
     @Inject
-    public PowerCellMechanism(IDriver driver, LoggingManager logger, IRobotProvider provider)
+    public PowerCellMechanism(IDriver driver, ITimer timer, LoggingManager logger, IRobotProvider provider)
     {
         this.driver = driver;
         this.logger = logger;
+        this.timer = timer;
 
         // intake components:
         this.intakeSolenoid = provider.getDoubleSolenoid(ElectronicsConstants.PCM_A_MODULE, ElectronicsConstants.POWERCELL_INTAKE_FORWARD_PCM, ElectronicsConstants.POWERCELL_INTAKE_REVERSE_PCM);
@@ -86,6 +97,17 @@ public class PowerCellMechanism implements IMechanism
         this.carouselMotor.setControlMode(TalonSRXControlMode.PercentOutput);
         this.carouselMotor.setNeutralMode(MotorNeutralMode.Brake);
 
+        this.carouselEncoder = provider.getEncoder(ElectronicsConstants.POWERCELL_CAROUSEL_ENCODER_CHANNEL_A, ElectronicsConstants.POWERCELL_CAROUSEL_ENCODER_CHANNEL_B);
+        this.carouselPID = new PIDHandler(
+            TuningConstants.POWERCELL_CAROUSEL_PID_KP, 
+            TuningConstants.POWERCELL_CAROUSEL_PID_KI, 
+            TuningConstants.POWERCELL_CAROUSEL_PID_KD, 
+            TuningConstants.POWERCELL_CAROUSEL_PID_KF, 
+            TuningConstants.POWERCELL_CAROUSEL_PID_KS, 
+            -TuningConstants.POWERCELL_CAROUSEL_MAX_POWER, 
+            TuningConstants.POWERCELL_CAROUSEL_MAX_POWER, 
+            this.timer);
+
         // kicker components:
         this.kickerSolenoid = provider.getDoubleSolenoid(ElectronicsConstants.PCM_A_MODULE, ElectronicsConstants.POWERCELL_KICKER_FORWARD_PCM, ElectronicsConstants.POWERCELL_KICKER_REVERSE_PCM);
         this.kickerMotor = provider.getVictorSPX(ElectronicsConstants.POWERCELL_KICKER_MOTOR_CAN_ID);
@@ -104,9 +126,19 @@ public class PowerCellMechanism implements IMechanism
         this.flywheelVelocity = this.flyWheel.getVelocity();
         this.flywheelError = this.flyWheel.getError();
 
+        this.carouselPosition = this.carouselMotor.getPosition();
+        this.carouselVelocity = this.carouselMotor.getVelocity();
+        this.carouselError = this.carouselMotor.getError();
+
+        this.carouselEncoderVelocity = this.carouselEncoder.getRate();
+
         this.logger.logNumber(LoggingKey.PowerCellFlywheelVelocity, this.flywheelVelocity);
         this.logger.logNumber(LoggingKey.PowerCellFlywheelPosition, this.flywheelPosition);
         this.logger.logNumber(LoggingKey.PowerCellFlywheelError, this.flywheelError);
+
+        this.logger.logNumber(LoggingKey.PowerCellCarouselVelocity, this.carouselVelocity);
+        this.logger.logNumber(LoggingKey.PowerCellCarouselPosition, this.carouselPosition);
+        this.logger.logNumber(LoggingKey.PowerCellCarouselError, this.carouselError);
     }
 
     @Override
@@ -219,7 +251,7 @@ public class PowerCellMechanism implements IMechanism
         double debugCarouselMotorPower = this.driver.getAnalog(AnalogOperation.PowerCellCarousel);
         if (debugCarouselMotorPower != TuningConstants.PERRY_THE_PLATYPUS)
         {
-            desiredCarouselMotorPower = -1.0 * debugCarouselMotorPower * 0.5;
+            desiredCarouselMotorPower = 1.0 * debugCarouselMotorPower * 0.5;
         }
         else if (this.driver.getDigital(DigitalOperation.PowerCellRotateCarousel) && kickerSpin && this.flywheelVelocitySetpoint != 0.0) 
         {
@@ -229,11 +261,8 @@ public class PowerCellMechanism implements IMechanism
         {
             desiredCarouselMotorPower = TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
         }
-        else if (this.driver.getDigital(DigitalOperation.PowerCellRotateCarousel))
-        {
-            desiredCarouselMotorPower = -TuningConstants.POWERCELL_CAROUSEL_MOTOR_POWER_INDEXING;
-        }
 
+        carouselPID.calculateVelocity(desiredCarouselMotorPower, this.carouselEncoderVelocity);
         this.carouselMotor.set(desiredCarouselMotorPower);
         
         this.logger.logNumber(LoggingKey.PowerCellCarouselPower, desiredCarouselMotorPower);
@@ -270,5 +299,15 @@ public class PowerCellMechanism implements IMechanism
     public boolean isFlywheelSpunUp()
     {
         return this.flywheelVelocitySetpoint > 0.0 && Math.abs(this.flywheelError) <= TuningConstants.POWERCELL_FLYWHEEL_ALLOWABLE_ERROR_RANGE;
+    }
+
+    public double getCarouselVelocity()
+    {
+        return this.carouselVelocity;
+    }
+
+    public double getCarouselPosition()
+    {
+        return this.carouselPosition;
     }
 }
