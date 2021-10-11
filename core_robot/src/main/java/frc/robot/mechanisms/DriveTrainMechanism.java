@@ -59,6 +59,15 @@ public class DriveTrainMechanism implements IMechanism
             HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE // module 4 (back-right)
         };
 
+    private static final double[] DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSETS =
+        new double[]
+        {
+            HardwareConstants.DRIVETRAIN_STEER_MOTOR1_ABSOLUTE_OFFSET,
+            HardwareConstants.DRIVETRAIN_STEER_MOTOR2_ABSOLUTE_OFFSET,
+            HardwareConstants.DRIVETRAIN_STEER_MOTOR3_ABSOLUTE_OFFSET,
+            HardwareConstants.DRIVETRAIN_STEER_MOTOR4_ABSOLUTE_OFFSET,
+        };
+
     private final IDriver driver;
     private final ILogger logger;
     private final ITimer timer;
@@ -120,21 +129,40 @@ public class DriveTrainMechanism implements IMechanism
         this.steerMotors = new ITalonFX[DriveTrainMechanism.NUM_MODULES];
         this.driveMotors = new ITalonFX[DriveTrainMechanism.NUM_MODULES];
         this.absoluteEncoders = new IAnalogInput[DriveTrainMechanism.NUM_MODULES];
+        int[] driveMotorCanIds = new int[] { ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_1_CAN_ID, ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_2_CAN_ID, ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_3_CAN_ID, ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_4_CAN_ID };
+        int[] steerMotorCanIds = new int[] { ElectronicsConstants.DRIVETRAIN_STEER_MOTOR_1_CAN_ID, ElectronicsConstants.DRIVETRAIN_STEER_MOTOR_2_CAN_ID, ElectronicsConstants.DRIVETRAIN_STEER_MOTOR_3_CAN_ID, ElectronicsConstants.DRIVETRAIN_STEER_MOTOR_4_CAN_ID};
+        int[] absoluteEncoderAnalogInputs = new int[] { ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_1_ANALOG_INPUT, ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_2_ANALOG_INPUT, ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_3_ANALOG_INPUT, ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_4_ANALOG_INPUT };
+
+        boolean[] driveMotorInvertOutputs = new boolean[] { HardwareConstants.DRIVETRAIN_DRIVE_MOTOR1_INVERT_OUTPUT, HardwareConstants.DRIVETRAIN_DRIVE_MOTOR2_INVERT_OUTPUT, HardwareConstants.DRIVETRAIN_DRIVE_MOTOR3_INVERT_OUTPUT, HardwareConstants.DRIVETRAIN_DRIVE_MOTOR4_INVERT_OUTPUT }; 
+        boolean[] driveMotorInvertSensors = new boolean[] { HardwareConstants.DRIVETRAIN_DRIVE_MOTOR1_INVERT_SENSOR, HardwareConstants.DRIVETRAIN_DRIVE_MOTOR2_INVERT_SENSOR, HardwareConstants.DRIVETRAIN_DRIVE_MOTOR3_INVERT_SENSOR, HardwareConstants.DRIVETRAIN_DRIVE_MOTOR4_INVERT_SENSOR };
+        boolean[] steerMotorInvertOutputs = new boolean[] { HardwareConstants.DRIVETRAIN_STEER_MOTOR1_INVERT_OUTPUT, HardwareConstants.DRIVETRAIN_STEER_MOTOR2_INVERT_OUTPUT, HardwareConstants.DRIVETRAIN_STEER_MOTOR3_INVERT_OUTPUT, HardwareConstants.DRIVETRAIN_STEER_MOTOR4_INVERT_OUTPUT }; 
+        boolean[] steerMotorInvertSensors = new boolean[] { HardwareConstants.DRIVETRAIN_STEER_MOTOR1_INVERT_SENSOR, HardwareConstants.DRIVETRAIN_STEER_MOTOR2_INVERT_SENSOR, HardwareConstants.DRIVETRAIN_STEER_MOTOR3_INVERT_SENSOR, HardwareConstants.DRIVETRAIN_STEER_MOTOR4_INVERT_SENSOR };
+
+        double[] driveMotorVelocityKPs = new double[] { TuningConstants.DRIVETRAIN_DRIVE_MOTOR1_VELOCITY_PID_KP, TuningConstants.DRIVETRAIN_DRIVE_MOTOR2_VELOCITY_PID_KP, TuningConstants.DRIVETRAIN_DRIVE_MOTOR3_VELOCITY_PID_KP, TuningConstants.DRIVETRAIN_DRIVE_MOTOR4_VELOCITY_PID_KP };
+        double[] driveMotorVelocityKIs = new double[] { TuningConstants.DRIVETRAIN_DRIVE_MOTOR1_VELOCITY_PID_KI, TuningConstants.DRIVETRAIN_DRIVE_MOTOR2_VELOCITY_PID_KI, TuningConstants.DRIVETRAIN_DRIVE_MOTOR3_VELOCITY_PID_KI, TuningConstants.DRIVETRAIN_DRIVE_MOTOR4_VELOCITY_PID_KI };
+        double[] driveMotorVelocityKDs = new double[] { TuningConstants.DRIVETRAIN_DRIVE_MOTOR1_VELOCITY_PID_KD, TuningConstants.DRIVETRAIN_DRIVE_MOTOR2_VELOCITY_PID_KD, TuningConstants.DRIVETRAIN_DRIVE_MOTOR3_VELOCITY_PID_KD, TuningConstants.DRIVETRAIN_DRIVE_MOTOR4_VELOCITY_PID_KD };
+        double[] driveMotorVelocityKFs = new double[] { TuningConstants.DRIVETRAIN_DRIVE_MOTOR1_VELOCITY_PID_KF, TuningConstants.DRIVETRAIN_DRIVE_MOTOR2_VELOCITY_PID_KF, TuningConstants.DRIVETRAIN_DRIVE_MOTOR3_VELOCITY_PID_KF, TuningConstants.DRIVETRAIN_DRIVE_MOTOR4_VELOCITY_PID_KF };
+
+        double[] steerMotorPositionKPs = new double[] { TuningConstants.DRIVETRAIN_STEER_MOTOR1_POSITION_PID_KP, TuningConstants.DRIVETRAIN_STEER_MOTOR2_POSITION_PID_KP, TuningConstants.DRIVETRAIN_STEER_MOTOR3_POSITION_PID_KP, TuningConstants.DRIVETRAIN_STEER_MOTOR4_POSITION_PID_KP };
+        double[] steerMotorPositionKIs = new double[] { TuningConstants.DRIVETRAIN_STEER_MOTOR1_POSITION_PID_KI, TuningConstants.DRIVETRAIN_STEER_MOTOR2_POSITION_PID_KI, TuningConstants.DRIVETRAIN_STEER_MOTOR3_POSITION_PID_KI, TuningConstants.DRIVETRAIN_STEER_MOTOR4_POSITION_PID_KI };
+        double[] steerMotorPositionKDs = new double[] { TuningConstants.DRIVETRAIN_STEER_MOTOR1_POSITION_PID_KD, TuningConstants.DRIVETRAIN_STEER_MOTOR2_POSITION_PID_KD, TuningConstants.DRIVETRAIN_STEER_MOTOR3_POSITION_PID_KD, TuningConstants.DRIVETRAIN_STEER_MOTOR4_POSITION_PID_KD };
+        double[] steerMotorPositionKFs = new double[] { TuningConstants.DRIVETRAIN_STEER_MOTOR1_POSITION_PID_KF, TuningConstants.DRIVETRAIN_STEER_MOTOR2_POSITION_PID_KF, TuningConstants.DRIVETRAIN_STEER_MOTOR3_POSITION_PID_KF, TuningConstants.DRIVETRAIN_STEER_MOTOR4_POSITION_PID_KF };
+
         for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
         {
-            this.driveMotors[i] = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_DRIVE_MOTOR_CAN_ID[i]);
+            this.driveMotors[i] = provider.getTalonFX(driveMotorCanIds[i]);
             this.driveMotors[i].setNeutralMode(MotorNeutralMode.Brake); //
             this.driveMotors[i].setSensorType(TalonXFeedbackDevice.IntegratedSensor); //
             this.driveMotors[i].setFeedbackFramePeriod(DriveTrainMechanism.FRAME_PERIOD_MS); //
             this.driveMotors[i].setPIDFFramePeriod(DriveTrainMechanism.FRAME_PERIOD_MS); //
-            this.driveMotors[i].setInvertOutput(HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_INVERT_OUTPUT[i]);
-            this.driveMotors[i].setInvertSensor(HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_INVERT_SENSOR[i]);
+            this.driveMotors[i].setInvertOutput(driveMotorInvertOutputs[i]);
+            this.driveMotors[i].setInvertSensor(driveMotorInvertSensors[i]);
             this.driveMotors[i].configureVelocityMeasurements(10, 32); //
             this.driveMotors[i].setPIDF(
-                TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KP[i],
-                TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KI[i],
-                TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KD[i],
-                TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KF[i],
+                driveMotorVelocityKPs[i],
+                driveMotorVelocityKIs[i],
+                driveMotorVelocityKDs[i],
+                driveMotorVelocityKFs[i],
                 DriveTrainMechanism.pidSlotId);
             this.driveMotors[i].setVoltageCompensation(
                 TuningConstants.DRIVETRAIN_DRIVE_VOLTAGE_COMPENSATION_ENABLED,
@@ -146,16 +174,16 @@ public class DriveTrainMechanism implements IMechanism
                 TuningConstants.DRIVETRAIN_DRIVE_SUPPLY_TRIGGER_DURATION);
             this.driveMotors[i].setControlMode(TalonSRXControlMode.Velocity);
 
-            this.steerMotors[i] = provider.getTalonFX(ElectronicsConstants.DRIVETRAIN_STEER_MOTOR_CAN_ID[i]);
-            this.steerMotors[i].setInvertOutput(HardwareConstants.DRIVETRAIN_STEER_MOTOR_INVERT_OUTPUT[i]);
-            this.steerMotors[i].setInvertSensor(HardwareConstants.DRIVETRAIN_STEER_MOTOR_INVERT_SENSOR[i]);
+            this.steerMotors[i] = provider.getTalonFX(steerMotorCanIds[i]);
+            this.steerMotors[i].setInvertOutput(steerMotorInvertOutputs[i]);
+            this.steerMotors[i].setInvertSensor(steerMotorInvertSensors[i]);
             this.steerMotors[i].setNeutralMode(MotorNeutralMode.Brake);
             this.steerMotors[i].setSensorType(TalonXFeedbackDevice.IntegratedSensor);
             this.steerMotors[i].setPIDF(
-                TuningConstants.DRIVETRAIN_STEER_MOTOR_POSITION_PID_KP[i],
-                TuningConstants.DRIVETRAIN_STEER_MOTOR_POSITION_PID_KI[i],
-                TuningConstants.DRIVETRAIN_STEER_MOTOR_POSITION_PID_KD[i],
-                TuningConstants.DRIVETRAIN_STEER_MOTOR_POSITION_PID_KF[i],
+                steerMotorPositionKPs[i],
+                steerMotorPositionKIs[i],
+                steerMotorPositionKDs[i],
+                steerMotorPositionKFs[i],
                 DriveTrainMechanism.pidSlotId);
             this.steerMotors[i].setVoltageCompensation(
                 TuningConstants.DRIVETRAIN_STEER_VOLTAGE_COMPENSATION_ENABLED,
@@ -168,7 +196,7 @@ public class DriveTrainMechanism implements IMechanism
 
             this.steerMotors[i].setControlMode(TalonSRXControlMode.Position);
 
-            this.absoluteEncoders[i] = provider.getAnalogInput(ElectronicsConstants.DRIVETRAIN_ABSOLUTE_ENCODER_ANALOG_INPUT[i]);
+            this.absoluteEncoders[i] = provider.getAnalogInput(absoluteEncoderAnalogInputs[i]);
         }
 
         this.driveVelocities = new double[DriveTrainMechanism.NUM_MODULES];
@@ -319,7 +347,7 @@ public class DriveTrainMechanism implements IMechanism
             for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
             {
                 this.driveMotors[i].setPosition(0);
-                double angleDifference = (this.encoderAngles[i] - HardwareConstants.DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSET[i]);
+                double angleDifference = (this.encoderAngles[i] - DriveTrainMechanism.DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSETS[i]);
                 double tickDifference = angleDifference * HardwareConstants.DRIVETRAIN_STEER_TICKS_PER_DEGREE;
                 this.steerMotors[i].setPosition((int)tickDifference);
     
