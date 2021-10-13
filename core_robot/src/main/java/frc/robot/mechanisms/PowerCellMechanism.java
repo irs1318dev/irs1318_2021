@@ -284,6 +284,7 @@ public class PowerCellMechanism implements IMechanism
         this.outerHood.set(DoubleSolenoidValue.Off);
         this.flyWheel.stop();
 
+        this.carouselPID.reset();
         this.carouselMotor.stop();
 
         this.kickerSolenoid.set(DoubleSolenoidValue.Off);

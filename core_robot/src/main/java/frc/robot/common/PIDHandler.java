@@ -180,6 +180,10 @@ public class PIDHandler
             this.output = this.outputFilter.getValue();
             this.prevMeasuredValue = measuredValue;
         }
+        else if (dt < 0.0)
+        {
+            this.prevTime = curTime;
+        }
 
         return this.output;
     }
@@ -248,6 +252,10 @@ public class PIDHandler
             this.outputFilter.update(result);
             this.output = result; // this.outputFilter.getValue();
             this.prevMeasuredValue = measuredValue;
+        }
+        else if (dt < 0.0)
+        {
+            this.prevTime = curTime;
         }
 
         return this.output;
@@ -321,6 +329,10 @@ public class PIDHandler
             this.outputFilter.update(result);
             this.output = this.outputFilter.getValue();
             this.prevMeasuredValue = measuredValue;
+        }
+        else if (dt < 0.0)
+        {
+            this.prevTime = curTime;
         }
 
         return this.output;
