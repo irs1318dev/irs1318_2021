@@ -73,7 +73,7 @@ public class PowerCellMechanism implements IMechanism
         this.flyWheel.setNeutralMode(MotorNeutralMode.Coast);
         this.flyWheel.setSensorType(TalonXFeedbackDevice.QuadEncoder);
         this.flyWheel.setPosition(0);
-        this.flyWheel.setControlMode(TalonSRXControlMode.Velocity);
+        this.flyWheel.setControlMode(TalonXControlMode.Velocity);
         this.flyWheel.setPIDF(
             TuningConstants.POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KP,
             TuningConstants.POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KI,
@@ -92,7 +92,7 @@ public class PowerCellMechanism implements IMechanism
         // carousel components:
         this.carouselMotor = provider.getTalonSRX(ElectronicsConstants.POWERCELL_CAROUSEL_MOTOR_CAN_ID);
         this.carouselMotor.setInvertOutput(HardwareConstants.POWERCELL_CAROUSEL_MOTOR_INVERT_OUTPUT);
-        this.carouselMotor.setControlMode(TalonSRXControlMode.PercentOutput);
+        this.carouselMotor.setControlMode(TalonXControlMode.PercentOutput);
         this.carouselMotor.setNeutralMode(MotorNeutralMode.Brake);
 
         this.carouselEncoder = provider.getEncoder(ElectronicsConstants.POWERCELL_CAROUSEL_ENCODER_CHANNEL_A, ElectronicsConstants.POWERCELL_CAROUSEL_ENCODER_CHANNEL_B);
@@ -110,7 +110,7 @@ public class PowerCellMechanism implements IMechanism
         this.kickerSolenoid = provider.getDoubleSolenoid(ElectronicsConstants.PCM_A_MODULE, ElectronicsConstants.POWERCELL_KICKER_FORWARD_PCM, ElectronicsConstants.POWERCELL_KICKER_REVERSE_PCM);
         this.kickerMotor = provider.getVictorSPX(ElectronicsConstants.POWERCELL_KICKER_MOTOR_CAN_ID);
         this.kickerMotor.setInvertOutput(HardwareConstants.POWERCELL_KICKER_MOTOR_INVERT_OUTPUT);
-        this.kickerMotor.setControlMode(TalonSRXControlMode.Velocity);
+        this.kickerMotor.setControlMode(TalonXControlMode.Velocity);
         this.kickerMotor.setNeutralMode(MotorNeutralMode.Coast);
 
         this.intakeExtended = false;
@@ -230,12 +230,12 @@ public class PowerCellMechanism implements IMechanism
         }
         else if (this.driver.getDigital(DigitalOperation.PowerCellFlywheelReverse))
         {
-            this.flyWheel.setControlMode(TalonSRXControlMode.PercentOutput);
+            this.flyWheel.setControlMode(TalonXControlMode.PercentOutput);
             this.flyWheel.set(TuningConstants.POWERCELL_FLYWHEEL_REVERSE_POWER);
         }
         else
         {
-            this.flyWheel.setControlMode(TalonSRXControlMode.Velocity);
+            this.flyWheel.setControlMode(TalonXControlMode.Velocity);
             this.flyWheel.set(this.flywheelVelocitySetpoint);
         }
 

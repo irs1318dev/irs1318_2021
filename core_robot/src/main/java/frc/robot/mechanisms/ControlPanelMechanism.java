@@ -32,7 +32,7 @@ public class ControlPanelMechanism implements IMechanism
 
         this.spinnerMotor = provider.getVictorSPX(ElectronicsConstants.CONTROLPANEL_SPINNER_CAN_ID);
         this.spinnerMotor.setInvertOutput(HardwareConstants.CONTROLPANEL_SPINNER_INVERT_OUTPUT);
-        this.spinnerMotor.setControlMode(TalonSRXControlMode.PercentOutput);
+        this.spinnerMotor.setControlMode(TalonXControlMode.PercentOutput);
         this.spinnerMotor.setNeutralMode(MotorNeutralMode.Brake);
 
         this.isExtended = false;

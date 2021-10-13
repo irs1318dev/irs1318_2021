@@ -14,7 +14,7 @@ import frc.robot.common.robotprovider.MotorNeutralMode;
 import frc.robot.common.robotprovider.NullLogger;
 import frc.robot.common.robotprovider.Pose2d;
 import frc.robot.common.robotprovider.RobotMode;
-import frc.robot.common.robotprovider.TalonSRXControlMode;
+import frc.robot.common.robotprovider.TalonXControlMode;
 import frc.robot.common.robotprovider.TalonXFeedbackDevice;
 import frc.robot.common.robotprovider.TalonXLimitSwitchStatus;
 import frc.robot.driver.AnalogOperation;
@@ -28,6 +28,24 @@ import org.junit.jupiter.api.Test;
 
 public class DriveTrainMechanismTests
 {
+    private static final double[] MODULE_OFFSET_X =
+        new double[]
+        {
+            -HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE, // module 1 (front-right)
+            HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE, // module 2 (front-left)
+            HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE, // module 3 (back-left)
+            -HardwareConstants.DRIVETRAIN_HORIZONTAL_WHEEL_CENTER_DISTANCE, // module 4 (back-right)
+        };
+
+        private static final double[] MODULE_OFFSET_Y =
+        new double[]
+        {
+            -HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE, // module 1 (front-right)
+            -HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE, // module 2 (front-left)
+            HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE, // module 3 (back-left)
+            HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_CENTER_DISTANCE, // module 4 (back-right)
+        };
+
     @Test
     public void testStill()
     {
@@ -302,8 +320,8 @@ public class DriveTrainMechanismTests
         {
             for (int i = 0; i < 4; i++)
             {
-                double moduleVelocityRight = robotVelocityRight + omega * DriveTrainMechanism.MODULE_OFFSET_Y[i];
-                double moduleVelocityForward = robotVelocityForward - omega * DriveTrainMechanism.MODULE_OFFSET_X[i];
+                double moduleVelocityRight = robotVelocityRight + omega * DriveTrainMechanismTests.MODULE_OFFSET_Y[i];
+                double moduleVelocityForward = robotVelocityForward - omega * DriveTrainMechanismTests.MODULE_OFFSET_X[i];
 
                 double moduleSteerPositionGoal = Helpers.atan2d(-moduleVelocityRight, moduleVelocityForward);
                 moduleSteerPositionGoal *= TuningConstants.DRIVETRAIN_STEER_MOTOR_POSITION_PID_KS;
@@ -468,7 +486,7 @@ public class DriveTrainMechanismTests
         }
 
         @Override
-        public void setControlMode(TalonSRXControlMode mode)
+        public void setControlMode(TalonXControlMode mode)
         {
         }
 

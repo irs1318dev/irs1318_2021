@@ -32,7 +32,7 @@ public class ClimberMechanism implements IMechanism
 
         this.winchMotorMaster = provider.getTalonSRX(ElectronicsConstants.CLIMBER_WINCH_MASTER_CAN_ID);
         this.winchMotorMaster.setInvertOutput(HardwareConstants.CLIMBER_WINCH_MASTER_INVERT_OUTPUT);
-        this.winchMotorMaster.setControlMode(TalonSRXControlMode.PercentOutput);
+        this.winchMotorMaster.setControlMode(TalonXControlMode.PercentOutput);
         this.winchMotorMaster.setNeutralMode(MotorNeutralMode.Brake);
 
         this.isExtended = false;
