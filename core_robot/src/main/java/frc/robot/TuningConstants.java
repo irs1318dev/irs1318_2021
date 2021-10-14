@@ -118,8 +118,14 @@ public class TuningConstants
     //================================================== DriveTrain ==============================================================
 
     public static boolean DRIVETRAIN_USE_PID = true;
-	public static boolean DRIVETRAIN_USE_ODOMETRY = true;
+    public static boolean DRIVETRAIN_USE_ODOMETRY = true;
     public static boolean DRIVETRAIN_RESET_ON_ROBOT_START = false;
+
+    //public static double[] DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSET = new double[] { -135.0, 65.0, -96.0, -14.0 };
+    public static double DRIVETRAIN_STEER_MOTOR1_ABSOLUTE_OFFSET = -136.6;
+    public static double DRIVETRAIN_STEER_MOTOR2_ABSOLUTE_OFFSET = 65.2;
+    public static double DRIVETRAIN_STEER_MOTOR3_ABSOLUTE_OFFSET = -94.1;
+    public static double DRIVETRAIN_STEER_MOTOR4_ABSOLUTE_OFFSET = -37.1;
 
     // Position PID (angle) per-module
     public static double DRIVETRAIN_STEER_MOTOR_POSITION_PID_KS = HardwareConstants.DRIVETRAIN_STEER_TICKS_PER_DEGREE;

@@ -190,4 +190,10 @@ public class FauxbotProvider implements IRobotProvider
     {
         return new FauxbotNetworkTableProvider();
     }
+
+    @Override
+    public IPreferences getPreferences()
+    {
+        return new FauxbotPreferences();
+    }
 }

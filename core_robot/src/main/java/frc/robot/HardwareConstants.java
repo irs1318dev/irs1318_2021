@@ -40,12 +40,6 @@ public class HardwareConstants
     public static boolean DRIVETRAIN_DRIVE_MOTOR4_INVERT_OUTPUT = false;
     public static boolean DRIVETRAIN_DRIVE_MOTOR4_INVERT_SENSOR = false;
 
-    //public static double[] DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSET = new double[] { -135.0, 65.0, -96.0, -14.0 };
-    public static double DRIVETRAIN_STEER_MOTOR1_ABSOLUTE_OFFSET = -136.6;
-    public static double DRIVETRAIN_STEER_MOTOR2_ABSOLUTE_OFFSET = 65.2;
-    public static double DRIVETRAIN_STEER_MOTOR3_ABSOLUTE_OFFSET = -94.1;
-    public static double DRIVETRAIN_STEER_MOTOR4_ABSOLUTE_OFFSET = -37.1;
-
     public static double DRIVETRAIN_STEER_ENCODER_PULSES_PER_REVOLUTION = 2048.0;
     public static double DRIVETRAIN_STEER_GEAR_RATIO = 18.0; // set correctly
     public static double DRIVETRAIN_STEER_DEGREES = 360.0;
@@ -74,8 +68,6 @@ public class HardwareConstants
     public static boolean POWERCELL_FLYWHEEL_FOLLOWER_INVERT_OUTPUT = true;
     public static boolean POWERCELL_CAROUSEL_MOTOR_INVERT_OUTPUT = true;
     public static boolean POWERCELL_KICKER_MOTOR_INVERT_OUTPUT = false;
-
-    public static int POWERCELL_CAROUSEL_SLOT_COUNT = 5;
 
     //================================================== Climber ==============================================================
 

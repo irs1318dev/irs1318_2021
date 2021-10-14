@@ -134,10 +134,10 @@ public class DriveTrainMechanism implements IMechanism
         this.drivetrainSteerMotorAbsoluteOffsets =
             new double[]
             {
-                HardwareConstants.DRIVETRAIN_STEER_MOTOR1_ABSOLUTE_OFFSET,
-                HardwareConstants.DRIVETRAIN_STEER_MOTOR2_ABSOLUTE_OFFSET,
-                HardwareConstants.DRIVETRAIN_STEER_MOTOR3_ABSOLUTE_OFFSET,
-                HardwareConstants.DRIVETRAIN_STEER_MOTOR4_ABSOLUTE_OFFSET,
+                TuningConstants.DRIVETRAIN_STEER_MOTOR1_ABSOLUTE_OFFSET,
+                TuningConstants.DRIVETRAIN_STEER_MOTOR2_ABSOLUTE_OFFSET,
+                TuningConstants.DRIVETRAIN_STEER_MOTOR3_ABSOLUTE_OFFSET,
+                TuningConstants.DRIVETRAIN_STEER_MOTOR4_ABSOLUTE_OFFSET,
             };
 
         int[] driveMotorCanIds =

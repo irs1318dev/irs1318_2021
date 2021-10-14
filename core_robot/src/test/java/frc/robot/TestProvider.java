@@ -298,6 +298,12 @@ public class TestProvider implements IRobotProvider
         return null;
     }
 
+    @Override
+    public IPreferences getPreferences()
+    {
+        return null;
+    }
+
     public void setAnalogInput(int channel, IAnalogInput value)
     {
         this.analogInputMap.put(channel, value);

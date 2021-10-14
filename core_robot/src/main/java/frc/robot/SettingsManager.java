@@ -2,27 +2,17 @@ package frc.robot;
 
 import java.io.IOException;
 import java.lang.Class;
+import java.lang.reflect.*;
 import java.util.*;
 
 import com.google.inject.Injector;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 
 import frc.robot.common.*;
 import frc.robot.common.robotprovider.*;
 import frc.robot.mechanisms.*;
 
-@Singleton
 public class SettingsManager
 {
-    /**
-     * Initializes a new SettingsManager
-     */
-    @Inject
-    public SettingsManager(IRobotProvider provider)
-    {
-    }
-
     public static List<IMechanism> getActiveMechanisms(Injector injector)
     {
         List<IMechanism> mechanismList = new ArrayList<IMechanism>();
@@ -155,4 +145,86 @@ public class SettingsManager
         }
     }
 
+    public static void initAndUpdatePreferences(IPreferences preferences, Class<?> type)
+    {
+        Field[] fields = type.getFields();
+        for (Field field : fields)
+        {
+            String fieldName = field.getName();
+            SettingType fieldType = SettingsManager.getSettingType(field.getType());
+
+            try
+            {
+                Object initialValue = field.get(null);
+
+                switch (fieldType)
+                {
+                    case Boolean:
+                        preferences.initBoolean(fieldName, (boolean)initialValue);
+                        field.set(null, preferences.getBoolean(fieldName, (boolean)initialValue));
+                        break;
+
+                    case Integer:
+                        preferences.initInt(fieldName, (int)initialValue);
+                        field.set(null, preferences.getInt(fieldName, (int)initialValue));
+                        break;
+
+                    case Long:
+                        preferences.initLong(fieldName, (long)initialValue);
+                        field.set(null, preferences.getLong(fieldName, (long)initialValue));
+                        break;
+
+                    case Double:
+                        preferences.initDouble(fieldName, (double)initialValue);
+                        field.set(null, preferences.getDouble(fieldName, (double)initialValue));
+                        break;
+
+                    case String:
+                        preferences.initString(fieldName, (String)initialValue);
+                        field.set(null, preferences.getString(fieldName, (String)initialValue));
+                        break;
+                }
+            }
+            catch (IllegalAccessException ex)
+            {
+                if (TuningConstants.THROW_EXCEPTIONS)
+                {
+                    throw new RuntimeException("Error with field " + fieldName, ex);
+                }
+            }
+        }
+    }
+
+    private static SettingType getSettingType(Class<?> valueClass)
+    {
+        for (SettingType settingType : SettingType.values())
+        {
+            if (valueClass == settingType.getSettingClass())
+            {
+                return settingType;
+            }
+        }
+
+        throw new RuntimeException("Unsupported type " + valueClass.getName());
+    }
+
+    private enum SettingType
+    {
+        Boolean(boolean.class),
+        Integer(int.class),
+        Long(long.class),
+        Double(double.class),
+        String(String.class);
+
+        private final Class<?> settingClass;
+        private SettingType(Class<?> settingClass)
+        {
+            this.settingClass = settingClass;
+        }
+
+        public Class<?> getSettingClass()
+        {
+            return this.settingClass;
+        }
+    }
 }
