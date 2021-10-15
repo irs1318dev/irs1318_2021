@@ -87,7 +87,6 @@ public class DriveTrainMechanism implements IMechanism
     private double desiredYaw;
 
     private double time;
-    private double startTime;
     private double angle;
     private double xPosition;
     private double yPosition;
@@ -422,7 +421,6 @@ public class DriveTrainMechanism implements IMechanism
         this.angle = 0.0;
         this.xPosition = 0.0;
         this.yPosition = 0.0;
-        this.startTime = 0.0;
 
         this.firstRun = TuningConstants.DRIVETRAIN_RESET_ON_ROBOT_START;
         this.fieldOriented = false;
@@ -461,6 +459,12 @@ public class DriveTrainMechanism implements IMechanism
         this.time = this.timer.get();
 
         this.deltaT = this.time - prevTime;
+        if (this.deltaT <= 0.0)
+        {
+            // keep this positive...
+            this.deltaT = 0.001;
+        }
+
         if (TuningConstants.DRIVETRAIN_USE_ODOMETRY)
         {
             double deltaNavxYaw = (this.robotYaw - prevYaw) / this.deltaT;
@@ -558,14 +562,15 @@ public class DriveTrainMechanism implements IMechanism
                 this.steerMotors[i].set(steerSetpoint);
             }
         }
-
-        this.logger.logNumber(LoggingKey.RobotTimer, this.timer.get() - this.startTime);
     }
 
     @Override
     public void stop()
     {
         this.omegaPID.reset();
+        this.pathOmegaPID.reset();
+        this.pathXOffsetPID.reset();
+        this.pathYOffsetPID.reset();
         for (int i = 0; i < DriveTrainMechanism.NUM_MODULES; i++)
         {
             this.driveMotors[i].stop();

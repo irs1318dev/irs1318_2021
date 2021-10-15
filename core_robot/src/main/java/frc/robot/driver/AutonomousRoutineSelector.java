@@ -200,10 +200,10 @@ public class AutonomousRoutineSelector
     {
         return SequentialTask.Sequence(
             // new PositionStartingTask(0.0, true, true),
-            ConcurrentTask.AllTasks(
-                new VisionCenteringTask(),
-                new FlywheelVisionSpinTask()),
-            new FullHopperShotTask(),
+            new VisionCenteringTask(),
+            ConcurrentTask.AnyTasks(
+                new FlywheelFixedSpinTask(0.45, 5.0),
+                new FullHopperShotTask()),
             ConcurrentTask.AllTasks(
                 new FollowPathTask(goToPowerCell),
                 new IntakePositionTask(true),

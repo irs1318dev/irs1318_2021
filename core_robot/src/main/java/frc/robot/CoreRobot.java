@@ -70,7 +70,7 @@ public class CoreRobot<T extends AbstractModule>
         IRobotProvider robotProvider = injector.getInstance(IRobotProvider.class);
         IPreferences preferences = robotProvider.getPreferences();
 
-        SettingsManager.initAndUpdatePreferences(preferences, TuningConstants.class);
+        //SettingsManager.initAndUpdatePreferences(preferences, TuningConstants.class);
         //SettingsManager.initAndUpdatePreferences(preferences, HardwareConstants.class);
         //SettingsManager.initAndUpdatePreferences(preferences, ElectronicsConstants.class);
         //SettingsManager.initAndUpdatePreferences(preferences, VisionConstants.class);
