@@ -125,7 +125,7 @@ public class TuningConstants
     public static double DRIVETRAIN_STEER_MOTOR1_ABSOLUTE_OFFSET = -136.6;
     public static double DRIVETRAIN_STEER_MOTOR2_ABSOLUTE_OFFSET = 65.2;
     public static double DRIVETRAIN_STEER_MOTOR3_ABSOLUTE_OFFSET = -94.1;
-    public static double DRIVETRAIN_STEER_MOTOR4_ABSOLUTE_OFFSET = -37.1;
+    public static double DRIVETRAIN_STEER_MOTOR4_ABSOLUTE_OFFSET = 32.0;
 
     // Position PID (angle) per-module
     public static double DRIVETRAIN_STEER_MOTOR_POSITION_PID_KS = HardwareConstants.DRIVETRAIN_STEER_TICKS_PER_DEGREE;
