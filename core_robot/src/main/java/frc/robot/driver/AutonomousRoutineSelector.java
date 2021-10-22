@@ -38,6 +38,7 @@ public class AutonomousRoutineSelector
         ShootAndTrenchShoot,
         ShootAndShieldShoot,
         ShootAndMove,
+        Shoot,
         Move,
     }
 
@@ -68,6 +69,7 @@ public class AutonomousRoutineSelector
         this.routineChooser.addObject("Shoot and Trench Shoot", AutoRoutine.ShootAndTrenchShoot);
         this.routineChooser.addObject("Shoot and Shield Shoot", AutoRoutine.ShootAndShieldShoot);
         this.routineChooser.addObject("Shoot and Move", AutoRoutine.ShootAndMove);
+        this.routineChooser.addObject("Just Shoot", AutoRoutine.Shoot);
         networkTableProvider.addChooser("Auto Routine", this.routineChooser);
 
         this.positionChooser = networkTableProvider.getSendableChooser();
@@ -156,6 +158,10 @@ public class AutonomousRoutineSelector
         {
             return ShootAndMove("leftToOpTrench", "rotate1808");
         }
+        else if (routine == AutoRoutine.Shoot) 
+        {
+            return JustShoot();
+        }
 
         return new PositionStartingTask(0.0, true, true);
     }
@@ -199,8 +205,9 @@ public class AutonomousRoutineSelector
     private static IControlTask ShootAndMove(String goToPowerCell, String rotate)
     {
         return SequentialTask.Sequence(
-            // new PositionStartingTask(0.0, true, true),
+            new PositionStartingTask(0.0, true, true),
             new VisionCenteringTask(),
+            new DriveTrainFieldOrientationModeTask(true),
             ConcurrentTask.AnyTasks(
                 new FlywheelFixedSpinTask(0.45, 5.0),
                 new FullHopperShotTask()),
@@ -216,15 +223,30 @@ public class AutonomousRoutineSelector
         );
     }
 
+    // shoot and move off initiation line
     private static IControlTask Shoot(String path)
     {
         return SequentialTask.Sequence(
-            //new PositionStartingTask(0.0, true, true),
+            new PositionStartingTask(0.0, true, true),
             new VisionCenteringTask(),
             ConcurrentTask.AnyTasks(
                 new FlywheelFixedSpinTask(0.45, 5.0),
-                new FullHopperShotTask()),
+                SequentialTask.Sequence(
+                    new DriveTrainFieldOrientationModeTask(true),
+                    new FullHopperShotTask())),
             new FollowPathTask(path));
+    }
+
+    private static IControlTask JustShoot()
+    {
+        return SequentialTask.Sequence(
+            new PositionStartingTask(0.0, true, true),
+            new VisionCenteringTask(),
+            ConcurrentTask.AnyTasks(
+                new FlywheelFixedSpinTask(0.45, 5.0),
+                SequentialTask.Sequence(
+                    new DriveTrainFieldOrientationModeTask(true),
+                    new FullHopperShotTask())));
     }
 
     private static IControlTask Move(String path)

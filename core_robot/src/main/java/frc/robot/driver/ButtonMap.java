@@ -287,7 +287,9 @@ public class ButtonMap implements IButtonMap
             Shift.DriverDebug,
             Shift.DriverDebug,
             ButtonType.Toggle,
-            () -> new VisionCenteringTask(),
+            () -> SequentialTask.Sequence(
+                new VisionCenteringTask(),
+                new DriveTrainFieldOrientationModeTask(true)),
             new IOperation[]
             {
                 AnalogOperation.DriveTrainMoveForward,
@@ -350,10 +352,6 @@ public class ButtonMap implements IButtonMap
                 DigitalOperation.PowerCellHoodShort,
                 DigitalOperation.PowerCellHoodMedium,
                 DigitalOperation.PowerCellHoodLong,
-                DigitalOperation.VisionDisableStream,
-                DigitalOperation.VisionEnablePowercellProcessing,
-                DigitalOperation.VisionEnableRetroreflectiveProcessing,
-                DigitalOperation.VisionForceDisable,
             }),
     };
 

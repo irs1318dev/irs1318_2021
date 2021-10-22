@@ -61,6 +61,8 @@ public class VisionCenteringTask extends ControlTaskBase
         }
 
         this.setDigitalOperationState(DigitalOperation.VisionDisableStream, false);
+        this.setDigitalOperationState(DigitalOperation.DriveTrainEnableFieldOrientation, false);
+        this.setDigitalOperationState(DigitalOperation.DriveTrainDisableFieldOrientation, true);
         this.setDigitalOperationState(DigitalOperation.VisionEnableRetroreflectiveProcessing, true);
     }
 
@@ -88,6 +90,8 @@ public class VisionCenteringTask extends ControlTaskBase
         this.setAnalogOperationState(AnalogOperation.DriveTrainTurnSpeed, 0.0);
 
         this.setDigitalOperationState(DigitalOperation.VisionDisableStream, false);
+        this.setDigitalOperationState(DigitalOperation.DriveTrainEnableFieldOrientation, false);
+        this.setDigitalOperationState(DigitalOperation.DriveTrainDisableFieldOrientation, false);
         this.setDigitalOperationState(DigitalOperation.VisionEnableRetroreflectiveProcessing, false);
     }
 
