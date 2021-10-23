@@ -28,46 +28,10 @@ public class TuningConstants
 
     public static final boolean CANCEL_AUTONOMOUS_ROUTINE_ON_DISABLE = true;
 
-    public static final double DRIVETRAIN_POSITIONAL_ACCEPTABLE_DELTA = 1.0;
-
-    // Navx Turn Constants
-    public static final double MAX_NAVX_TURN_RANGE_DEGREES = 5.0;
-    public static final double MAX_NAVX_FAST_TURN_RANGE_DEGREES = 5.0;
-    public static final double NAVX_FAST_TURN_TIMEOUT = 1.25;
-    public static final double NAVX_TURN_COMPLETE_TIME = 0.4;
-    public static final double NAVX_TURN_COMPLETE_CURRENT_VELOCITY_DELTA = 0;
-    public static final double NAVX_TURN_COMPLETE_DESIRED_VELOCITY_DELTA = 0;
-
-    // Navx Turn PID Constants
-    public static final double NAVX_TURN_PID_KP = 0.025; // 0.04
-    public static final double NAVX_TURN_PID_KI = 0.0;
-    public static final double NAVX_TURN_PID_KD = 0.02;
-    public static final double NAVX_TURN_PID_KF = 0.0;
-    public static final double NAVX_TURN_PID_KS = 1.0;
-    public static final double NAVX_TURN_PID_MIN = -0.8;
-    public static final double NAVX_TURN_PID_MAX = 0.8;
-    public static final double NAVX_FAST_TURN_PID_KP = 0.01;
-    public static final double NAVX_FAST_TURN_PID_KI = 0.0;
-    public static final double NAVX_FAST_TURN_PID_KD = 0.0;
-    public static final double NAVX_FAST_TURN_PID_KF = 0.0;
-    public static final double NAVX_FAST_TURN_PID_KS = 1.0;
-    public static final double NAVX_FAST_TURN_PID_MIN = -0.8;
-    public static final double NAVX_FAST_TURN_PID_MAX = 0.8;
-
-    // Kinodynamic constraints for driving with roadrunner
-    public static final double ROADRUNNER_TIME_STEP = 0.01;
-    public static final double ROADRUNNER_MAX_VELOCITY = 100.0;
-    public static final double ROADRUNNER_MAX_ACCELERATION = 200.0;
-    public static final double ROADRUNNER_MAX_JERK = 2000.0;
-    public static final double ROADRUNNER_MAX_ANGULAR_VELOCITY = 5.0;
-    public static final double ROADRUNNER_MAX_ANGULAR_ACCELERATION = 10.0;
-    public static final double ROADRUNNER_MAX_ANGULAR_JERK = 20.0;
-
     //================================================= Vision ======================================================
 
     // Acceptable vision centering range values in degrees
     public static final double MAX_VISION_CENTERING_RANGE_DEGREES = 5.0;
-    public static final double MAX_VISION_TURRET_CENTERING_RANGE_DEGREES = 1.0;
 
     // Acceptable vision distance from tape in inches
     public static final double MAX_VISION_ACCEPTABLE_FORWARD_DISTANCE = 3.25;
@@ -108,7 +72,6 @@ public class TuningConstants
     public static final double VISION_FAST_ADVANCING_PID_MIN = -0.45;
     public static final double VISION_FAST_ADVANCING_PID_MAX = 0.45;
 
-    public static final boolean VISION_ENABLE_DURING_TELEOP = true;
     public static final int VISION_MISSED_HEARTBEAT_THRESHOLD = 10000;
 
     //================================================== Indicator Lights ========================================================

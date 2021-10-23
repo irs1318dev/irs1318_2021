@@ -18,6 +18,7 @@ public class ButtonMap implements IButtonMap
             Shift.DriverDebug,
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_LEFT_BUTTON),
+
         new ShiftDescription(
             Shift.OperatorDebug,
             UserInputDevice.Operator,
@@ -66,6 +67,8 @@ public class ButtonMap implements IButtonMap
             !ElectronicsConstants.INVERT_XBONE_RIGHT_X_AXIS, // make left positive, as counter-clockwise is positive
             -TuningConstants.DRIVETRAIN_DEAD_ZONE_TURN,
             TuningConstants.DRIVETRAIN_DEAD_ZONE_TURN),
+
+/*
         new AnalogOperationDescription(
             AnalogOperation.DriveTrainRotationA,
             UserInputDevice.Driver,
@@ -82,7 +85,9 @@ public class ButtonMap implements IButtonMap
             -TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB,
             TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB,
             TuningConstants.DRIVETRAIN_ROTATION_B_MULTIPLIER),
-        new AnalogOperationDescription( // TODO: comment this out when shooting macros are ready
+*/
+
+        new AnalogOperationDescription(
             AnalogOperation.PowerCellFlywheelVelocity,
             UserInputDevice.Operator,
             AnalogAxis.PS4_LSX,
@@ -105,7 +110,7 @@ public class ButtonMap implements IButtonMap
             Shift.OperatorDebug,
             ElectronicsConstants.INVERT_TRIGGER_AXIS,
             -1.01,
-            TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB),   
+            TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB),
     };
 
     public static DigitalOperationDescription[] DigitalOperationSchema = new DigitalOperationDescription[]
@@ -115,21 +120,21 @@ public class ButtonMap implements IButtonMap
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_A_BUTTON,
             Shift.DriverDebug,
-            Shift.None,
+            Shift.DriverDebug,
             ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.DriveTrainEnableFieldOrientation,
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_B_BUTTON,
             Shift.DriverDebug,
-            Shift.None,
+            Shift.DriverDebug,
             ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.DriveTrainDisableFieldOrientation,
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_X_BUTTON,
             Shift.DriverDebug,
-            Shift.None,
+            Shift.DriverDebug,
             ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.PositionResetFieldOrientation,
@@ -143,15 +148,50 @@ public class ButtonMap implements IButtonMap
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_RIGHT_STICK_BUTTON,
             Shift.DriverDebug,
-            Shift.None,
+            Shift.DriverDebug,
             ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.DriveTrainDisableMaintainDirectionMode,
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_LEFT_STICK_BUTTON,
             Shift.DriverDebug,
+            Shift.DriverDebug,
+            ButtonType.Click),
+
+        new DigitalOperationDescription(
+            DigitalOperation.PowerCellOuttake,
+            UserInputDevice.Driver,
+            AnalogAxis.XBONE_LT,
+            0.5,
+            1.0,
+            Shift.DriverDebug,
+            Shift.None,
+            ButtonType.Simple),
+        new DigitalOperationDescription(
+            DigitalOperation.PowerCellIntake,
+            UserInputDevice.Driver,
+            AnalogAxis.XBONE_RT,
+            0.5,
+            1.0,
+            Shift.DriverDebug,
+            Shift.None,
+            ButtonType.Simple),
+        new DigitalOperationDescription(
+            DigitalOperation.PowerCellIntakeExtend,
+            UserInputDevice.Driver,
+            0,
+            Shift.DriverDebug,
             Shift.None,
             ButtonType.Click),
+        new DigitalOperationDescription(
+            DigitalOperation.PowerCellIntakeRetract,
+            UserInputDevice.Driver,
+            180,
+            Shift.DriverDebug,
+            Shift.None,
+            ButtonType.Click),
+
+/*
         new DigitalOperationDescription(
             DigitalOperation.PowerCellOuttake,
             UserInputDevice.Operator,
@@ -180,6 +220,8 @@ public class ButtonMap implements IButtonMap
             Shift.OperatorDebug,
             Shift.None,
             ButtonType.Click),
+*/
+
         new DigitalOperationDescription(
             DigitalOperation.PowerCellHoodPointBlank,
             UserInputDevice.Operator,
@@ -250,7 +292,7 @@ public class ButtonMap implements IButtonMap
         new MacroOperationDescription(
             MacroOperation.PIDBrake,
             UserInputDevice.Driver,
-            UserInputDeviceButton.XBONE_START_BUTTON,
+            UserInputDeviceButton.XBONE_LEFT_BUTTON,
             ButtonType.Simple,
             () -> new PIDBrakeTask(),
             new IOperation[]
@@ -285,7 +327,7 @@ public class ButtonMap implements IButtonMap
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_B_BUTTON,
             Shift.DriverDebug,
-            Shift.DriverDebug,
+            Shift.None,
             ButtonType.Toggle,
             () -> SequentialTask.Sequence(
                 new VisionCenteringTask(),
@@ -323,6 +365,40 @@ public class ButtonMap implements IButtonMap
             }),
         new MacroOperationDescription(
             MacroOperation.ShootHopper,
+            UserInputDevice.Driver,
+            UserInputDeviceButton.XBONE_A_BUTTON,
+            Shift.DriverDebug,
+            Shift.None,
+            ButtonType.Toggle,
+            () -> new FullHopperShotTask(),
+            new IOperation[]
+            {
+                DigitalOperation.PowerCellKick,
+                DigitalOperation.PowerCellKickerSpin,
+                DigitalOperation.PowerCellRotateCarousel,
+            }),
+        new MacroOperationDescription(
+            MacroOperation.SpinFlywheel,
+            UserInputDevice.Driver,
+            UserInputDeviceButton.XBONE_X_BUTTON,
+            Shift.DriverDebug,
+            Shift.None,
+            ButtonType.Toggle,
+            () -> ConcurrentTask.AllTasks( //new FlywheelVisionSpinTask(),
+                new FlywheelFixedSpinTask(0.45, 10.0),
+                new ShooterHoodPositionTask(DigitalOperation.PowerCellHoodShort)),
+            new IOperation[]
+            {
+                AnalogOperation.PowerCellFlywheelVelocity,
+                DigitalOperation.PowerCellHoodPointBlank,
+                DigitalOperation.PowerCellHoodShort,
+                DigitalOperation.PowerCellHoodMedium,
+                DigitalOperation.PowerCellHoodLong,
+            }),
+
+/*
+        new MacroOperationDescription(
+            MacroOperation.ShootHopper,
             UserInputDevice.Operator,
             UserInputDeviceButton.PS4_CIRCLE_BUTTON,
             Shift.OperatorDebug,
@@ -353,6 +429,7 @@ public class ButtonMap implements IButtonMap
                 DigitalOperation.PowerCellHoodMedium,
                 DigitalOperation.PowerCellHoodLong,
             }),
+*/
     };
 
     @Override
