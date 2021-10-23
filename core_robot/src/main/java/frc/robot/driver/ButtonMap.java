@@ -141,7 +141,7 @@ public class ButtonMap implements IButtonMap
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_Y_BUTTON,
             Shift.DriverDebug,
-            Shift.None,
+            Shift.DriverDebug,
             ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.DriveTrainEnableMaintainDirectionMode,
@@ -179,14 +179,14 @@ public class ButtonMap implements IButtonMap
         new DigitalOperationDescription(
             DigitalOperation.PowerCellIntakeExtend,
             UserInputDevice.Driver,
-            0,
+            UserInputDeviceButton.XBONE_Y_BUTTON,
             Shift.DriverDebug,
             Shift.None,
             ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.PowerCellIntakeRetract,
             UserInputDevice.Driver,
-            180,
+            UserInputDeviceButton.XBONE_A_BUTTON,
             Shift.DriverDebug,
             Shift.None,
             ButtonType.Click),
@@ -292,7 +292,7 @@ public class ButtonMap implements IButtonMap
         new MacroOperationDescription(
             MacroOperation.PIDBrake,
             UserInputDevice.Driver,
-            UserInputDeviceButton.XBONE_LEFT_BUTTON,
+            180, // DPad Down
             ButtonType.Simple,
             () -> new PIDBrakeTask(),
             new IOperation[]
@@ -325,7 +325,7 @@ public class ButtonMap implements IButtonMap
         new MacroOperationDescription(
             MacroOperation.VisionCenter,
             UserInputDevice.Driver,
-            UserInputDeviceButton.XBONE_B_BUTTON,
+            0, // DPad Up
             Shift.DriverDebug,
             Shift.None,
             ButtonType.Toggle,
@@ -366,7 +366,7 @@ public class ButtonMap implements IButtonMap
         new MacroOperationDescription(
             MacroOperation.ShootHopper,
             UserInputDevice.Driver,
-            UserInputDeviceButton.XBONE_A_BUTTON,
+            UserInputDeviceButton.XBONE_B_BUTTON,
             Shift.DriverDebug,
             Shift.None,
             ButtonType.Toggle,
