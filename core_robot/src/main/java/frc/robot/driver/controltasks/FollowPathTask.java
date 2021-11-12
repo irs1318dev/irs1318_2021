@@ -6,7 +6,7 @@ import frc.robot.common.robotprovider.Pose2d;
 import frc.robot.common.robotprovider.TrajectoryState;
 import frc.robot.driver.AnalogOperation;
 import frc.robot.driver.DigitalOperation;
-import frc.robot.driver.PathManager;
+import frc.robot.driver.common.PathManager;
 import frc.robot.mechanisms.DriveTrainMechanism;
 
 /**

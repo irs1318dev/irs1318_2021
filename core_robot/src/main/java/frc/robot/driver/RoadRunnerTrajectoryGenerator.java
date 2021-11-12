@@ -15,6 +15,7 @@ import frc.robot.TuningConstants;
 import frc.robot.common.*;
 import frc.robot.common.robotprovider.ITrajectory;
 import frc.robot.common.robotprovider.TrajectoryState;
+import frc.robot.driver.common.PathManager;
 import frc.robot.driver.common.TrajectoryWrapper;
 
 public class RoadRunnerTrajectoryGenerator
