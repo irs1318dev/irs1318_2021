@@ -26,6 +26,7 @@ public interface IRobotProvider
     public ISolenoid getSolenoid(int channel);
     public ISolenoid getSolenoid(int module, int channel);
     public INavx getNavx();
+    public IPigeonIMU getPigeonIMU(int deviceNumber);
     public IVideoStream getMJPEGStream(String name, int width, int height);
     public IUsbCamera getUsbCamera(String name, int dev);
     public IDriverStation getDriverStation();

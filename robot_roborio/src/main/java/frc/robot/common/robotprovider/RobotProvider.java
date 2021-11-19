@@ -150,6 +150,12 @@ public class RobotProvider implements IRobotProvider
     }
 
     @Override
+    public IPigeonIMU getPigeonIMU(int deviceNumber)
+    {
+        return new PigeonIMUWrapper(deviceNumber);
+    }
+
+    @Override
     public IVideoStream getMJPEGStream(String name, int width, int height)
     {
         return new VideoStreamWrapper(name, width, height);

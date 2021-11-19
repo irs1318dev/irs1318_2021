@@ -162,6 +162,12 @@ public class FauxbotProvider implements IRobotProvider
     }
 
     @Override
+    public IPigeonIMU getPigeonIMU(int deviceNumber)
+    {
+        return new FauxbotPigeonIMU(deviceNumber);
+    }
+
+    @Override
     public IVideoStream getMJPEGStream(String name, int width, int height)
     {
         return new FauxbotVideoStream();
