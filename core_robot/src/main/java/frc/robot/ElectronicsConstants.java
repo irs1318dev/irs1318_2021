@@ -38,6 +38,10 @@ public class ElectronicsConstants
 
     //================================================== Vision ==============================================================
 
+    public static final int PIGEON_IMU_CAN_ID = 42;
+
+    //================================================== Vision ==============================================================
+
     public static final int VISION_RING_LIGHT_DIO = 0;
 
     //================================================== Indicator Lights ==============================================================
@@ -89,11 +93,11 @@ public class ElectronicsConstants
     public static final int CLIMBER_GRAB_FORWARD_PCM = 44;
     public static final int CLIMBER_GRAB_REVERSE_PCM = 45;
 
-    public static final int CLIMBER_WINCH_MASTER_CAN_ID = 13;
+    public static final int CLIMBER_WINCH_MASTER_CAN_ID = 14;
 
     //================================================== Control Panel Spinner ==============================================================
 
-    public static final int CONTROLPANEL_SPINNER_CAN_ID = 10;
-    public static final int CONTROLPANEL_EXTENDER_FORWARD_PCM = 10;
-    public static final int CONTROLPANEL_EXTENDER_REVERSE_PCM = 11;
+    public static final int CONTROLPANEL_SPINNER_CAN_ID = 15;
+    public static final int CONTROLPANEL_EXTENDER_FORWARD_PCM = 16;
+    public static final int CONTROLPANEL_EXTENDER_REVERSE_PCM = 17;
 }

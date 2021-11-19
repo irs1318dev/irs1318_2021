@@ -33,6 +33,11 @@ public enum LoggingKey
     NavxY("navx.y"),
     NavxZ("navx.z"),
     NavxStartingAngle("navx.startingAngle"),
+    PigeonState("pigeon.state"),
+    PigeonYaw("pigeon.yaw"),
+    PigeonPitch("pigeon.pitch"),
+    PigeonRoll("pigeon.roll"),
+    PigeonStartingYaw("pigeon.startingYaw"),
 
     DriveTrainDesiredAngle("dt.angle_goal"),
     DriveTrainAngle("dt.angle"),
