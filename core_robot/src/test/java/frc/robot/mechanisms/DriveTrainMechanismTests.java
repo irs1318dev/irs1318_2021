@@ -6,12 +6,14 @@ import frc.robot.TuningConstants;
 import frc.robot.common.Helpers;
 import frc.robot.common.LoggingManager;
 import frc.robot.common.robotprovider.INavx;
+import frc.robot.common.robotprovider.IPigeonIMU;
 import frc.robot.common.robotprovider.ITalonFX;
 import frc.robot.common.robotprovider.ITalonSRX;
 import frc.robot.common.robotprovider.ITimer;
 import frc.robot.common.robotprovider.IVictorSPX;
 import frc.robot.common.robotprovider.MotorNeutralMode;
 import frc.robot.common.robotprovider.NullLogger;
+import frc.robot.common.robotprovider.PigeonState;
 import frc.robot.common.robotprovider.Pose2d;
 import frc.robot.common.robotprovider.RobotMode;
 import frc.robot.common.robotprovider.TalonXControlMode;
@@ -52,8 +54,8 @@ public class DriveTrainMechanismTests
         TestProvider provider = new TestProvider();
 
         MockTimer timer = new MockTimer();
-        MockNavx navx = new MockNavx();
-        provider.setNavx(navx);
+        MockPigeonIMU pigeon = new MockPigeonIMU();
+        provider.setPigeon(pigeon);
 
         MockTalonFX[] steer = new MockTalonFX[4];
         MockTalonFX[] drive = new MockTalonFX[4];
@@ -67,17 +69,17 @@ public class DriveTrainMechanismTests
         }
 
         LoggingManager logger = new LoggingManager(new NullLogger());
-        NavxManager navxManager = new NavxManager(new MockDriver(), logger, provider);
+        PigeonManager pigeonManager = new PigeonManager(new MockDriver(), logger, provider);
         DriveTrainMechanism driveTrain = new DriveTrainMechanism(
             new MockDriver(), 
             logger,
             provider,
-            navxManager,
+            pigeonManager,
             timer);
 
         for (int timestep = 0; timestep < 10; timestep++)
         {
-            navxManager.readSensors();
+            pigeonManager.readSensors();
             driveTrain.readSensors();
             timer.increment(0.02);
         }
@@ -94,8 +96,8 @@ public class DriveTrainMechanismTests
         TestProvider provider = new TestProvider();
 
         MockTimer timer = new MockTimer();
-        MockNavx navx = new MockNavx();
-        provider.setNavx(navx);
+        MockPigeonIMU pigeon = new MockPigeonIMU();
+        provider.setPigeon(pigeon);
 
         MockTalonFX[] steer = new MockTalonFX[4];
         MockTalonFX[] drive = new MockTalonFX[4];
@@ -109,12 +111,12 @@ public class DriveTrainMechanismTests
         }
 
         LoggingManager logger = new LoggingManager(new NullLogger());
-        NavxManager navxManager = new NavxManager(new MockDriver(), logger, provider);
+        PigeonManager pigeonManager = new PigeonManager(new MockDriver(), logger, provider);
         DriveTrainMechanism driveTrain = new DriveTrainMechanism(
             new MockDriver(), 
             logger,
             provider,
-            navxManager,
+            pigeonManager,
             timer);
 
         for (int timestep = 0; timestep < 50; timestep++)
@@ -125,7 +127,7 @@ public class DriveTrainMechanismTests
                 drive[i].set(0.1 * TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS);;
             }
 
-            navxManager.readSensors();
+            pigeonManager.readSensors();
             driveTrain.readSensors();
             timer.increment(0.02);
         }
@@ -142,8 +144,8 @@ public class DriveTrainMechanismTests
         TestProvider provider = new TestProvider();
 
         MockTimer timer = new MockTimer();
-        MockNavx navx = new MockNavx();
-        provider.setNavx(navx);
+        MockPigeonIMU pigeon = new MockPigeonIMU();
+        provider.setPigeon(pigeon);
 
         MockTalonFX[] steer = new MockTalonFX[4];
         MockTalonFX[] drive = new MockTalonFX[4];
@@ -157,12 +159,12 @@ public class DriveTrainMechanismTests
         }
 
         LoggingManager logger = new LoggingManager(new NullLogger());
-        NavxManager navxManager = new NavxManager(new MockDriver(), logger, provider);
+        PigeonManager pigeonManager = new PigeonManager(new MockDriver(), logger, provider);
         DriveTrainMechanism driveTrain = new DriveTrainMechanism(
             new MockDriver(), 
             logger,
             provider,
-            navxManager,
+            pigeonManager,
             timer);
 
         for (int timestep = 0; timestep < 50; timestep++)
@@ -173,8 +175,8 @@ public class DriveTrainMechanismTests
                 drive[i].set(-0.1 * TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS);;
             }
 
-            navx.set(-180.0);
-            navxManager.readSensors();
+            pigeon.set(-180.0);
+            pigeonManager.readSensors();
             driveTrain.readSensors();
             timer.increment(0.02);
         }
@@ -191,8 +193,8 @@ public class DriveTrainMechanismTests
         TestProvider provider = new TestProvider();
 
         MockTimer timer = new MockTimer();
-        MockNavx navx = new MockNavx();
-        provider.setNavx(navx);
+        MockPigeonIMU pigeon = new MockPigeonIMU();
+        provider.setPigeon(pigeon);
 
         MockTalonFX[] steer = new MockTalonFX[4];
         MockTalonFX[] drive = new MockTalonFX[4];
@@ -206,12 +208,12 @@ public class DriveTrainMechanismTests
         }
 
         LoggingManager logger = new LoggingManager(new NullLogger());
-        NavxManager navxManager = new NavxManager(new MockDriver(), logger, provider);
+        PigeonManager pigeonManager = new PigeonManager(new MockDriver(), logger, provider);
         DriveTrainMechanism driveTrain = new DriveTrainMechanism(
             new MockDriver(), 
             logger,
             provider,
-            navxManager,
+            pigeonManager,
             timer);
 
         for (int timestep = 0; timestep < 50; timestep++)
@@ -223,8 +225,8 @@ public class DriveTrainMechanismTests
                 steer[i].set(90.0 * HardwareConstants.DRIVETRAIN_STEER_TICKS_PER_DEGREE);
             }
 
-            navx.set(0.0);
-            navxManager.readSensors();
+            pigeon.set(0.0);
+            pigeonManager.readSensors();
             driveTrain.readSensors();
             timer.increment(0.02);
         }
@@ -241,8 +243,8 @@ public class DriveTrainMechanismTests
         TestProvider provider = new TestProvider();
 
         MockTimer timer = new MockTimer();
-        MockNavx navx = new MockNavx();
-        provider.setNavx(navx);
+        MockPigeonIMU pigeon = new MockPigeonIMU();
+        provider.setPigeon(pigeon);
 
         MockTalonFX[] steer = new MockTalonFX[4];
         MockTalonFX[] drive = new MockTalonFX[4];
@@ -256,12 +258,12 @@ public class DriveTrainMechanismTests
         }
 
         LoggingManager logger = new LoggingManager(new NullLogger());
-        NavxManager navxManager = new NavxManager(new MockDriver(), logger, provider);
+        PigeonManager pigeonManager = new PigeonManager(new MockDriver(), logger, provider);
         DriveTrainMechanism driveTrain = new DriveTrainMechanism(
             new MockDriver(), 
             logger,
             provider,
-            navxManager,
+            pigeonManager,
             timer);
 
         for (int timestep = 0; timestep < 50; timestep++)
@@ -272,8 +274,8 @@ public class DriveTrainMechanismTests
                 drive[i].set(0.1 * TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS);
             }
 
-            navx.set(-90.0);
-            navxManager.readSensors();
+            pigeon.set(-90.0);
+            pigeonManager.readSensors();
             driveTrain.readSensors();
             timer.increment(0.02);
         }
@@ -290,8 +292,8 @@ public class DriveTrainMechanismTests
         TestProvider provider = new TestProvider();
 
         MockTimer timer = new MockTimer();
-        MockNavx navx = new MockNavx();
-        provider.setNavx(navx);
+        MockPigeonIMU pigeon = new MockPigeonIMU();
+        provider.setPigeon(pigeon);
 
         MockTalonFX[] steer = new MockTalonFX[4];
         MockTalonFX[] drive = new MockTalonFX[4];
@@ -305,12 +307,12 @@ public class DriveTrainMechanismTests
         }
 
         LoggingManager logger = new LoggingManager(new NullLogger());
-        NavxManager navxManager = new NavxManager(new MockDriver(), logger, provider);
+        PigeonManager pigeonManager = new PigeonManager(new MockDriver(), logger, provider);
         DriveTrainMechanism driveTrain = new DriveTrainMechanism(
             new MockDriver(), 
             logger,
             provider,
-            navxManager,
+            pigeonManager,
             timer);
 
         double robotVelocityRight = 0.0;
@@ -333,8 +335,8 @@ public class DriveTrainMechanismTests
                 steer[i].set(moduleSteerPositionGoal);
             }
 
-            navx.set(-timestep * 0.02 * 180.0 / Math.PI);
-            navxManager.readSensors();
+            pigeon.set(-timestep * 0.02 * 180.0 / Math.PI);
+            pigeonManager.readSensors();
             driveTrain.readSensors();
             timer.increment(0.02);
         }
@@ -452,6 +454,40 @@ public class DriveTrainMechanismTests
         @Override
         public void resetDisplacement()
         {
+        }
+
+        public void set(double angle)
+        {
+            this.currentAngle = angle;
+        }
+    }
+
+
+    private class MockPigeonIMU implements IPigeonIMU
+    {
+        private double currentAngle;
+
+        MockPigeonIMU()
+        {
+        }
+
+        public int getYawPitchRoll(double[] ypr_deg)
+        {
+            ypr_deg[0] = this.currentAngle;
+            ypr_deg[1] = this.currentAngle;
+            ypr_deg[2] = this.currentAngle;
+            return 0;
+        }
+
+        public int setYaw(double angleDeg)
+        {
+            this.currentAngle = currentAngle;
+            return 0;
+        }
+
+        public PigeonState getState()
+        {
+            return PigeonState.Ready;
         }
 
         public void set(double angle)
