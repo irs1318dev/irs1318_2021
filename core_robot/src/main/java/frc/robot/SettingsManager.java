@@ -16,7 +16,7 @@ public class SettingsManager
     public static List<IMechanism> getActiveMechanisms(Injector injector)
     {
         List<IMechanism> mechanismList = new ArrayList<IMechanism>();
-        mechanismList.add(injector.getInstance(NavxManager.class)); // NavxManager should come before DriveTrainMechanism
+        mechanismList.add(injector.getInstance(PigeonManager.class)); // PigeonManager/NavxManager should come before DriveTrainMechanism
         mechanismList.add(injector.getInstance(PowerManager.class));
         mechanismList.add(injector.getInstance(DriveTrainMechanism.class));
         mechanismList.add(injector.getInstance(CompressorMechanism.class));
