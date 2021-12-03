@@ -54,6 +54,14 @@ public class CoreRobot<T extends AbstractModule>
         // create mechanisms
         Injector injector = this.getInjector();
 
+        IRobotProvider robotProvider = injector.getInstance(IRobotProvider.class);
+        IPreferences preferences = robotProvider.getPreferences();
+
+        SettingsManager.initAndUpdatePreferences(preferences, TuningConstants.class);
+        //SettingsManager.initAndUpdatePreferences(preferences, HardwareConstants.class);
+        //SettingsManager.initAndUpdatePreferences(preferences, ElectronicsConstants.class);
+        //SettingsManager.initAndUpdatePreferences(preferences, VisionConstants.class);
+
         // create driver
         this.driver = injector.getInstance(IDriver.class);
 
@@ -66,14 +74,6 @@ public class CoreRobot<T extends AbstractModule>
         this.timer = injector.getInstance(ITimer.class);
         this.logger.logNumber(LoggingKey.RobotTime, this.timer.get());
         this.timerStarted = false;
-
-        IRobotProvider robotProvider = injector.getInstance(IRobotProvider.class);
-        IPreferences preferences = robotProvider.getPreferences();
-
-        //SettingsManager.initAndUpdatePreferences(preferences, TuningConstants.class);
-        //SettingsManager.initAndUpdatePreferences(preferences, HardwareConstants.class);
-        //SettingsManager.initAndUpdatePreferences(preferences, ElectronicsConstants.class);
-        //SettingsManager.initAndUpdatePreferences(preferences, VisionConstants.class);
 
         // reset number of logger updates
         this.loggerUpdates = 0;
