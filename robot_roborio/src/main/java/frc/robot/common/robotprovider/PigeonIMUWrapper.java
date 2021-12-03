@@ -1,6 +1,7 @@
 package frc.robot.common.robotprovider;
 
 import com.ctre.phoenix.sensors.*;
+import com.ctre.phoenix.sensors.PigeonIMU.CalibrationMode;
 
 public class PigeonIMUWrapper implements IPigeonIMU
 {
@@ -25,5 +26,10 @@ public class PigeonIMUWrapper implements IPigeonIMU
     {
         PigeonIMU.PigeonState state = this.wrappedObject.getState();
         return PigeonState.getValue(state.value);
+    }
+
+    public void enterTemperatureCalibrationMode()
+    {
+        this.wrappedObject.enterCalibrationMode(CalibrationMode.Temperature);
     }
 }

@@ -21,4 +21,9 @@ public interface IPigeonIMU
      * @return pigeon state value
      */
     PigeonState getState();
+
+    /**
+     * Start temperature calibration
+     */
+    void enterTemperatureCalibrationMode();
 }

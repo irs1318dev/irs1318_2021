@@ -98,6 +98,11 @@ public class PigeonManager implements IMechanism
             // clear the startAngle too if we are not actively setting it
             this.reset(newYaw == 0.0);
         }
+
+        if (this.driver.getDigital(DigitalOperation.PositionBeginTemperatureCalibration))
+        {
+            this.pigeon.enterTemperatureCalibrationMode();
+        }
     }
 
     /**

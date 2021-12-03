@@ -494,6 +494,10 @@ public class DriveTrainMechanismTests
         {
             this.currentAngle = angle;
         }
+
+        public void enterTemperatureCalibrationMode()
+        {
+        }
     }
 
     private class MockTalonFX implements ITalonFX

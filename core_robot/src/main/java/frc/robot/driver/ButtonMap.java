@@ -285,6 +285,13 @@ public class ButtonMap implements IButtonMap
             Shift.None,
             Shift.None,
             ButtonType.Simple),
+        new DigitalOperationDescription(
+            DigitalOperation.PositionBeginTemperatureCalibration,
+            UserInputDevice.Operator,
+            UserInputDeviceButton.PS4_OPTIONS_BUTTON,
+            Shift.None,
+            Shift.None,
+            ButtonType.Click),
     };
 
     public static MacroOperationDescription[] MacroSchema = new MacroOperationDescription[]

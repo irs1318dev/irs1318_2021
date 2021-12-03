@@ -44,6 +44,10 @@ public class FauxbotPigeonIMU extends FauxbotSensorBase implements IPigeonIMU
         return PigeonState.Ready;
     }
 
+    public void enterTemperatureCalibrationMode()
+    {
+    }
+
     public DoubleProperty getProperty()
     {
         return this.angleProperty;
