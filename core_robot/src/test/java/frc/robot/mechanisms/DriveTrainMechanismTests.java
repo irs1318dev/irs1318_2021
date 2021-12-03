@@ -175,7 +175,7 @@ public class DriveTrainMechanismTests
                 drive[i].set(-0.1 * TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS);;
             }
 
-            pigeon.set(-180.0);
+            pigeon.set(180.0);
             pigeonManager.readSensors();
             driveTrain.readSensors();
             timer.increment(0.02);
@@ -274,7 +274,7 @@ public class DriveTrainMechanismTests
                 drive[i].set(0.1 * TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS);
             }
 
-            pigeon.set(-90.0);
+            pigeon.set(90.0);
             pigeonManager.readSensors();
             driveTrain.readSensors();
             timer.increment(0.02);
@@ -335,7 +335,7 @@ public class DriveTrainMechanismTests
                 steer[i].set(moduleSteerPositionGoal);
             }
 
-            pigeon.set(-timestep * 0.02 * 180.0 / Math.PI);
+            pigeon.set(timestep * 0.02 * 180.0 / Math.PI);
             pigeonManager.readSensors();
             driveTrain.readSensors();
             timer.increment(0.02);
