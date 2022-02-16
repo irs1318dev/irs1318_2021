@@ -55,7 +55,7 @@ public class DriveTrainMechanism implements IMechanism
     private final ILogger logger;
     private final ITimer timer;
 
-    private final PigeonManager pigeonManager;
+    private final NavxManager navxManager;
 
     private final ITalonFX[] steerMotors;
     private final ITalonFX[] driveMotors;
@@ -99,14 +99,14 @@ public class DriveTrainMechanism implements IMechanism
         IDriver driver,
         LoggingManager logger,
         IRobotProvider provider,
-        PigeonManager pigeonManager,
+        NavxManager navxManager,
         ITimer timer)
     {
         this.driver = driver;
         this.logger = logger;
         this.timer = timer;
 
-        this.pigeonManager = pigeonManager;
+        this.navxManager = navxManager;
 
         this.steerMotors = new ITalonFX[DriveTrainMechanism.NUM_MODULES];
         this.driveMotors = new ITalonFX[DriveTrainMechanism.NUM_MODULES];
@@ -455,7 +455,7 @@ public class DriveTrainMechanism implements IMechanism
 
         double prevYaw = this.robotYaw;
         double prevTime = this.time;
-        this.robotYaw = this.pigeonManager.getAngle();
+        this.robotYaw = this.navxManager.getAngle();
         this.time = this.timer.get();
 
         this.deltaT = this.time - prevTime;
@@ -485,7 +485,7 @@ public class DriveTrainMechanism implements IMechanism
         }
 
         if (this.driver.getDigital(DigitalOperation.DriveTrainDisableFieldOrientation) ||
-            this.pigeonManager.getIsConnected())
+            this.navxManager.getIsConnected())
         {
             this.fieldOriented = false;
         }
@@ -496,14 +496,14 @@ public class DriveTrainMechanism implements IMechanism
         }
 
         if (this.driver.getDigital(DigitalOperation.DriveTrainEnableMaintainDirectionMode) ||
-            !this.pigeonManager.getIsConnected())
+            !this.navxManager.getIsConnected())
         {
             this.maintainOrientation = false;
         }
 
         if (this.driver.getDigital(DigitalOperation.PositionResetFieldOrientation))
         {
-            this.robotYaw = this.pigeonManager.getAngle();
+            this.robotYaw = this.navxManager.getAngle();
             this.desiredYaw = this.robotYaw;
         }
 
