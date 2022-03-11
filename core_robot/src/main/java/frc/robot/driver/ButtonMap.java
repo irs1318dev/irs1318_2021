@@ -190,6 +190,20 @@ public class ButtonMap implements IButtonMap
             Shift.DriverDebug,
             Shift.None,
             ButtonType.Click),
+        new DigitalOperationDescription(
+            DigitalOperation.PowerCellIntakeExtend,
+            UserInputDevice.Operator,
+            UserInputDeviceButton.BUTTON_PAD_BUTTON_11,
+            Shift.OperatorDebug,
+            Shift.None,
+            ButtonType.Click),
+        new DigitalOperationDescription(
+            DigitalOperation.PowerCellIntakeRetract,
+            UserInputDevice.Operator,
+            UserInputDeviceButton.BUTTON_PAD_BUTTON_12,
+            Shift.OperatorDebug,
+            Shift.None,
+            ButtonType.Click),
 
 /*
         new DigitalOperationDescription(

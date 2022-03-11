@@ -43,6 +43,8 @@ public enum LoggingKey
     DriveTrainAngle("dt.angle"),
     DriveTrainXPosition("dt.xpos"),
     DriveTrainYPosition("dt.ypos"),
+    DriveTrainFieldOriented("dt.field"),
+    DriveTrainMaintainPosition("dt.maintain_pos"),
 
     DriveTrainAbsoluteEncoderAngle1("dt.absenc_ang1"),
     DriveTrainDriveVelocity1("dt.drive_vel1"),

@@ -485,7 +485,7 @@ public class DriveTrainMechanism implements IMechanism
         }
 
         if (this.driver.getDigital(DigitalOperation.DriveTrainDisableFieldOrientation) ||
-            this.navxManager.getIsConnected())
+            !this.navxManager.getIsConnected())
         {
             this.fieldOriented = false;
         }
@@ -506,6 +506,9 @@ public class DriveTrainMechanism implements IMechanism
             this.robotYaw = this.navxManager.getAngle();
             this.desiredYaw = this.robotYaw;
         }
+        
+        this.logger.logBoolean(LoggingKey.DriveTrainFieldOriented, this.fieldOriented);
+        this.logger.logBoolean(LoggingKey.DriveTrainMaintainPosition, this.maintainOrientation);
 
         if (this.firstRun || this.driver.getDigital(DigitalOperation.DriveTrainReset))
         {

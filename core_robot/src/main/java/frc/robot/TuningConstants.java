@@ -85,10 +85,10 @@ public class TuningConstants
     public static final boolean DRIVETRAIN_RESET_ON_ROBOT_START = false;
 
     //public static final double[] DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSET = new double[] { -135.0, 65.0, -96.0, -14.0 };
-    public static final double DRIVETRAIN_STEER_MOTOR1_ABSOLUTE_OFFSET = -39.6;
-    public static final double DRIVETRAIN_STEER_MOTOR2_ABSOLUTE_OFFSET = -119.0;
-    public static final double DRIVETRAIN_STEER_MOTOR3_ABSOLUTE_OFFSET = 121.2;
-    public static final double DRIVETRAIN_STEER_MOTOR4_ABSOLUTE_OFFSET = -79.1;
+    public static final double DRIVETRAIN_STEER_MOTOR1_ABSOLUTE_OFFSET = -31.6;
+    public static final double DRIVETRAIN_STEER_MOTOR2_ABSOLUTE_OFFSET = -120.0;
+    public static final double DRIVETRAIN_STEER_MOTOR3_ABSOLUTE_OFFSET = 122.2;
+    public static final double DRIVETRAIN_STEER_MOTOR4_ABSOLUTE_OFFSET = -81.1;
 
     // Position PID (angle) per-module
     public static final double DRIVETRAIN_STEER_MOTOR_POSITION_PID_KS = HardwareConstants.DRIVETRAIN_STEER_TICKS_PER_DEGREE;
@@ -236,7 +236,7 @@ public class TuningConstants
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KP = 0.55;
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KI = 0.0;
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KD = 0.75;
-    public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KF = 0.0113666; // 90000 / 1023
+    public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KF = 0.0113666; // 1023 / 90000
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KS = 85000.0;
 
     public static final int POWERCELL_FLYWHEEL_VELOCITY_PERIOD = 10;
