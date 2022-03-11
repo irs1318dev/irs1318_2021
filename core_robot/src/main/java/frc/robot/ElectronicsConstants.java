@@ -36,7 +36,7 @@ public class ElectronicsConstants
     public static final int JOYSTICK_DRIVER_PORT = 0;
     public static final int JOYSTICK_CO_DRIVER_PORT = 1;
 
-    //================================================== Vision ==============================================================
+    //================================================== IMU ==============================================================
 
     public static final int PIGEON_IMU_CAN_ID = 42;
 
