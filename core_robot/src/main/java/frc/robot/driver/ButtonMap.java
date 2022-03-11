@@ -193,14 +193,14 @@ public class ButtonMap implements IButtonMap
         new DigitalOperationDescription(
             DigitalOperation.PowerCellIntakeExtend,
             UserInputDevice.Operator,
-            UserInputDeviceButton.BUTTON_PAD_BUTTON_11,
+            UserInputDeviceButton.BUTTON_PAD_BUTTON_9,
             Shift.OperatorDebug,
             Shift.None,
             ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.PowerCellIntakeRetract,
             UserInputDevice.Operator,
-            UserInputDeviceButton.BUTTON_PAD_BUTTON_12,
+            UserInputDeviceButton.BUTTON_PAD_BUTTON_10,
             Shift.OperatorDebug,
             Shift.None,
             ButtonType.Click),
