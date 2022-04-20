@@ -86,8 +86,16 @@ public class ButtonMap implements IButtonMap
             TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB,
             TuningConstants.DRIVETRAIN_ROTATION_B_MULTIPLIER),
 */
-
         new AnalogOperationDescription(
+            AnalogOperation.PowerCellFlywheelVelocity,
+            UserInputDevice.Driver,
+            AnalogAxis.XBONE_LT,
+            false,
+            -1.0,
+            0.125,
+            0.35),
+
+/*        new AnalogOperationDescription(
             AnalogOperation.PowerCellFlywheelVelocity,
             UserInputDevice.Operator,
             AnalogAxis.PS4_LSX,
@@ -101,7 +109,7 @@ public class ButtonMap implements IButtonMap
             true,
             1.0,
             0,
-            (x, y) -> (Helpers.atan2d(x, y) + 180.0) / 360),
+            (x, y) -> (Helpers.atan2d(x, y) + 180.0) / 360),*/
         new AnalogOperationDescription(
             AnalogOperation.PowerCellCarousel,
             UserInputDevice.Operator,
@@ -161,11 +169,11 @@ public class ButtonMap implements IButtonMap
         new DigitalOperationDescription(
             DigitalOperation.PowerCellOuttake,
             UserInputDevice.Driver,
-            AnalogAxis.XBONE_LT,
+            AnalogAxis.XBONE_RT,
             0.5,
             1.0,
             Shift.DriverDebug,
-            Shift.None,
+            Shift.DriverDebug,
             ButtonType.Simple),
         new DigitalOperationDescription(
             DigitalOperation.PowerCellIntake,
@@ -238,31 +246,31 @@ public class ButtonMap implements IButtonMap
 
         new DigitalOperationDescription(
             DigitalOperation.PowerCellHoodPointBlank,
-            UserInputDevice.Operator,
+            UserInputDevice.Driver,
             180,
-            Shift.OperatorDebug,
-            Shift.OperatorDebug,
+            Shift.DriverDebug,
+            Shift.DriverDebug,
             ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.PowerCellHoodShort,
-            UserInputDevice.Operator,
+            UserInputDevice.Driver,
             90,
-            Shift.OperatorDebug,
-            Shift.OperatorDebug,
+            Shift.DriverDebug,
+            Shift.DriverDebug,
             ButtonType.Simple),
         new DigitalOperationDescription(
             DigitalOperation.PowerCellHoodMedium,
-            UserInputDevice.Operator,
+            UserInputDevice.Driver,
             270,
-            Shift.OperatorDebug,
-            Shift.OperatorDebug,
+            Shift.DriverDebug,
+            Shift.DriverDebug,
             ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.PowerCellHoodLong,
-            UserInputDevice.Operator,
+            UserInputDevice.Driver,
             0,
-            Shift.OperatorDebug,
-            Shift.OperatorDebug,
+            Shift.DriverDebug,
+            Shift.DriverDebug,
             ButtonType.Simple),
         new DigitalOperationDescription(
             DigitalOperation.PowerCellFlywheelReverse,
@@ -314,6 +322,8 @@ public class ButtonMap implements IButtonMap
             MacroOperation.PIDBrake,
             UserInputDevice.Driver,
             180, // DPad Down
+            Shift.DriverDebug,
+            Shift.None,
             ButtonType.Simple,
             () -> new PIDBrakeTask(),
             new IOperation[]
