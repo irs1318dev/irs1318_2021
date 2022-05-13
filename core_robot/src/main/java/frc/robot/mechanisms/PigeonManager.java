@@ -14,7 +14,7 @@ import com.google.inject.Singleton;
  * Pigeon manager
  */
 @Singleton
-public class PigeonManager implements IMechanism
+public class PigeonManager implements IPositionManager
 {
     private final IDriver driver;
     private final ILogger logger;

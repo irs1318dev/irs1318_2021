@@ -14,7 +14,7 @@ import com.google.inject.Singleton;
  * Navx manager
  */
 @Singleton
-public class NavxManager implements IMechanism
+public class NavxManager implements IPositionManager
 {
     private final IDriver driver;
     private final ILogger logger;
