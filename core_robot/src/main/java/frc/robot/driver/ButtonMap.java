@@ -90,10 +90,12 @@ public class ButtonMap implements IButtonMap
             AnalogOperation.PowerCellFlywheelVelocity,
             UserInputDevice.Driver,
             AnalogAxis.XBONE_LT,
+            Shift.DriverDebug,
+            Shift.None,
             false,
             -1.0,
             0.125,
-            0.35),
+            0.4), // 0.35
 
 /*        new AnalogOperationDescription(
             AnalogOperation.PowerCellFlywheelVelocity,
@@ -112,10 +114,10 @@ public class ButtonMap implements IButtonMap
             (x, y) -> (Helpers.atan2d(x, y) + 180.0) / 360),*/
         new AnalogOperationDescription(
             AnalogOperation.PowerCellCarousel,
-            UserInputDevice.Operator,
-            AnalogAxis.PS4_RT,
-            Shift.OperatorDebug,
-            Shift.OperatorDebug,
+            UserInputDevice.Driver,
+            AnalogAxis.XBONE_LT,
+            Shift.DriverDebug,
+            Shift.DriverDebug,
             ElectronicsConstants.INVERT_TRIGGER_AXIS,
             -1.01,
             TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB),
@@ -416,7 +418,7 @@ public class ButtonMap implements IButtonMap
             Shift.None,
             ButtonType.Toggle,
             () -> ConcurrentTask.AllTasks( //new FlywheelVisionSpinTask(),
-                new FlywheelFixedSpinTask(0.45, 10.0),
+                new FlywheelFixedSpinTask(0.35, 10.0),
                 new ShooterHoodPositionTask(DigitalOperation.PowerCellHoodShort)),
             new IOperation[]
             {
