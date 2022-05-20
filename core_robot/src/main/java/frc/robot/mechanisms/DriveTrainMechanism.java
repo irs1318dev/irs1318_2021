@@ -99,7 +99,7 @@ public class DriveTrainMechanism implements IMechanism
         IDriver driver,
         LoggingManager logger,
         IRobotProvider provider,
-        NavxManager positionManager,
+        PigeonManager positionManager,
         ITimer timer)
     {
         this.driver = driver;
