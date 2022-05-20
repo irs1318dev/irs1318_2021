@@ -13,4 +13,9 @@ public class FauxbotTalonFX extends FauxbotTalonXBase implements ITalonFX
     public void setSupplyCurrentLimit(boolean enabled, double currentLimit, double triggerThresholdCurrent, double triggerThresholdTime)
     {
     }
+
+    @Override
+    public void setInvert(TalonFXInvertType invertType)
+    {
+    }
 }

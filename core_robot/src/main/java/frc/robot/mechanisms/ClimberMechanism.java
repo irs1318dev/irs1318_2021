@@ -27,8 +27,8 @@ public class ClimberMechanism implements IMechanism
     {
         this.driver = driver;
 
-        this.climberExtendSolenoid = provider.getDoubleSolenoid(ElectronicsConstants.PCM_B_MODULE, ElectronicsConstants.CLIMBER_EXTEND_FORWARD_PCM, ElectronicsConstants.CLIMBER_EXTEND_REVERSE_PCM);
-        this.climberGrabSolenoid = provider.getDoubleSolenoid(ElectronicsConstants.PCM_A_MODULE, ElectronicsConstants.CLIMBER_GRAB_FORWARD_PCM, ElectronicsConstants.CLIMBER_GRAB_REVERSE_PCM);
+        this.climberExtendSolenoid = provider.getDoubleSolenoid(ElectronicsConstants.PNEUMATICS_MODULE_B, ElectronicsConstants.PNEUMATICS_MODULE_TYPE_B, ElectronicsConstants.CLIMBER_EXTEND_FORWARD_PCM, ElectronicsConstants.CLIMBER_EXTEND_REVERSE_PCM);
+        this.climberGrabSolenoid = provider.getDoubleSolenoid(ElectronicsConstants.PNEUMATICS_MODULE_A, ElectronicsConstants.PNEUMATICS_MODULE_TYPE_A, ElectronicsConstants.CLIMBER_GRAB_FORWARD_PCM, ElectronicsConstants.CLIMBER_GRAB_REVERSE_PCM);
 
         this.winchMotorMaster = provider.getTalonSRX(ElectronicsConstants.CLIMBER_WINCH_MASTER_CAN_ID);
         this.winchMotorMaster.setInvertOutput(HardwareConstants.CLIMBER_WINCH_MASTER_INVERT_OUTPUT);

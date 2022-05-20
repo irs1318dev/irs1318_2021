@@ -11,6 +11,11 @@ public class JoystickWrapper implements IJoystick
         this.wrappedObject = new Joystick(port);
     }
 
+    public boolean isConnected()
+    {
+        return this.wrappedObject.isConnected();
+    }
+
     public double getAxis(int relevantAxis)
     {
         return this.wrappedObject.getRawAxis(relevantAxis);

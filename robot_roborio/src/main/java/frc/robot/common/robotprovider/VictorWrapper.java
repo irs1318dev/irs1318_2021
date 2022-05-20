@@ -1,6 +1,6 @@
 package frc.robot.common.robotprovider;
 
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.motorcontrol.Victor;
 
 public class VictorWrapper implements IMotor
 {

@@ -12,14 +12,18 @@ public class PigeonIMUWrapper implements IPigeonIMU
         this.wrappedObject = new PigeonIMU(deviceNumber);
     }
 
-    public int getYawPitchRoll(double[] ypr_deg)
+    public void getYawPitchRoll(double[] ypr_deg)
     {
-        return this.wrappedObject.getYawPitchRoll(ypr_deg).value;
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.getYawPitchRoll(ypr_deg),
+            "PigeonIMU.getYawPitchRoll");
     }
 
-    public int setYaw(double angleDeg)
+    public void setYaw(double angleDeg)
     {
-        return this.wrappedObject.setYaw(angleDeg).value;
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.setYaw(angleDeg),
+            "PigeonIMU.setYaw");
     }
 
     public PigeonState getState()
@@ -30,6 +34,8 @@ public class PigeonIMUWrapper implements IPigeonIMU
 
     public void enterTemperatureCalibrationMode()
     {
-        this.wrappedObject.enterCalibrationMode(CalibrationMode.Temperature);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.enterCalibrationMode(CalibrationMode.Temperature),
+            "PigeonIMU.enterTemperatureCalibrationMode");
     }
 }

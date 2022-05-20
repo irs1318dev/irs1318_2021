@@ -30,6 +30,12 @@ public class RobotProvider implements IRobotProvider
     }
 
     @Override
+    public IDutyCycle getDutyCycle(int digitalInputChannel)
+    {
+        return new DutyCycleWrapper(digitalInputChannel);
+    }
+
+    @Override
     public ITalonSRX getTalonSRX(int deviceNumber)
     {
         return new TalonSRXWrapper(deviceNumber);
@@ -39,6 +45,12 @@ public class RobotProvider implements IRobotProvider
     public ITalonFX getTalonFX(int deviceNumber)
     {
         return new TalonFXWrapper(deviceNumber);
+    }
+
+    @Override
+    public ITalonFX getTalonFX(int deviceNumber, String canbus)
+    {
+        return new TalonFXWrapper(deviceNumber, canbus);
     }
 
     @Override
@@ -54,33 +66,45 @@ public class RobotProvider implements IRobotProvider
     }
 
     @Override
-    public ICompressor getCompressor()
+    public ICompressor getCompressor(PneumaticsModuleType moduleType)
     {
-        return new CompressorWrapper();
+        return new CompressorWrapper(moduleType);
     }
 
     @Override
-    public ICompressor getCompressor(int module)
+    public ICompressor getCompressor(int module, PneumaticsModuleType moduleType)
     {
-        return new CompressorWrapper(module);
+        return new CompressorWrapper(module, moduleType);
     }
 
     @Override
-    public IDoubleSolenoid getDoubleSolenoid(int forwardChannel, int reverseChannel)
+    public IDoubleSolenoid getDoubleSolenoid(PneumaticsModuleType moduleType, int forwardChannel, int reverseChannel)
     {
-        return new DoubleSolenoidWrapper(forwardChannel, reverseChannel);
+        return new DoubleSolenoidWrapper(moduleType, forwardChannel, reverseChannel);
     }
 
     @Override
-    public IDoubleSolenoid getDoubleSolenoid(int module, int forwardChannel, int reverseChannel)
+    public IDoubleSolenoid getDoubleSolenoid(int module, PneumaticsModuleType moduleType, int forwardChannel, int reverseChannel)
     {
-        return new DoubleSolenoidWrapper(module, forwardChannel, reverseChannel);
+        return new DoubleSolenoidWrapper(module, moduleType, forwardChannel, reverseChannel);
     }
 
     @Override
     public IEncoder getEncoder(int channelA, int channelB)
     {
         return new EncoderWrapper(channelA, channelB);
+    }
+
+    @Override
+    public ICANCoder getCANCoder(int deviceNumber)
+    {
+        return new CANCoderWrapper(deviceNumber);
+    }
+
+    @Override
+    public ICANCoder getCANCoder(int deviceNumber, String canbus)
+    {
+        return new CANCoderWrapper(deviceNumber, canbus);
     }
 
     @Override
@@ -108,15 +132,15 @@ public class RobotProvider implements IRobotProvider
     }
 
     @Override
-    public IPowerDistributionPanel getPDP()
+    public IPowerDistribution getPowerDistribution()
     {
-        return new PowerDistributionPanelWrapper();
+        return new PowerDistributionWrapper();
     }
 
     @Override
-    public IPowerDistributionPanel getPDP(int module)
+    public IPowerDistribution getPowerDistribution(int module, PowerDistributionModuleType moduleType)
     {
-        return new PowerDistributionPanelWrapper(module);
+        return new PowerDistributionWrapper(module, moduleType);
     }
 
     @Override
@@ -132,15 +156,15 @@ public class RobotProvider implements IRobotProvider
     }
 
     @Override
-    public ISolenoid getSolenoid(int channel)
+    public ISolenoid getSolenoid(PneumaticsModuleType moduleType, int channel)
     {
-        return new SolenoidWrapper(channel);
+        return new SolenoidWrapper(moduleType, channel);
     }
 
     @Override
-    public ISolenoid getSolenoid(int module, int channel)
+    public ISolenoid getSolenoid(int module, PneumaticsModuleType moduleType, int channel)
     {
-        return new SolenoidWrapper(module, channel);
+        return new SolenoidWrapper(module, moduleType, channel);
     }
 
     @Override
@@ -153,6 +177,30 @@ public class RobotProvider implements IRobotProvider
     public IPigeonIMU getPigeonIMU(int deviceNumber)
     {
         return new PigeonIMUWrapper(deviceNumber);
+    }
+
+    @Override
+    public IPigeon2 getPigeon2(int deviceNumber)
+    {
+        return new Pigeon2Wrapper(deviceNumber);
+    }
+
+    @Override
+    public IPigeon2 getPigeon2(int deviceNumber, String canbus)
+    {
+        return new Pigeon2Wrapper(deviceNumber, canbus);
+    }
+
+    @Override
+    public ICANdle getCANdle(int deviceNumber)
+    {
+        return new CANdleWrapper(deviceNumber);
+    }
+
+    @Override
+    public ICANdle getCANdle(int deviceNumber, String canbus)
+    {
+        return new CANdleWrapper(deviceNumber, canbus);
     }
 
     @Override

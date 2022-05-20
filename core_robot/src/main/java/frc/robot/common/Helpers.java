@@ -7,6 +7,7 @@ public class Helpers
     public static final double RADIANS_TO_DEGREES = (180.0f / Math.PI);
     public static final double INCHES_PER_METER = 39.37;
     public static final double METERS_PER_INCH = 0.0254;
+    public static final double GRAVITY_INCH_PER_SQ_SECOND = 386.22047244094; // in/s^2
 
     public static double EnforceRange(double value, double minValue, double maxValue)
     {

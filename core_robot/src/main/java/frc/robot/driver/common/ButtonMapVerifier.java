@@ -1,21 +1,26 @@
 package frc.robot.driver.common;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import frc.robot.*;
 import frc.robot.driver.*;
 import frc.robot.driver.common.descriptions.*;
 
 public class ButtonMapVerifier
 {
-    public static void Verify(IButtonMap buttonMap)
+    public static void main(String[] args)
     {
-        ButtonMapVerifier.Verify(buttonMap, TuningConstants.THROW_EXCEPTIONS);
+        ButtonMapVerifier.Verify(new ButtonMap(), true, true);
     }
 
-    public static void Verify(IButtonMap buttonMap, boolean failOnError)
+    public static void Verify(IButtonMap buttonMap)
+    {
+        ButtonMapVerifier.Verify(buttonMap, true, false);
+    }
+
+    public static void Verify(IButtonMap buttonMap, boolean failOnError, boolean printMapping)
     {
         if (failOnError)
         {
@@ -258,6 +263,54 @@ public class ButtonMapVerifier
                     }
                 }
             }
+
+            if (printMapping)
+            {
+                List<ButtonCombination> buttonCombinationKeys = new ArrayList<ButtonCombination>(mapping.keySet());
+                buttonCombinationKeys.sort(new ButtonCombinationComparator());
+                for (ButtonCombination buttonCombination : buttonCombinationKeys)
+                {
+                    HashMap<Shift, List<OperationDescription>> shiftMap = mapping.get(buttonCombination);
+                    List<Shift> shiftKeys = new ArrayList<Shift>(shiftMap.keySet());
+                    shiftKeys.sort(new ShiftComparator());
+                    for (Shift shift : shiftKeys)
+                    {
+                        String shiftString = "None";
+                        if (shift == Shift.DriverDebug)
+                        {
+                            shiftString = "DriverDebug";
+                        }
+                        else if (shift == Shift.OperatorDebug)
+                        {
+                            shiftString = "CodriverDebug";
+                        }
+                        else if (shift == Shift.Test1Debug)
+                        {
+                            shiftString = "Test1Debug";
+                        }
+                        else if (shift == Shift.Test2Debug)
+                        {
+                            shiftString = "Test2Debug";
+                        }
+
+                        List<OperationDescription> operationDescriptions = shiftMap.get(shift);
+                        if (operationDescriptions == null)
+                        {
+                            continue;
+                        }
+
+                        for (OperationDescription operationDescription : operationDescriptions)
+                        {
+                            System.out.println(
+                                String.format(
+                                    "%s (Shift: %s)  -->  %s",
+                                    buttonCombination.toString(),
+                                    shiftString,
+                                    operationDescription.getOperation().toString()));
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -273,5 +326,48 @@ public class ButtonMapVerifier
                 (twoMax >= oneMin && twoMax <= oneMax) ||
                 (oneMin >= twoMin && oneMin <= twoMax) ||
                 (oneMax >= twoMin && oneMax <= twoMax);
+    }
+
+    private static class ButtonCombinationComparator implements Comparator<ButtonCombination>
+    {
+        @Override
+        public int compare(ButtonCombination o1, ButtonCombination o2)
+        {
+            if (o1 == o2)
+            {
+                return 0;
+            }
+
+            if (o1 == null)
+            {
+                return -1;
+            }
+
+            return o1.compareTo(o2);
+        }
+    }
+
+    private static class ShiftComparator implements Comparator<Shift>
+    {
+        @Override
+        public int compare(Shift o1, Shift o2)
+        {
+            if (o1 == o2)
+            {
+                return 0;
+            }
+
+            if (o1 == null)
+            {
+                return -1;
+            }
+
+            if (o2 == null)
+            {
+                return 1;
+            }
+
+            return o1.getValue() - o2.getValue();
+        }
     }
 }

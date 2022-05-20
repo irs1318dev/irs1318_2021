@@ -6,7 +6,21 @@ package frc.robot.driver.common.descriptions;
  */
 public enum UserInputDevice
 {
-    None,
-    Driver,
-    Operator;
+    None(-1),
+    Driver(0),
+    Operator(1),
+    Test1(2),
+    Test2(3),
+    MaxCount(4);
+
+    private final int joystickId;
+    private UserInputDevice(int joystickId)
+    {
+        this.joystickId = joystickId;
+    }
+
+    public int getId()
+    {
+        return this.joystickId;
+    }
 }

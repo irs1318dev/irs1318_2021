@@ -53,14 +53,13 @@ public class AnalogOperationState extends OperationState
     }
 
     /**
-     * Checks whether the operation state should change based on the driver and operator joysticks and component sensors. 
-     * @param driver joystick to update from
-     * @param operator joystick to update from
+     * Checks whether the operation state should change based on the joysticks and active stifts. 
+     * @param joysticks to update from
      * @param activeShifts to update from
      * @return true if there was any active user input that triggered a state change
      */
     @Override
-    public boolean checkInput(IJoystick driver, IJoystick operator, Shift activeShifts)
+    public boolean checkInput(IJoystick[] joysticks, Shift activeShifts)
     {
         AnalogOperationDescription description = (AnalogOperationDescription)this.getDescription();
 
@@ -82,82 +81,64 @@ public class AnalogOperationState extends OperationState
             }
         }
 
-        IJoystick relevantJoystick;
-        AnalogAxis relevantAxis;
-        switch (userInputDevice)
+        IJoystick relevantJoystick = joysticks[userInputDevice.getId()];
+        if (relevantJoystick == null || !relevantJoystick.isConnected())
         {
-            case Driver:
-                relevantJoystick = driver;
-                break;
+            if (!TuningConstants.EXPECT_UNUSED_JOYSTICKS && TuningConstants.THROW_EXCEPTIONS)
+            {
+                throw new RuntimeException("Unexpected user input device " + userInputDevice.toString());
+            }
 
-            case Operator:
-                relevantJoystick = operator;
-                break;
+            this.currentValue = description.getDefaultValue();
+            return false;
+        }
 
-            default:
+        AnalogAxis relevantAxis = description.getUserInputDeviceAxis();
+        if (relevantAxis == null || relevantAxis == AnalogAxis.NONE)
+        {
+            return false;
+        }
+
+        double oldValue = this.currentValue;
+        double newValue = relevantJoystick.getAxis(relevantAxis.Value);
+        if (description.getShouldInvert())
+        {
+            newValue *= -1.0;
+        }
+
+        AnalogAxis secondaryAxis = description.getUserInputDeviceSecondaryAxis();
+        if (secondaryAxis != null && secondaryAxis != AnalogAxis.NONE)
+        {
+            double secondaryValue = relevantJoystick.getAxis(secondaryAxis.Value);
+            if (description.getShouldInvertSecondary())
+            {
+                secondaryValue *= -1.0;
+            }
+
+            // don't adjust for dead zone, simply check for having both within dead zone
+            if (this.withinDeadZone(newValue, secondaryValue, description.getDeadZoneMin(), description.getDeadZoneMax(), description.getUseSquaredMagnitudeForDeadZone()))
+            {
+                this.currentValue = description.getDefaultValue();
+                return false;
+            }
+
+            AnalogOperationDescription.ResultCalculator calculator = description.getResultCalculator();
+            if (calculator == null)
+            {
                 if (TuningConstants.THROW_EXCEPTIONS)
                 {
-                    throw new RuntimeException("Unexpected user input device " + description.getUserInputDevice().toString());
+                    throw new RuntimeException("No result calculator provided!");
                 }
 
                 this.currentValue = description.getDefaultValue();
                 return false;
-        }
-
-        double newValue;
-        double oldValue = this.currentValue;
-        if (relevantJoystick != null)
-        {
-            relevantAxis = description.getUserInputDeviceAxis();
-            if (relevantAxis == null || relevantAxis == AnalogAxis.NONE)
-            {
-                return false;
             }
 
-            newValue = relevantJoystick.getAxis(relevantAxis.Value);
-            if (description.getShouldInvert())
-            {
-                newValue *= -1.0;
-            }
-
-            AnalogAxis secondaryAxis = description.getUserInputDeviceSecondaryAxis();
-            if (secondaryAxis != null && secondaryAxis != AnalogAxis.NONE)
-            {
-                double secondaryValue = relevantJoystick.getAxis(secondaryAxis.Value);
-                if (description.getShouldInvertSecondary())
-                {
-                    secondaryValue *= -1.0;
-                }
-
-                // don't adjust for dead zone, simply check for having both within dead zone
-                if (this.withinDeadZone(newValue, secondaryValue, description.getDeadZoneMin(), description.getDeadZoneMax(), description.getUseSquaredMagnitudeForDeadZone()))
-                {
-                    this.currentValue = description.getDefaultValue();
-                    return false;
-                }
-
-                AnalogOperationDescription.ResultCalculator calculator = description.getResultCalculator();
-                if (calculator == null)
-                {
-                    if (TuningConstants.THROW_EXCEPTIONS)
-                    {
-                        throw new RuntimeException("No result calculator provided!");
-                    }
-
-                    this.currentValue = description.getDefaultValue();
-                    return false;
-                }
-
-                newValue = calculator.calculate(newValue, secondaryValue);
-            }
-            else
-            {
-                newValue = this.adjustForDeadZone(newValue, description.getDeadZoneMin(), description.getDeadZoneMax(), description.getDefaultValue(), description.getMultiplier());
-            }
+            newValue = calculator.calculate(newValue, secondaryValue);
         }
         else
         {
-            newValue = description.getDefaultValue();
+            newValue = this.adjustForDeadZone(newValue, description.getDeadZoneMin(), description.getDeadZoneMax(), description.getDefaultValue(), description.getMultiplier());
         }
 
         this.currentValue = newValue;

@@ -19,11 +19,11 @@ public class PigeonManager implements IPositionManager
     private final IDriver driver;
     private final ILogger logger;
 
-    private final IPigeonIMU pigeon;
+    private final IPigeon2 pigeon;
 
     private final double[] ypr_deg; // shared array to avoid extra allocations
 
-    private PigeonState currentState;
+    private boolean isActive;
 
     // Orientation
     private double yaw;
@@ -46,11 +46,12 @@ public class PigeonManager implements IPositionManager
         this.driver = driver;
         this.logger = logger;
 
-        this.pigeon = provider.getPigeonIMU(ElectronicsConstants.PIGEON_IMU_CAN_ID);
+        this.pigeon = provider.getPigeon2(ElectronicsConstants.PIGEON_IMU_CAN_ID);
+        this.pigeon.setYaw(0.0);
 
         this.ypr_deg = new double[3];
 
-        this.currentState = PigeonState.Unknown;
+        this.isActive = false;
 
         this.yaw = 0.0;
         this.pitch = 0.0;
@@ -65,7 +66,7 @@ public class PigeonManager implements IPositionManager
     @Override
     public void readSensors()
     {
-        this.currentState = this.pigeon.getState();
+        this.isActive = true;
 
         this.pigeon.getYawPitchRoll(this.ypr_deg);
         this.yaw = this.ypr_deg[0];
@@ -73,7 +74,7 @@ public class PigeonManager implements IPositionManager
         this.roll = this.ypr_deg[2];
 
         // log the current position and orientation
-        this.logger.logString(LoggingKey.PigeonState, this.currentState.toString());
+        ////this.logger.logBoolean(LoggingKey.PigeonState, this.isActive);
         this.logger.logNumber(LoggingKey.PigeonYaw, this.yaw);
         this.logger.logNumber(LoggingKey.PigeonPitch, this.pitch);
         this.logger.logNumber(LoggingKey.PigeonRoll, this.roll);
@@ -98,11 +99,6 @@ public class PigeonManager implements IPositionManager
             // clear the startAngle too if we are not actively setting it
             this.reset(newYaw == 0.0);
         }
-
-        if (this.driver.getDigital(DigitalOperation.PositionBeginTemperatureCalibration))
-        {
-            this.pigeon.enterTemperatureCalibrationMode();
-        }
     }
 
     /**
@@ -119,7 +115,7 @@ public class PigeonManager implements IPositionManager
      */
     public boolean getIsConnected()
     {
-        return this.currentState == PigeonState.Ready;
+        return this.isActive;
     }
 
     /**

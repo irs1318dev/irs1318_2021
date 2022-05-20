@@ -91,14 +91,13 @@ public class MacroOperationState extends OperationState implements IMacroOperati
     }
 
     /**
-     * Checks whether the operation state should change based on the driver and operator joysticks and component sensors. 
-     * @param driver joystick to update from
-     * @param operator joystick to update from
+     * Checks whether the operation state should change based on the joysticks and active stifts. 
+     * @param joysticks to update from
      * @param activeShifts to update from
      * @return true if there was any active user input that triggered a state change
      */
     @Override
-    public boolean checkInput(IJoystick driver, IJoystick operator, Shift activeShifts)
+    public boolean checkInput(IJoystick[] joysticks, Shift activeShifts)
     {
         MacroOperationDescription description = (MacroOperationDescription)this.getDescription();
 
@@ -120,52 +119,34 @@ public class MacroOperationState extends OperationState implements IMacroOperati
             }
         }
 
-        IJoystick relevantJoystick;
-        UserInputDeviceButton relevantButton;
-        switch (userInputDevice)
+        IJoystick relevantJoystick = joysticks[userInputDevice.getId()];
+        if (relevantJoystick == null || !relevantJoystick.isConnected())
         {
-            case Driver:
-                relevantJoystick = driver;
-                break;
+            if (!TuningConstants.EXPECT_UNUSED_JOYSTICKS && TuningConstants.THROW_EXCEPTIONS)
+            {
+                throw new RuntimeException("Unexpected user input device " + userInputDevice.toString());
+            }
 
-            case Operator:
-                relevantJoystick = operator;
-                break;
-
-            default:
-                if (TuningConstants.THROW_EXCEPTIONS)
-                {
-                    throw new RuntimeException("Unexpected user input device " + description.getUserInputDevice().toString());
-                }
-
-                return false;
+            return false;
         }
 
+        // find the appropriate button and grab the value from the relevant joystick
         boolean buttonPressed;
-        if (relevantJoystick != null)
+        UserInputDeviceButton relevantButton = description.getUserInputDeviceButton();
+        if (relevantButton == UserInputDeviceButton.POV)
         {
-            // find the appropriate button and grab the value from the relevant joystick
-            relevantButton = description.getUserInputDeviceButton();
-
-            if (relevantButton == UserInputDeviceButton.POV)
-            {
-                buttonPressed = relevantJoystick.getPOV() == description.getUserInputDevicePovValue();
-            }
-            else if (relevantButton == UserInputDeviceButton.ANALOG_AXIS_RANGE)
-            {
-                double value = relevantJoystick.getAxis(description.getUserInputDeviceAxis().Value);
-                buttonPressed =
-                    value >= description.getUserInputDeviceRangeMin() &&
-                    value <= description.getUserInputDeviceRangeMax();
-            }
-            else if (relevantButton != UserInputDeviceButton.NONE)
-            {
-                buttonPressed = relevantJoystick.getRawButton(relevantButton.Value);
-            }
-            else
-            {
-                buttonPressed = false;
-            }
+            buttonPressed = relevantJoystick.getPOV() == description.getUserInputDevicePovValue();
+        }
+        else if (relevantButton == UserInputDeviceButton.ANALOG_AXIS_RANGE)
+        {
+            double value = relevantJoystick.getAxis(description.getUserInputDeviceAxis().Value);
+            buttonPressed =
+                value >= description.getUserInputDeviceRangeMin() &&
+                value <= description.getUserInputDeviceRangeMax();
+        }
+        else if (relevantButton != UserInputDeviceButton.NONE)
+        {
+            buttonPressed = relevantJoystick.getRawButton(relevantButton.Value);
         }
         else
         {

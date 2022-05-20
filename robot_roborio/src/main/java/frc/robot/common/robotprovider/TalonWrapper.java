@@ -1,6 +1,6 @@
 package frc.robot.common.robotprovider;
 
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 public class TalonWrapper implements IMotor
 {

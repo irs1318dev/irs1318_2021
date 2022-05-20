@@ -7,14 +7,14 @@ public class DoubleSolenoidWrapper implements IDoubleSolenoid
 {
     private final DoubleSolenoid wrappedObject;
 
-    public DoubleSolenoidWrapper(int forwardChannel, int reverseChannel)
+    public DoubleSolenoidWrapper(PneumaticsModuleType moduleType, int forwardChannel, int reverseChannel)
     {
-        this.wrappedObject = new DoubleSolenoid(forwardChannel, reverseChannel);
+        this.wrappedObject = new DoubleSolenoid(PneumaticHubWrapper.getModuleType(moduleType), forwardChannel, reverseChannel);
     }
 
-    public DoubleSolenoidWrapper(int moduleNumber, int forwardChannel, int reverseChannel)
+    public DoubleSolenoidWrapper(int moduleNumber, PneumaticsModuleType moduleType, int forwardChannel, int reverseChannel)
     {
-        this.wrappedObject = new DoubleSolenoid(moduleNumber, forwardChannel, reverseChannel);
+        this.wrappedObject = new DoubleSolenoid(moduleNumber, PneumaticHubWrapper.getModuleType(moduleType), forwardChannel, reverseChannel);
     }
 
     public void set(DoubleSolenoidValue value)

@@ -57,6 +57,11 @@ public class FlagBase
         return this.value == ((FlagBase)obj).value;
     }
 
+    public int getValue()
+    {
+        return this.value;
+    }
+
     protected static int Union(FlagBase... flags)
     {
         if (flags == null || flags.length == 0)

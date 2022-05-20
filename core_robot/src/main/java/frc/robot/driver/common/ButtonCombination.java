@@ -2,7 +2,7 @@ package frc.robot.driver.common;
 
 import frc.robot.driver.common.descriptions.*;
 
-class ButtonCombination
+class ButtonCombination implements Comparable<ButtonCombination>
 {
     public final UserInputDevice device;
     public final UserInputDeviceButton button;
@@ -36,5 +36,56 @@ class ButtonCombination
             this.button == other.button &&
             this.pov == other.pov &&
             this.axis == other.axis);
+    }
+
+    @Override
+    public String toString()
+    {
+        if (this.button == UserInputDeviceButton.NONE)
+        {
+            return String.format("%s joystick, %s Axis", this.device, this.axis);
+        }
+
+        if (this.button == UserInputDeviceButton.ANALOG_AXIS_RANGE && this.axis != AnalogAxis.NONE)
+        {
+            return String.format("%s joystick, %s Axis (range)", this.device, this.axis);
+        }
+
+        if (this.button == UserInputDeviceButton.POV)
+        {
+            return String.format("%s joystick, POV %d", this.device, this.pov);
+        }
+
+        return String.format("%s joystick, %s button", this.device, this.button);
+    }
+
+    @Override
+    public int compareTo(ButtonCombination o)
+    {
+        if (o == null)
+        {
+            return 1;
+        }
+
+        int deviceComparison = this.device.compareTo(o.device);
+        if (deviceComparison != 0)
+        {
+            return deviceComparison;
+        }
+
+        int buttonComparison = this.button.compareTo(o.button);
+        if (buttonComparison != 0)
+        {
+            return buttonComparison;
+        }
+
+        int povComparison = Integer.compare(this.pov, o.pov);
+        if (povComparison != 0)
+        {
+            return povComparison;
+        }
+
+        int axisComparison = this.axis.compareTo(o.axis);
+        return axisComparison;
     }
 }

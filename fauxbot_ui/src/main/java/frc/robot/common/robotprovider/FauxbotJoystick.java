@@ -38,6 +38,11 @@ public class FauxbotJoystick implements IJoystick
         return result;
     }
 
+    public boolean isConnected()
+    {
+        return true;
+    }
+
     public int getPOV()
     {
         return this.povProperty.get();

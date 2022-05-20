@@ -7,7 +7,6 @@ import java.util.Set;
 
 import javax.inject.Singleton;
 
-import frc.robot.ElectronicsConstants;
 import frc.robot.LoggingKey;
 import frc.robot.TuningConstants;
 import frc.robot.common.LoggingManager;
@@ -32,8 +31,7 @@ public class Driver implements IDriver
     protected final Injector injector;
     protected final Map<IOperation, OperationState> operationStateMap;
 
-    private final IJoystick joystickDriver;
-    private final IJoystick joystickOperator;
+    private final IJoystick[] joysticks;
 
     private final Map<Shift, ShiftDescription> shiftMap;
     private final Map<MacroOperation, IMacroOperationState> macroStateMap;
@@ -60,6 +58,7 @@ public class Driver implements IDriver
         this.logger = logger;
         this.injector = injector;
 
+        HashSet<UserInputDevice> devices = new HashSet<UserInputDevice>();
         AnalogOperationDescription[] analogOperationSchema = buttonMap.getAnalogOperationSchema();
         DigitalOperationDescription[] digitalOperationSchema = buttonMap.getDigitalOperationSchema();
 
@@ -69,6 +68,7 @@ public class Driver implements IDriver
         this.operationStateMap = new HashMap<IOperation, OperationState>(analogOperations.length + digitalOperations.length);
         for (DigitalOperationDescription description : digitalOperationSchema)
         {
+            devices.add(description.getUserInputDevice());
             this.operationStateMap.put(description.getOperation(), new DigitalOperationState(description));
         }
 
@@ -84,6 +84,7 @@ public class Driver implements IDriver
 
         for (AnalogOperationDescription description : analogOperationSchema)
         {
+            devices.add(description.getUserInputDevice());
             this.operationStateMap.put(description.getOperation(), new AnalogOperationState(description));
         }
 
@@ -99,9 +100,6 @@ public class Driver implements IDriver
 
         this.routineSelector = injector.getInstance(AutonomousRoutineSelector.class);
 
-        this.joystickDriver = provider.getJoystick(ElectronicsConstants.JOYSTICK_DRIVER_PORT);
-        this.joystickOperator = provider.getJoystick(ElectronicsConstants.JOYSTICK_CO_DRIVER_PORT);
-
         ShiftDescription[] shiftSchema = buttonMap.getShiftSchema();
         this.shiftMap = new HashMap<Shift, ShiftDescription>();
         for (ShiftDescription description : shiftSchema)
@@ -113,6 +111,7 @@ public class Driver implements IDriver
         MacroOperationDescription[] macroSchema = buttonMap.getMacroOperationSchema();
         for (MacroOperationDescription description : macroSchema)
         {
+            devices.add(description.getUserInputDevice());
             this.macroStateMap.put(
                 (MacroOperation)description.getOperation(),
                 new MacroOperationState(
@@ -122,6 +121,17 @@ public class Driver implements IDriver
         }
 
         ButtonMapVerifier.Verify(buttonMap);
+
+        this.joysticks = new IJoystick[UserInputDevice.MaxCount.getId()];
+        for (UserInputDevice device : UserInputDevice.values())
+        {
+            if (device != UserInputDevice.None &&
+                devices.contains(device))
+            {
+                int id = device.getId();
+                this.joysticks[id] = provider.getJoystick(id);
+            }
+        }
 
         this.currentMode = RobotMode.Disabled;
 
@@ -163,7 +173,7 @@ public class Driver implements IDriver
         for (Shift shift : this.shiftMap.keySet())
         {
             ShiftDescription shiftDescription = this.shiftMap.get(shift);
-            if (this.currentMode != RobotMode.Autonomous && shiftDescription.checkInput(this.joystickDriver, this.joystickOperator))
+            if (this.currentMode != RobotMode.Autonomous && shiftDescription.checkInput(this.joysticks))
             {
                 activeShiftList[shiftIndex++] = shift;
             }
@@ -178,7 +188,7 @@ public class Driver implements IDriver
         for (IOperation operation : this.operationStateMap.keySet())
         {
             OperationState opState = this.operationStateMap.get(operation);
-            boolean receivedInput = this.currentMode != RobotMode.Autonomous && opState.checkInput(this.joystickDriver, this.joystickOperator, activeShifts);
+            boolean receivedInput = this.currentMode != RobotMode.Autonomous && opState.checkInput(this.joysticks, activeShifts);
             if (receivedInput)
             {
                 modifiedOperations.add(operation);
@@ -199,7 +209,7 @@ public class Driver implements IDriver
             IMacroOperationState macroState = this.macroStateMap.get(macroOperation);
             if (this.currentMode != RobotMode.Autonomous)
             {
-                macroState.checkInput(this.joystickDriver, this.joystickOperator, activeShifts);
+                macroState.checkInput(this.joysticks, activeShifts);
             }
 
             if (macroState.getIsActive())
@@ -287,8 +297,7 @@ public class Driver implements IDriver
     {
         this.currentMode = RobotMode.Disabled;
 
-        if (TuningConstants.CANCEL_AUTONOMOUS_ROUTINE_ON_DISABLE &&
-            this.macroStateMap.containsKey(MacroOperation.AutonomousRoutine))
+        if (this.macroStateMap.containsKey(MacroOperation.AutonomousRoutine))
         {
             this.macroStateMap.remove(MacroOperation.AutonomousRoutine);
         }
@@ -318,12 +327,6 @@ public class Driver implements IDriver
         if (this.autonomousTask != null)
         {
             this.autonomousTask.initialize(this.operationStateMap, injector);
-            if (!TuningConstants.CANCEL_AUTONOMOUS_ROUTINE_ON_DISABLE &&
-                this.macroStateMap.containsKey(MacroOperation.AutonomousRoutine))
-            {
-                this.macroStateMap.remove(MacroOperation.AutonomousRoutine);
-            }
-
             this.macroStateMap.put(
                 MacroOperation.AutonomousRoutine,
                 new AutonomousOperationState(this.autonomousTask, this.operationStateMap));

@@ -6,23 +6,38 @@ public class CompressorWrapper implements ICompressor
 {
     private final Compressor wrappedObject;
 
-    public CompressorWrapper()
+    public CompressorWrapper(PneumaticsModuleType moduleType)
     {
-        this.wrappedObject = new Compressor();
+        this.wrappedObject = new Compressor(PneumaticHubWrapper.getModuleType(moduleType));
     }
 
-    public CompressorWrapper(int module)
+    public CompressorWrapper(int module, PneumaticsModuleType moduleType)
     {
-        this.wrappedObject = new Compressor(module);
+        this.wrappedObject = new Compressor(module, PneumaticHubWrapper.getModuleType(moduleType));
     }
 
-    public void start()
+    public void enableAnalog(double minPressurePSI, double maxPressurePSI)
     {
-        this.wrappedObject.start();
+        this.wrappedObject.enableAnalog(minPressurePSI, maxPressurePSI);
     }
 
-    public void stop()
+    public void enableHybrid(double minPressurePSI, double maxPressurePSI)
     {
-        this.wrappedObject.stop();
+        this.wrappedObject.enableHybrid(minPressurePSI, maxPressurePSI);
+    }
+
+    public void enableDigital()
+    {
+        this.wrappedObject.enableDigital();
+    }
+
+    public double getPressure()
+    {
+        return this.wrappedObject.getPressure();
+    }
+
+    public void disable()
+    {
+        this.wrappedObject.disable();
     }
 }

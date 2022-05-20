@@ -142,7 +142,7 @@ public class FauxbotPreferences implements IPreferences
      * Puts the given boolean into the preferences table.
      * */
     @Override
-    public void putBoolean(String key, boolean value)
+    public void setBoolean(String key, boolean value)
     {
         this.pairs.put(key, value);
     }
@@ -151,7 +151,7 @@ public class FauxbotPreferences implements IPreferences
      * Puts the given double into the preferences table.
      * */
     @Override
-    public void putDouble(String key, double value)
+    public void setDouble(String key, double value)
     {
         this.pairs.put(key, value);
     }
@@ -160,7 +160,7 @@ public class FauxbotPreferences implements IPreferences
      * Puts the given float into the preferences table.
      * */
     @Override
-    public void putFloat(String key, float value)
+    public void setFloat(String key, float value)
     {
         this.pairs.put(key, value);
     }
@@ -169,7 +169,7 @@ public class FauxbotPreferences implements IPreferences
      * Puts the given int into the preferences table.
      * */
     @Override
-    public void putInt(String key, int value)
+    public void setInt(String key, int value)
     {
         this.pairs.put(key, value);
     }
@@ -178,7 +178,7 @@ public class FauxbotPreferences implements IPreferences
      * Puts the given long into the preferences table.
      * */
     @Override
-    public void putLong(String key, long value)
+    public void setLong(String key, long value)
     {
         this.pairs.put(key, value);
     }
@@ -187,7 +187,7 @@ public class FauxbotPreferences implements IPreferences
      * Puts the given string into the preferences table.
      * */
     @Override
-    public void putString(String key, String value)
+    public void setString(String key, String value)
     {
         this.pairs.put(key, value);
     }

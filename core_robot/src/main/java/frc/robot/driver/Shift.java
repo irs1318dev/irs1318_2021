@@ -8,8 +8,10 @@ public class Shift extends FlagBase
     public static final Shift None = new Shift(0x0);
     public static final Shift DriverDebug = new Shift(0x1);
     public static final Shift OperatorDebug = new Shift(0x2);
+    public static final Shift Test1Debug = new Shift(0x4);
+    public static final Shift Test2Debug = new Shift(0x8);
 
-    public static final Shift[] AllShifts = new Shift[] { Shift.None, Shift.DriverDebug, Shift.OperatorDebug };
+    public static final Shift[] AllShifts = new Shift[] { Shift.None, Shift.DriverDebug, Shift.OperatorDebug, Shift.Test1Debug, Shift.Test2Debug };
 
     public Shift(int value)
     {

@@ -2,15 +2,15 @@ package frc.robot.common.robotprovider;
 
 import java.util.Collection;
 
+import javax.inject.Singleton;
+
 import edu.wpi.first.wpilibj.Preferences;
 
+@Singleton
 public class PreferencesWrapper implements IPreferences
 {
-    private Preferences wrappedObject;
-
     public PreferencesWrapper()
     {
-        this.wrappedObject = Preferences.getInstance();
     }
 
     /**
@@ -19,7 +19,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public boolean containsKey(String key)
     {
-        return this.wrappedObject.containsKey(key);
+        return Preferences.containsKey(key);
     }
 
     /**
@@ -28,7 +28,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public boolean getBoolean(String key, boolean backup)
     {
-        return this.wrappedObject.getBoolean(key, backup);
+        return Preferences.getBoolean(key, backup);
     }
 
     /**
@@ -37,7 +37,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public double getDouble(String key, double backup)
     {
-        return this.wrappedObject.getDouble(key, backup);
+        return Preferences.getDouble(key, backup);
     }
 
     /**
@@ -46,7 +46,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public float getFloat(String key, float backup)
     {
-        return this.wrappedObject.getFloat(key, backup);
+        return Preferences.getFloat(key, backup);
     }
 
     /**
@@ -55,7 +55,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public int getInt(String key, int backup)
     {
-        return this.wrappedObject.getInt(key, backup);
+        return Preferences.getInt(key, backup);
     }
 
     /**
@@ -64,7 +64,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public Collection<String> getKeys()
     {
-        return this.wrappedObject.getKeys();
+        return Preferences.getKeys();
     }
 
     /**
@@ -73,7 +73,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public long getLong(String key, long backup)
     {
-        return this.wrappedObject.getLong(key, backup);
+        return Preferences.getLong(key, backup);
     }
 
     /**
@@ -82,7 +82,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public String getString(String key, String backup)
     {
-        return this.wrappedObject.getString(key, backup);
+        return Preferences.getString(key, backup);
     }
 
     /**
@@ -91,7 +91,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public void initBoolean(String key, boolean value)
     {
-        this.wrappedObject.initBoolean(key, value);
+        Preferences.initBoolean(key, value);
     }
 
     /**
@@ -100,7 +100,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public void initDouble(String key, double value)
     {
-        this.wrappedObject.initDouble(key, value);
+        Preferences.initDouble(key, value);
     }
 
     /**
@@ -109,7 +109,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public void initFloat(String key, float value)
     {
-        this.wrappedObject.initFloat(key, value);
+        Preferences.initFloat(key, value);
     }
 
     /**
@@ -118,7 +118,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public void initInt(String key, int value)
     {
-        this.wrappedObject.initInt(key, value);
+        Preferences.initInt(key, value);
     }
 
     /**
@@ -127,7 +127,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public void initLong(String key, long value)
     {
-        this.wrappedObject.initLong(key, value);
+        Preferences.initLong(key, value);
     }
 
     /**
@@ -136,61 +136,61 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public void initString(String key, String value)
     {
-        this.wrappedObject.initString(key, value);
+        Preferences.initString(key, value);
     }
 
     /**
      * Puts the given boolean into the preferences table.
      * */
     @Override
-    public void putBoolean(String key, boolean value)
+    public void setBoolean(String key, boolean value)
     {
-        this.wrappedObject.putBoolean(key, value);
+        Preferences.setBoolean(key, value);
     }
 
     /**
      * Puts the given double into the preferences table.
      * */
     @Override
-    public void putDouble(String key, double value)
+    public void setDouble(String key, double value)
     {
-        this.wrappedObject.putDouble(key, value);
+        Preferences.setDouble(key, value);
     }
 
     /**
      * Puts the given float into the preferences table.
      * */
     @Override
-    public void putFloat(String key, float value)
+    public void setFloat(String key, float value)
     {
-        this.wrappedObject.putFloat(key, value);
+        Preferences.setFloat(key, value);
     }
 
     /**
      * Puts the given int into the preferences table.
      * */
     @Override
-    public void putInt(String key, int value)
+    public void setInt(String key, int value)
     {
-        this.wrappedObject.putInt(key, value);
+        Preferences.setInt(key, value);
     }
 
     /**
      * Puts the given long into the preferences table.
      * */
     @Override
-    public void putLong(String key, long value)
+    public void setLong(String key, long value)
     {
-        this.wrappedObject.putLong(key, value);
+        Preferences.setLong(key, value);
     }
 
     /**
      * Puts the given string into the preferences table.
      * */
     @Override
-    public void putString(String key, String value)
+    public void setString(String key, String value)
     {
-        this.wrappedObject.putString(key, value);
+        Preferences.setString(key, value);
     }
 
     /**
@@ -199,7 +199,7 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public void remove(String key)
     {
-        this.wrappedObject.remove(key);
+        Preferences.remove(key);
     }
 
     /**
@@ -208,6 +208,6 @@ public class PreferencesWrapper implements IPreferences
     @Override
     public void removeAll()
     {
-        this.wrappedObject.removeAll();
+        Preferences.removeAll();
     }
 }

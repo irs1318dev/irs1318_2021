@@ -8,6 +8,7 @@ public enum LoggingKey
     RobotState("r.state", true),
     RobotTime("r.time", true),
     RobotMatch("r.match"),
+    RobotCrash("r.crash", true),
     DriverMode("driver.mode"),
     DriverActiveMacros("driver.activeMacros", true),
     DriverActiveShifts("driver.activeShifts"),
@@ -34,7 +35,7 @@ public enum LoggingKey
     NavxZ("navx.z"),
     NavxStartingAngle("navx.startingAngle"),
     PigeonState("pigeon.state"),
-    PigeonYaw("pigeon.yaw"),
+    PigeonYaw("pigeon.yaw", true),
     PigeonPitch("pigeon.pitch"),
     PigeonRoll("pigeon.roll"),
     PigeonStartingYaw("pigeon.startingYaw"),
@@ -116,6 +117,4 @@ public enum LoggingKey
         this.value = value;
         this.shouldLog = shouldLog;
     }
-
-
 }

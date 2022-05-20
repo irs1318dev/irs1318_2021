@@ -3,7 +3,7 @@ package frc.robot.common.robotprovider;
 import frc.robot.IRealWorldSimulator;
 import frc.robot.common.PIDHandler;
 
-public abstract class FauxbotTalonXBase extends FauxbotAdvancedMotorBase implements ITalonSRX
+public abstract class FauxbotTalonXBase extends FauxbotAdvancedMotorBase
 {
     private final IRealWorldSimulator simulator;
 
@@ -51,6 +51,10 @@ public abstract class FauxbotTalonXBase extends FauxbotAdvancedMotorBase impleme
         }
     }
 
+    public void setGeneralFramePeriod(int periodMS)
+    {
+    }
+
     public void setFeedbackFramePeriod(int periodMS)
     {
     }
@@ -80,7 +84,7 @@ public abstract class FauxbotTalonXBase extends FauxbotAdvancedMotorBase impleme
         this.resetPID();
     }
 
-    public void setMotionMagicPIDF(double p, double i, double d, double f, int velocity, int acceleration, int slotId)
+    public void setMotionMagicPIDF(double p, double i, double d, double f, double velocity, double acceleration, int slotId)
     {
     }
 

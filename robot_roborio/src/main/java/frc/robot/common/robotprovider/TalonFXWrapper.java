@@ -8,8 +8,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
-import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 public class TalonFXWrapper implements ITalonFX
 {
@@ -23,6 +23,12 @@ public class TalonFXWrapper implements ITalonFX
     public TalonFXWrapper(int deviceNumber)
     {
         this.wrappedObject = new TalonFX(deviceNumber);
+        this.controlMode = ControlMode.PercentOutput;
+    }
+
+    public TalonFXWrapper(int deviceNumber, String canbus)
+    {
+        this.wrappedObject = new TalonFX(deviceNumber, canbus);
         this.controlMode = ControlMode.PercentOutput;
     }
 
@@ -94,28 +100,47 @@ public class TalonFXWrapper implements ITalonFX
             return;
         }
 
-        this.wrappedObject.configSelectedFeedbackSensor(device, TalonFXWrapper.pidIdx, 0);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.configSelectedFeedbackSensor(device, TalonFXWrapper.pidIdx, 0),
+            "TalonFX.configSelectedFeedbackSensor");
     }
 
-    public void setPIDFFramePeriod(int periodMS)
+    public void setGeneralFramePeriod(int periodMS)
     {
-        this.wrappedObject.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, periodMS, TalonFXWrapper.timeoutMS);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, periodMS, TalonFXWrapper.timeoutMS),
+            "TalonFX.setGeneralFramePeriod");
     }
 
     public void setFeedbackFramePeriod(int periodMS)
     {
-        this.wrappedObject.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, periodMS, TalonFXWrapper.timeoutMS);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, periodMS, TalonFXWrapper.timeoutMS),
+            "TalonFX.setFeedbackFramePeriod");
+    }
+
+    public void setPIDFFramePeriod(int periodMS)
+    {
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, periodMS, TalonFXWrapper.timeoutMS),
+            "TalonFX.setPIDFFramePeriod");
     }
 
     public void configureVelocityMeasurements(int periodMS, int windowSize)
     {
-        this.wrappedObject.configVelocityMeasurementPeriod(VelocityMeasPeriod.valueOf(periodMS), TalonFXWrapper.timeoutMS);
-        this.wrappedObject.configVelocityMeasurementWindow(windowSize, TalonFXWrapper.timeoutMS);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.valueOf(periodMS), TalonFXWrapper.timeoutMS),
+            "TalonFX.configureVelocityMeasurementPeriod");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.configVelocityMeasurementWindow(windowSize, TalonFXWrapper.timeoutMS),
+            "TalonFX.configureVelocityMeasurementWindow");
     }
 
     public void configureAllowableClosedloopError(int slotId, int error)
     {
-        this.wrappedObject.configAllowableClosedloopError(slotId, error, TalonFXWrapper.timeoutMS);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.configAllowableClosedloopError(slotId, error, TalonFXWrapper.timeoutMS),
+            "TalonFX.configureAllowableClosedloopError");
     }
 
     public void setSelectedSlot(int slotId)
@@ -125,30 +150,62 @@ public class TalonFXWrapper implements ITalonFX
 
     public void setPIDF(double p, double i, double d, double f, int slotId)
     {
-        this.wrappedObject.config_kP(slotId, p, TalonFXWrapper.timeoutMS);
-        this.wrappedObject.config_kI(slotId, i, TalonFXWrapper.timeoutMS);
-        this.wrappedObject.config_kD(slotId, d, TalonFXWrapper.timeoutMS);
-        this.wrappedObject.config_kF(slotId, f, TalonFXWrapper.timeoutMS);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.config_kP(slotId, p, TalonFXWrapper.timeoutMS),
+            "TalonFX.setPIDF_kP");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.config_kI(slotId, i, TalonFXWrapper.timeoutMS),
+            "TalonFX.setPIDF_kI");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.config_kD(slotId, d, TalonFXWrapper.timeoutMS),
+            "TalonFX.setPIDF_kD");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.config_kF(slotId, f, TalonFXWrapper.timeoutMS),
+            "TalonFX.setPIDF_kF");
     }
 
-    public void setMotionMagicPIDF(double p, double i, double d, double f, int velocity, int acceleration, int slotId)
+    public void setMotionMagicPIDF(double p, double i, double d, double f, double velocity, double acceleration, int slotId)
     {
-        this.wrappedObject.config_kP(slotId, p, TalonFXWrapper.timeoutMS);
-        this.wrappedObject.config_kI(slotId, i, TalonFXWrapper.timeoutMS);
-        this.wrappedObject.config_kD(slotId, d, TalonFXWrapper.timeoutMS);
-        this.wrappedObject.config_kF(slotId, f, TalonFXWrapper.timeoutMS);
-        this.wrappedObject.configMotionCruiseVelocity(velocity, TalonFXWrapper.timeoutMS);
-        this.wrappedObject.configMotionAcceleration(acceleration, TalonFXWrapper.timeoutMS);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.config_kP(slotId, p, TalonFXWrapper.timeoutMS),
+            "TalonFX.setMotionMagicPIDF_kP");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.config_kI(slotId, i, TalonFXWrapper.timeoutMS),
+            "TalonFX.setMotionMagicPIDF_kI");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.config_kD(slotId, d, TalonFXWrapper.timeoutMS),
+            "TalonFX.setMotionMagicPIDF_kD");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.config_kF(slotId, f, TalonFXWrapper.timeoutMS),
+            "TalonFX.setMotionMagicPIDF_kF");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.configMotionCruiseVelocity(velocity, TalonFXWrapper.timeoutMS),
+            "TalonFX.setMotionMagicPIDF_CruiseVelocity");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.configMotionAcceleration(acceleration, TalonFXWrapper.timeoutMS),
+            "TalonFX.setMotionMagicPIDF_Acceleration");
     }
 
     public void setPIDF(double p, double i, double d, double f, int izone, double closeLoopRampRate, int slotId)
     {
-        this.wrappedObject.config_kP(slotId, p, TalonFXWrapper.timeoutMS);
-        this.wrappedObject.config_kI(slotId, i, TalonFXWrapper.timeoutMS);
-        this.wrappedObject.config_kD(slotId, d, TalonFXWrapper.timeoutMS);
-        this.wrappedObject.config_kF(slotId, f, TalonFXWrapper.timeoutMS);
-        this.wrappedObject.config_IntegralZone(slotId, izone, TalonFXWrapper.timeoutMS);
-        this.wrappedObject.configClosedloopRamp(closeLoopRampRate, TalonFXWrapper.timeoutMS);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.config_kP(slotId, p, TalonFXWrapper.timeoutMS),
+            "TalonFX.setPIDF_kP");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.config_kI(slotId, i, TalonFXWrapper.timeoutMS),
+            "TalonFX.setPIDF_kI");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.config_kD(slotId, d, TalonFXWrapper.timeoutMS),
+            "TalonFX.setPIDF_kD");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.config_kF(slotId, f, TalonFXWrapper.timeoutMS),
+            "TalonFX.setPIDF_kF");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.config_IntegralZone(slotId, izone, TalonFXWrapper.timeoutMS),
+            "TalonFX.setPIDF_IntegralZone");
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.configClosedloopRamp(closeLoopRampRate, TalonFXWrapper.timeoutMS),
+            "TalonFX.setPIDF_CloosedloopRamp");
     }
 
     public void setForwardLimitSwitch(boolean enabled, boolean normallyOpen)
@@ -165,10 +222,12 @@ public class TalonFXWrapper implements ITalonFX
             type = LimitSwitchNormal.NormallyOpen;
         }
 
-        this.wrappedObject.configForwardLimitSwitchSource(
-            source,
-            type,
-            TalonFXWrapper.timeoutMS);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.configForwardLimitSwitchSource(
+                source,
+                type,
+                TalonFXWrapper.timeoutMS),
+            "TalonFX.setForwardLimitSwitch");
     }
 
     public void setReverseLimitSwitch(boolean enabled, boolean normallyOpen)
@@ -185,10 +244,12 @@ public class TalonFXWrapper implements ITalonFX
             type = LimitSwitchNormal.NormallyOpen;
         }
 
-        this.wrappedObject.configReverseLimitSwitchSource(
-            source,
-            type,
-            TalonFXWrapper.timeoutMS);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.configReverseLimitSwitchSource(
+                source,
+                type,
+                TalonFXWrapper.timeoutMS),
+            "TalonFX.setReverseLimitSwitch");
     }
 
     public void setInvertOutput(boolean invert)
@@ -199,6 +260,32 @@ public class TalonFXWrapper implements ITalonFX
     public void setInvertSensor(boolean invert)
     {
         this.wrappedObject.setSensorPhase(invert);
+    }
+
+    public void setInvert(TalonFXInvertType invertType)
+    {
+        com.ctre.phoenix.motorcontrol.TalonFXInvertType ctreInvertType;
+        switch (invertType)
+        {
+            case CounterClockwise:
+                ctreInvertType = com.ctre.phoenix.motorcontrol.TalonFXInvertType.CounterClockwise;
+                break;
+
+            case FollowMaster:
+                ctreInvertType = com.ctre.phoenix.motorcontrol.TalonFXInvertType.FollowMaster;
+                break;
+
+            case OpposeMaster:
+                ctreInvertType = com.ctre.phoenix.motorcontrol.TalonFXInvertType.OpposeMaster;
+                break;
+
+            default:
+            case Clockwise:
+                ctreInvertType = com.ctre.phoenix.motorcontrol.TalonFXInvertType.Clockwise;
+                break;
+        }
+
+        this.wrappedObject.setInverted(ctreInvertType);
     }
 
     public void setNeutralMode(MotorNeutralMode neutralMode)
@@ -218,14 +305,18 @@ public class TalonFXWrapper implements ITalonFX
 
     public void setVoltageCompensation(boolean enabled, double maxVoltage)
     {
-        this.wrappedObject.configVoltageCompSaturation(maxVoltage, TalonFXWrapper.timeoutMS);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.configVoltageCompSaturation(maxVoltage, TalonFXWrapper.timeoutMS),
+            "TalonFX.setVoltageCompensationSaturation");
         this.wrappedObject.enableVoltageCompensation(enabled);
     }
 
     public void setSupplyCurrentLimit(boolean enabled, double currentLimit, double triggerThresholdCurrent, double triggerThresholdTime)
     {
         SupplyCurrentLimitConfiguration config = new SupplyCurrentLimitConfiguration(enabled, currentLimit, triggerThresholdCurrent, triggerThresholdTime);
-        this.wrappedObject.configSupplyCurrentLimit(config);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.configSupplyCurrentLimit(config),
+            "TalonFX.setSupplyCurrentLimit");
     }
 
     public void stop()
@@ -235,12 +326,16 @@ public class TalonFXWrapper implements ITalonFX
 
     public void setPosition(double position)
     {
-        this.wrappedObject.setSelectedSensorPosition(position, TalonFXWrapper.pidIdx, TalonFXWrapper.timeoutMS);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.setSelectedSensorPosition(position, TalonFXWrapper.pidIdx, TalonFXWrapper.timeoutMS),
+            "TalonFX.setPosition");
     }
 
     public void reset()
     {
-        this.wrappedObject.setSelectedSensorPosition(0.0, TalonFXWrapper.pidIdx, TalonFXWrapper.timeoutMS);
+        CTREErrorCodeHelper.printError(
+            this.wrappedObject.setSelectedSensorPosition(0.0, TalonFXWrapper.pidIdx, TalonFXWrapper.timeoutMS),
+            "TalonFX.reset");
     }
 
     public double getPosition()

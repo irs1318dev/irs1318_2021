@@ -1,7 +1,7 @@
 package frc.robot.common.robotprovider;
 
 import com.revrobotics.*;
-import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
+import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.CANSparkMax.*;
 import com.revrobotics.CANSparkMaxLowLevel.*;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -9,13 +9,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class SparkMaxWrapper implements ISparkMax
 {
     final CANSparkMax wrappedObject;
-    private CANPIDController pidController;
-    private CANEncoder wrappedEncoder;
-    private CANDigitalInput wrappedFwdLimitSwitch;
-    private CANDigitalInput wrappedRevLimitSwitch;
+    private SparkMaxPIDController pidController;
+    private RelativeEncoder wrappedEncoder;
+    private SparkMaxLimitSwitch wrappedFwdLimitSwitch;
+    private SparkMaxLimitSwitch wrappedRevLimitSwitch;
 
     private SparkMaxControlMode currentMode;
-    private int currentSlot;
 
     public SparkMaxWrapper(int deviceID, SparkMaxMotorType motorType)
     {
@@ -33,17 +32,11 @@ public class SparkMaxWrapper implements ISparkMax
 
         this.wrappedObject = new CANSparkMax(deviceID, type);
         this.currentMode = SparkMaxControlMode.PercentOutput;
-        this.currentSlot = 0;
     }
 
     public void setControlMode(SparkMaxControlMode mode)
     {
         this.currentMode = mode;
-    }
-
-    public void setSelectedSlot(int slotId)
-    {
-        this.currentSlot = slotId;
     }
 
     public void set(double value)
@@ -54,7 +47,7 @@ public class SparkMaxWrapper implements ISparkMax
             this.pidController = this.wrappedObject.getPIDController();
         }
 
-        ControlType controlType;
+        CANSparkMax.ControlType controlType;
         switch (this.currentMode)
         {
             case PercentOutput:
@@ -62,22 +55,22 @@ public class SparkMaxWrapper implements ISparkMax
                 return;
 
             case Position:
-                controlType = ControlType.kPosition;
+                controlType = CANSparkMax.ControlType.kPosition;
                 break;
 
             case Velocity:
-                controlType = ControlType.kVelocity;
+                controlType = CANSparkMax.ControlType.kVelocity;
                 break;
 
             case Voltage:
-                controlType = ControlType.kVoltage;
+                controlType = CANSparkMax.ControlType.kVoltage;
                 break;
 
             default:
                 throw new RuntimeException("unexpected control mode " + this.currentMode);
         }
 
-        this.pidController.setReference(value, controlType, this.currentSlot);
+        this.pidController.setReference(value, controlType);
     }
 
     public void follow(ISparkMax sparkMax)
@@ -201,10 +194,10 @@ public class SparkMaxWrapper implements ISparkMax
 
     public void setForwardLimitSwitch(boolean enabled, boolean normallyOpen)
     {
-        LimitSwitchPolarity polarity = LimitSwitchPolarity.kNormallyClosed;
+        SparkMaxLimitSwitch.Type polarity = SparkMaxLimitSwitch.Type.kNormallyClosed;
         if (normallyOpen)
         {
-            polarity = LimitSwitchPolarity.kNormallyOpen;
+            polarity = SparkMaxLimitSwitch.Type.kNormallyOpen;
         }
 
         this.wrappedFwdLimitSwitch = this.wrappedObject.getForwardLimitSwitch(polarity);
@@ -213,10 +206,10 @@ public class SparkMaxWrapper implements ISparkMax
 
     public void setReverseLimitSwitch(boolean enabled, boolean normallyOpen)
     {
-        LimitSwitchPolarity polarity = LimitSwitchPolarity.kNormallyClosed;
+        SparkMaxLimitSwitch.Type polarity = SparkMaxLimitSwitch.Type.kNormallyClosed;
         if (normallyOpen)
         {
-            polarity = LimitSwitchPolarity.kNormallyOpen;
+            polarity = SparkMaxLimitSwitch.Type.kNormallyOpen;
         }
 
         this.wrappedRevLimitSwitch = this.wrappedObject.getForwardLimitSwitch(polarity);
@@ -307,7 +300,7 @@ public class SparkMaxWrapper implements ISparkMax
             return false;
         }
 
-        return this.wrappedFwdLimitSwitch.get();
+        return this.wrappedFwdLimitSwitch.isPressed();
     }
 
     public boolean getReverseLimitSwitchStatus()
@@ -317,6 +310,6 @@ public class SparkMaxWrapper implements ISparkMax
             return false;
         }
 
-        return this.wrappedRevLimitSwitch.get();
+        return this.wrappedRevLimitSwitch.isPressed();
     }
 }

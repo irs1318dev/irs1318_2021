@@ -55,9 +55,10 @@ public class CoreRobot<T extends AbstractModule>
         Injector injector = this.getInjector();
 
         IRobotProvider robotProvider = injector.getInstance(IRobotProvider.class);
-        IPreferences preferences = robotProvider.getPreferences();
+        // IPreferences preferences = 
+        robotProvider.getPreferences();
 
-        SettingsManager.initAndUpdatePreferences(preferences, TuningConstants.class);
+        //SettingsManager.initAndUpdatePreferences(preferences, TuningConstants.class);
         //SettingsManager.initAndUpdatePreferences(preferences, HardwareConstants.class);
         //SettingsManager.initAndUpdatePreferences(preferences, ElectronicsConstants.class);
         //SettingsManager.initAndUpdatePreferences(preferences, VisionConstants.class);
@@ -110,12 +111,8 @@ public class CoreRobot<T extends AbstractModule>
      */
     public void autonomousInit()
     {
-        this.driver.startMode(RobotMode.Autonomous);
+        this.generalInit(RobotMode.Autonomous);
 
-        this.generalInit();
-
-        // log that we are in autonomous mode
-        this.logger.logString(LoggingKey.RobotState, "Autonomous");
     }
 
     /**
@@ -124,12 +121,7 @@ public class CoreRobot<T extends AbstractModule>
      */
     public void teleopInit()
     {
-        this.driver.startMode(RobotMode.Teleop);
-
-        this.generalInit();
-
-        // log that we are in teleop mode
-        this.logger.logString(LoggingKey.RobotState, "Teleop");
+        this.generalInit(RobotMode.Teleop);
     }
 
     /**
@@ -138,12 +130,7 @@ public class CoreRobot<T extends AbstractModule>
      */
     public void testInit()
     {
-        this.driver.startMode(RobotMode.Test);
-
-        this.generalInit();
-
-        // log that we are in test mode
-        this.logger.logString(LoggingKey.RobotState, "Test");
+        this.generalInit(RobotMode.Test);
     }
 
     /**
@@ -198,19 +185,36 @@ public class CoreRobot<T extends AbstractModule>
     /**
      * General initialization code for teleop/autonomous mode should go here.
      */
-    private void generalInit()
+    private void generalInit(RobotMode robotMode)
     {
-        Injector injector = this.getInjector();
-        this.logger.refresh(injector);
-
-        // log match information
-        IRobotProvider robotProvider = injector.getInstance(IRobotProvider.class);
-        this.logger.logString(LoggingKey.RobotMatch, this.generateMatchString(robotProvider.getDriverStation()));
-
-        if (!this.timerStarted)
+        try
         {
-            this.timer.start();
-            this.timerStarted = true;
+            this.driver.startMode(robotMode);
+
+            Injector injector = this.getInjector();
+            this.logger.refresh(injector);
+
+            // log match information
+            IRobotProvider robotProvider = injector.getInstance(IRobotProvider.class);
+            this.logger.logString(LoggingKey.RobotMatch, this.generateMatchString(robotProvider.getDriverStation()));
+
+            if (!this.timerStarted)
+            {
+                this.timer.start();
+                this.timerStarted = true;
+            }
+
+            // log our current mode
+            this.logger.logString(LoggingKey.RobotState, robotMode.toString());
+        }
+        catch (RuntimeException ex)
+        {
+            if (TuningConstants.LOG_EXCEPTIONS)
+            {
+                this.logger.logString(LoggingKey.RobotCrash, ExceptionHelpers.exceptionString(ex));
+            }
+
+            throw ex;
         }
     }
 
@@ -219,20 +223,32 @@ public class CoreRobot<T extends AbstractModule>
      */
     private void generalPeriodic()
     {
-        this.mechanisms.readSensors();
-
-        this.driver.update();
-
-        // run each mechanism
-        this.mechanisms.update();
-
-        this.logger.logNumber(LoggingKey.RobotTime, this.timer.get());
-        this.logger.update();
-
-        if (this.loggerUpdates++ > TuningConstants.LOG_FLUSH_THRESHOLD)
+        try
         {
-            // lazily flush the log, in case of power-off.
-            this.logger.flush();
+            this.mechanisms.readSensors();
+
+            this.driver.update();
+
+            // run each mechanism
+            this.mechanisms.update();
+
+            this.logger.logNumber(LoggingKey.RobotTime, this.timer.get());
+            this.logger.update();
+
+            if (this.loggerUpdates++ > TuningConstants.LOG_FLUSH_THRESHOLD)
+            {
+                // lazily flush the log, in case of power-off.
+                this.logger.flush();
+            }
+        }
+        catch (RuntimeException ex)
+        {
+            if (TuningConstants.LOG_EXCEPTIONS)
+            {
+                this.logger.logString(LoggingKey.RobotCrash, ExceptionHelpers.exceptionString(ex));
+            }
+
+            throw ex;
         }
     }
 

@@ -11,6 +11,11 @@ package frc.robot.driver.common;
  * 2 - Twist (stick, twist)
  * 3 - Throttle: -1 to 1
  * -----------------------
+ * Razer Tartarus button pad
+ * 0 - DPAD X (all or nothing: -1, 0, or 1)
+ * 1 - DPAD Y (all or nothing: -1, 0, or 1)
+ * 2 - Thumb button (all or nothing: 0 or 1)
+ * -----------------------
  * XBox One Controller:
  * 0 - LS_X (left stick, X)
  * 1 - LS_Y (left stick, Y)
@@ -26,7 +31,6 @@ package frc.robot.driver.common;
  * 3 - LT (left trigger, L2): -1 to 1
  * 4 - RT (right trigger, R2): -1 to 1
  * 5 - RS_Y (right stick, Y)
- * 
  */
 public enum AnalogAxis
 {
@@ -35,6 +39,9 @@ public enum AnalogAxis
     JOYSTICK_Y(1),
     JOYSTICK_TWIST(2),
     JOYSTICK_THROTTLE(3),
+    BUTTONPAD_DPAD_X(0),
+    BUTTONPAD_DPAD_Y(1),
+    BUTTONPAD_THUMB_BUTTON(1),
     XBONE_LSX(0),
     XBONE_LSY(1),
     XBONE_LT(2),

@@ -10,11 +10,16 @@ public class TuningConstants
 {
     public static final boolean COMPETITION_ROBOT = true;
     public static boolean THROW_EXCEPTIONS = !TuningConstants.COMPETITION_ROBOT;
+    public static boolean LOG_EXCEPTIONS = true;
+
+    public static final boolean EXPECT_UNUSED_JOYSTICKS = true;
 
     //================================================== Magic Values ==============================================================
 
     public static final double MAGIC_NULL_VALUE = -1318.0;
     public static final double PERRY_THE_PLATYPUS = 0.0;
+    public static final double ENDGAME_START_TIME = 30.0;
+    public static final double ENDGAME_CLIMB_TIME = 5.0;
 
     //================================================== Logging  ==============================================================
 

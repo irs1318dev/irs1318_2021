@@ -74,56 +74,42 @@ public class ShiftDescription
         return this.userInputDevicePovValue;
     }
 
-    public boolean checkInput(IJoystick driver, IJoystick operator)
+    public boolean checkInput(IJoystick[] joysticks)
     {
-        IJoystick relevantJoystick;
-        UserInputDeviceButton relevantButton;
-        switch (this.getUserInputDevice())
+        UserInputDevice userInputDevice = this.getUserInputDevice();
+        IJoystick relevantJoystick = null;
+        if (userInputDevice != UserInputDevice.None)
         {
-            case None:
-                return false;
-
-            case Driver:
-                relevantJoystick = driver;
-                break;
-
-            case Operator:
-                relevantJoystick = operator;
-                break;
-
-            default:
-                if (TuningConstants.THROW_EXCEPTIONS)
-                {
-                    throw new RuntimeException("unexpected user input device " + this.getUserInputDevice().toString());
-                }
-
-                return false;
+            relevantJoystick = joysticks[userInputDevice.getId()];
         }
 
-        if (relevantJoystick != null)
+        if (relevantJoystick == null || !relevantJoystick.isConnected())
         {
-            // find the appropriate button and grab the value from the relevant joystick
-            relevantButton = this.getUserInputDeviceButton();
+            if (!TuningConstants.EXPECT_UNUSED_JOYSTICKS && TuningConstants.THROW_EXCEPTIONS)
+            {
+                throw new RuntimeException("Unexpected user input device " + userInputDevice.toString());
+            }
 
-            if (relevantButton == UserInputDeviceButton.POV)
-            {
-                return relevantJoystick.getPOV() == this.getUserInputDevicePovValue();
-            }
-            else if (relevantButton == UserInputDeviceButton.ANALOG_AXIS_RANGE)
-            {
-                double value = relevantJoystick.getAxis(this.userInputDeviceAxis.Value);
-                return
-                    value >= this.userInputDeviceAxisRangeMin &&
-                    value <= this.userInputDeviceAxisRangeMax;
-            }
-            else if (relevantButton != UserInputDeviceButton.NONE)
-            {
-                return relevantJoystick.getRawButton(relevantButton.Value);
-            }
-            else
-            {
-                return false;
-            }
+            return false;
+        }
+
+        // find the appropriate button and grab the value from the relevant joystick
+        UserInputDeviceButton relevantButton = this.getUserInputDeviceButton();
+
+        if (relevantButton == UserInputDeviceButton.POV)
+        {
+            return relevantJoystick.getPOV() == this.getUserInputDevicePovValue();
+        }
+        else if (relevantButton == UserInputDeviceButton.ANALOG_AXIS_RANGE)
+        {
+            double value = relevantJoystick.getAxis(this.userInputDeviceAxis.Value);
+            return
+                value >= this.userInputDeviceAxisRangeMin &&
+                value <= this.userInputDeviceAxisRangeMax;
+        }
+        else if (relevantButton != UserInputDeviceButton.NONE)
+        {
+            return relevantJoystick.getRawButton(relevantButton.Value);
         }
         else
         {

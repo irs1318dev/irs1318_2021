@@ -59,14 +59,13 @@ public class AutonomousOperationState extends OperationState implements IMacroOp
     }
 
     /**
-     * Checks whether the operation state should change based on the driver and operator joysticks and component sensors. 
-     * @param driver joystick to update from
-     * @param operator joystick to update from
+     * Checks whether the operation state should change based on the joysticks and active stifts. 
+     * @param joysticks to update from
      * @param activeShifts to update from
      * @return true if there was any active user input that triggered a state change
      */
     @Override
-    public boolean checkInput(IJoystick driver, IJoystick operator, Shift activeShifts)
+    public boolean checkInput(IJoystick[] joysticks, Shift activeShifts)
     {
         return false;
     }

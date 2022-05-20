@@ -7,23 +7,20 @@ import edu.wpi.first.wpilibj.DriverStation;
 @Singleton
 public class DriverStationWrapper implements IDriverStation
 {
-    private final DriverStation wrappedObject;
-
     public DriverStationWrapper()
     {
-        this.wrappedObject = DriverStation.getInstance();
     }
 
     @Override
     public String getEventName()
     {
-        return this.wrappedObject.getEventName();
+        return DriverStation.getEventName();
     }
 
     @Override
     public Alliance getAlliance()
     {
-        switch (this.wrappedObject.getAlliance())
+        switch (DriverStation.getAlliance())
         {
             case Red:
                 return Alliance.Red;
@@ -40,19 +37,19 @@ public class DriverStationWrapper implements IDriverStation
     @Override
     public int getLocation()
     {
-        return this.wrappedObject.getLocation();
+        return DriverStation.getLocation();
     }
 
     @Override
     public int getMatchNumber()
     {
-        return this.wrappedObject.getMatchNumber();
+        return DriverStation.getMatchNumber();
     }
 
     @Override
     public MatchType getMatchType()
     {
-        switch (this.wrappedObject.getMatchType())
+        switch (DriverStation.getMatchType())
         {
             case Practice:
                 return MatchType.Practice;
@@ -72,27 +69,27 @@ public class DriverStationWrapper implements IDriverStation
     @Override
     public int getReplayNumber()
     {
-        return this.wrappedObject.getReplayNumber();
+        return DriverStation.getReplayNumber();
     }
 
     @Override
     public double getMatchTime()
     {
-        return this.wrappedObject.getMatchTime();
+        return DriverStation.getMatchTime();
     }
 
     @Override
     public RobotMode getMode()
     {
-        if (!this.wrappedObject.isEnabled())
+        if (!DriverStation.isEnabled())
         {
             return RobotMode.Disabled;
         }
-        else if (this.wrappedObject.isAutonomous())
+        else if (DriverStation.isAutonomous())
         {
             return RobotMode.Autonomous;
         }
-        else if (this.wrappedObject.isTest())
+        else if (DriverStation.isTest())
         {
             return RobotMode.Test;
         }
@@ -105,6 +102,6 @@ public class DriverStationWrapper implements IDriverStation
     @Override
     public String getGameSpecificMessage()
     {
-        return this.wrappedObject.getGameSpecificMessage();
+        return DriverStation.getGameSpecificMessage();
     }
 }

@@ -77,32 +77,32 @@ public interface IPreferences
     /**
      * Puts the given boolean into the preferences table.
      */
-    void putBoolean(String key, boolean value);
+    void setBoolean(String key, boolean value);
 
     /**
      * Puts the given double into the preferences table.
      */
-    void putDouble(String key, double value);
+    void setDouble(String key, double value);
 
     /**
      * Puts the given float into the preferences table.
      */
-    void putFloat(String key, float value);
+    void setFloat(String key, float value);
 
     /**
      * Puts the given int into the preferences table.
      */
-    void putInt(String key, int value);
+    void setInt(String key, int value);
 
     /**
      * Puts the given long into the preferences table.
      */
-    void putLong(String key, long value);
+    void setLong(String key, long value);
 
     /**
      * Puts the given string into the preferences table.
      */
-    void putString(String key, String value);
+    void setString(String key, String value);
 
     /**
      * Remove a preference.

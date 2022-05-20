@@ -218,15 +218,7 @@ public class FauxbotApplication extends Application
                         firstMacro = false;
                     }
 
-                    int joystickPort = -1;
-                    if (description.getUserInputDevice() == UserInputDevice.Driver)
-                    {
-                        joystickPort = ElectronicsConstants.JOYSTICK_DRIVER_PORT;
-                    }
-                    else if (description.getUserInputDevice() == UserInputDevice.Operator)
-                    {
-                        joystickPort = ElectronicsConstants.JOYSTICK_CO_DRIVER_PORT;
-                    }
+                    int joystickPort = description.getUserInputDevice().getId();
 
                     if (joystickPort != -1)
                     {
@@ -520,15 +512,7 @@ public class FauxbotApplication extends Application
             this.firstOperation = false;
         }
 
-        int joystickPort = -1;
-        if (description.getUserInputDevice() == UserInputDevice.Driver)
-        {
-            joystickPort = ElectronicsConstants.JOYSTICK_DRIVER_PORT;
-        }
-        else if (description.getUserInputDevice() == UserInputDevice.Operator)
-        {
-            joystickPort = ElectronicsConstants.JOYSTICK_CO_DRIVER_PORT;
-        }
+        int joystickPort = description.getUserInputDevice().getId();
 
         if (joystickPort != -1)
         {
