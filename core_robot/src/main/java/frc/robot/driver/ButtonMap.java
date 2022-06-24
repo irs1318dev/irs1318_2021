@@ -200,6 +200,7 @@ public class ButtonMap implements IButtonMap
             Shift.DriverDebug,
             Shift.None,
             ButtonType.Click),
+/*
         new DigitalOperationDescription(
             DigitalOperation.PowerCellIntakeExtend,
             UserInputDevice.Operator,
@@ -214,8 +215,6 @@ public class ButtonMap implements IButtonMap
             Shift.OperatorDebug,
             Shift.None,
             ButtonType.Click),
-
-/*
         new DigitalOperationDescription(
             DigitalOperation.PowerCellOuttake,
             UserInputDevice.Operator,
