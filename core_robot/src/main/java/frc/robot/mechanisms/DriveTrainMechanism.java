@@ -423,8 +423,8 @@ public class DriveTrainMechanism implements IMechanism
         this.yPosition = 0.0;
 
         this.firstRun = TuningConstants.DRIVETRAIN_RESET_ON_ROBOT_START;
-        this.fieldOriented = false;
-        this.maintainOrientation = true;
+        this.fieldOriented = true;
+        this.maintainOrientation = false;
         this.updatedOrientation = false;
     }
 
@@ -495,7 +495,7 @@ public class DriveTrainMechanism implements IMechanism
             this.maintainOrientation = true;
         }
 
-        if (this.driver.getDigital(DigitalOperation.DriveTrainEnableMaintainDirectionMode) ||
+        if (this.driver.getDigital(DigitalOperation.DriveTrainDisableMaintainDirectionMode) ||
             !this.positionManager.getIsConnected())
         {
             this.maintainOrientation = false;
