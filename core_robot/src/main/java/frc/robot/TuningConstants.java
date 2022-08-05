@@ -88,8 +88,8 @@ public class TuningConstants
     public static final boolean DRIVETRAIN_USE_PID = true;
     public static final boolean DRIVETRAIN_USE_ODOMETRY = true;
     public static final boolean DRIVETRAIN_RESET_ON_ROBOT_START = true;
-    public static final boolean DRIVETRAIN_USE_FIELD_ORIENTATION_ON_ROBOT_START = false;
-    public static final boolean DRIVETRAIN_USE_MAINTAIN_ORIENTATION_ON_ROBOT_START = false;
+    public static final boolean DRIVETRAIN_FIELD_ORIENTED_ON_ROBOT_START = false;
+    public static final boolean DRIVETRAIN_MAINTAIN_ORIENTATION_ON_ROBOT_START = false;
 
     //public static final double[] DRIVETRAIN_STEER_MOTOR_ABSOLUTE_OFFSET = new double[] { -135.0, 65.0, -96.0, -14.0 };
     public static final double DRIVETRAIN_STEER_MOTOR1_ABSOLUTE_OFFSET = -31.6;
