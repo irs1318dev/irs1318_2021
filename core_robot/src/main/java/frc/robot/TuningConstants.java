@@ -247,7 +247,10 @@ public class TuningConstants
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KF = 0.0113666; // 1023 / 90000
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KS = 85000.0;
 
-    public static final double POWERCELL_FLYWHEEL_MIN_PERCENTILE = 0.34;
+    public static final double POWERCELL_FLYWHEEL_MIN_PERCENTILE = 0.24;
+    public static final double POWERCELL_FLYWHEEL_SHOOT_PERCENTILE = 0.11; // .11 + .24 ==> .35
+    public static final double POWERCELL_FLYWHEEL_PERCENTILE_MULTIPLIER = 0.26; // .26 + .24 ==> .5
+
     public static final int POWERCELL_FLYWHEEL_VELOCITY_PERIOD = 10;
     public static final int POWERCELL_FLYWHEEL_VELOCITY_WINDOWSIZE = 32;
     public static final boolean POWERCELL_FLYWHEEL_MASTER_VELOCITY_VOLTAGE_COMPENSATION_ENABLED = true;

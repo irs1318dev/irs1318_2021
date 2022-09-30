@@ -95,7 +95,7 @@ public class ButtonMap implements IButtonMap
             false,
             -1.0,
             0.125,
-            0.26),
+            TuningConstants.POWERCELL_FLYWHEEL_PERCENTILE_MULTIPLIER),
 
 /*        new AnalogOperationDescription(
             AnalogOperation.PowerCellFlywheelVelocity,
@@ -417,7 +417,7 @@ public class ButtonMap implements IButtonMap
             Shift.None,
             ButtonType.Toggle,
             () -> ConcurrentTask.AllTasks( //new FlywheelVisionSpinTask(),
-                new FlywheelFixedSpinTask(0.01, 10.0),
+                new FlywheelFixedSpinTask(TuningConstants.POWERCELL_FLYWHEEL_SHOOT_PERCENTILE, 10.0),
                 new ShooterHoodPositionTask(DigitalOperation.PowerCellHoodShort)),
             new IOperation[]
             {
