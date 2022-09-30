@@ -220,7 +220,7 @@ public class PowerCellMechanism implements IMechanism
            }
            else
            {
-               this.flywheelVelocitySetpoint = flywheelVelocityPercentage * TuningConstants.POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KS;
+               this.flywheelVelocitySetpoint = (flywheelVelocityPercentage + TuningConstants.POWERCELL_FLYWHEEL_MIN_PERCENTILE) * TuningConstants.POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KS;
            }
         }
 

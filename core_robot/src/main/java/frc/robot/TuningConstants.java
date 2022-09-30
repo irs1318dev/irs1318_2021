@@ -223,7 +223,7 @@ public class TuningConstants
     // REDUCED FOR OUTREACH
     public static final double DRIVETRAIN_MAX_VELOCITY = TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS * HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND * 0.5; // max velocity in inches per second
     public static final double DRIVETRAIN_VELOCITY_TO_PERCENTAGE = 1.0 / TuningConstants.DRIVETRAIN_MAX_VELOCITY;
-    public static final double DRIVETRAIN_TURN_GOAL_VELOCITY = 10.0 * 0.5; // degrees per second for turn goal // REDUCED FOR OUTREACH
+    public static final double DRIVETRAIN_TURN_GOAL_VELOCITY = 10.0 * 0.25; // degrees per second for turn goal // REDUCED FOR OUTREACH
     public static final double DRIVETRAIN_TURN_SCALE = 4.0; // radians per second
     public static final double DRIVETRAIN_TURN_APPROXIMATION = 0.5; // number of degrees off at which point we give up trying to face an angle when uncommanded
     public static final double DRIVETRAIN_MAX_MODULE_PATH_VELOCITY = 0.85 * TuningConstants.DRIVETRAIN_MAX_VELOCITY; // up to x% of our max controllable speed
@@ -247,6 +247,7 @@ public class TuningConstants
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KF = 0.0113666; // 1023 / 90000
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KS = 85000.0;
 
+    public static final double POWERCELL_FLYWHEEL_MIN_PERCENTILE = 0.34;
     public static final int POWERCELL_FLYWHEEL_VELOCITY_PERIOD = 10;
     public static final int POWERCELL_FLYWHEEL_VELOCITY_WINDOWSIZE = 32;
     public static final boolean POWERCELL_FLYWHEEL_MASTER_VELOCITY_VOLTAGE_COMPENSATION_ENABLED = true;
