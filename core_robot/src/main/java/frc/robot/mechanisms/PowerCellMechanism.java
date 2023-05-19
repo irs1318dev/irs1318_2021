@@ -210,7 +210,7 @@ public class PowerCellMechanism implements IMechanism
             this.rollerMotor.set(TuningConstants.PERRY_THE_PLATYPUS);
         }
 
-        double flywheelVelocityPercentage = this.driver.getAnalog(AnalogOperation.PowerCellFlywheelVelocity);
+        double flywheelVelocityPercentage = this.driver.getAnalog(AnalogOperation.PowerCellFlywheelVelocity) + this.driver.getAnalog(AnalogOperation.PowerCellFlywheelVelocity2);
         if (flywheelVelocityPercentage != TuningConstants.MAGIC_NULL_VALUE)
         {
            if (Math.abs(flywheelVelocityPercentage) < 0.01)
@@ -220,7 +220,7 @@ public class PowerCellMechanism implements IMechanism
            }
            else
            {
-               this.flywheelVelocitySetpoint = (flywheelVelocityPercentage + TuningConstants.POWERCELL_FLYWHEEL_MIN_PERCENTILE) * TuningConstants.POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KS;
+               this.flywheelVelocitySetpoint = ((flywheelVelocityPercentage + TuningConstants.POWERCELL_FLYWHEEL_MIN_PERCENTILE) * TuningConstants.POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KS);
            }
         }
 

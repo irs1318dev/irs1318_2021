@@ -8,6 +8,7 @@ public enum MacroOperation implements IOperation
     PIDBrake,
 
     // Testing operations
+    PowerCellFlywheelVelocity,
     VisionCenter,
     VisionCenterAndAdvance,
     FollowSomePath,

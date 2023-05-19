@@ -28,6 +28,7 @@ public enum AnalogOperation implements IOperation
 
     // Powercell Operations
     PowerCellFlywheelVelocity,
+    PowerCellFlywheelVelocity2,
     PowerCellCarousel,
 
     // Climber operations

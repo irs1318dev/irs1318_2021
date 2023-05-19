@@ -7,6 +7,7 @@ import frc.robot.common.Helpers;
 import frc.robot.driver.common.*;
 import frc.robot.driver.common.buttons.*;
 import frc.robot.driver.common.descriptions.*;
+import frc.robot.driver.common.states.AnalogOperationState;
 import frc.robot.driver.controltasks.*;
 
 @Singleton
@@ -95,7 +96,18 @@ public class ButtonMap implements IButtonMap
             false,
             -1.0,
             0.125,
-            0.26),
+            0.175),
+
+        new AnalogOperationDescription(
+            AnalogOperation.PowerCellFlywheelVelocity2,
+            UserInputDevice.Driver,
+            AnalogAxis.XBONE_LT,
+            Shift.DriverDebug,
+            Shift.DriverDebug,
+            false,
+            -1.0,
+            0.125,
+            0.50),
 
 /*        new AnalogOperationDescription(
             AnalogOperation.PowerCellFlywheelVelocity,
@@ -112,15 +124,15 @@ public class ButtonMap implements IButtonMap
             1.0,
             0,
             (x, y) -> (Helpers.atan2d(x, y) + 180.0) / 360),*/
-        new AnalogOperationDescription(
-            AnalogOperation.PowerCellCarousel,
-            UserInputDevice.Driver,
-            AnalogAxis.XBONE_LT,
-            Shift.DriverDebug,
-            Shift.DriverDebug,
-            ElectronicsConstants.INVERT_TRIGGER_AXIS,
-            -1.01,
-            TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB),
+        // new AnalogOperationDescription(
+        //     AnalogOperation.PowerCellCarousel,
+        //     UserInputDevice.Driver,
+        //     AnalogAxis.XBONE_LT,
+        //     Shift.DriverDebug,
+        //     Shift.DriverDebug,
+        //     ElectronicsConstants.INVERT_TRIGGER_AXIS,
+        //     -1.01,
+        //     TuningConstants.DRIVETRAIN_DEAD_ZONE_TRIGGER_AB),
     };
 
     public static DigitalOperationDescription[] DigitalOperationSchema = new DigitalOperationDescription[]
@@ -132,13 +144,13 @@ public class ButtonMap implements IButtonMap
             Shift.DriverDebug,
             Shift.DriverDebug,
             ButtonType.Click),
-        new DigitalOperationDescription(
-            DigitalOperation.DriveTrainEnableFieldOrientation,
-            UserInputDevice.Driver,
-            UserInputDeviceButton.XBONE_B_BUTTON,
-            Shift.DriverDebug,
-            Shift.DriverDebug,
-            ButtonType.Click),
+        // new DigitalOperationDescription(
+        //     DigitalOperation.DriveTrainEnableFieldOrientation,
+        //     UserInputDevice.Driver,
+        //     UserInputDeviceButton.XBONE_B_BUTTON,
+        //     Shift.DriverDebug,
+        //     Shift.DriverDebug,
+        //     ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.DriveTrainDisableFieldOrientation,
             UserInputDevice.Driver,
@@ -399,7 +411,7 @@ public class ButtonMap implements IButtonMap
             MacroOperation.ShootHopper,
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_B_BUTTON,
-            Shift.DriverDebug,
+            Shift.None,
             Shift.None,
             ButtonType.Toggle,
             () -> new FullHopperShotTask(),
@@ -422,6 +434,7 @@ public class ButtonMap implements IButtonMap
             new IOperation[]
             {
                 AnalogOperation.PowerCellFlywheelVelocity,
+                AnalogOperation.PowerCellFlywheelVelocity2,
                 DigitalOperation.PowerCellHoodPointBlank,
                 DigitalOperation.PowerCellHoodShort,
                 DigitalOperation.PowerCellHoodMedium,
@@ -456,6 +469,7 @@ public class ButtonMap implements IButtonMap
             new IOperation[]
             {
                 AnalogOperation.PowerCellFlywheelVelocity,
+                AnalogOperation.PowerCellFlywheelVelocity2,
                 DigitalOperation.PowerCellHoodPointBlank,
                 DigitalOperation.PowerCellHoodShort,
                 DigitalOperation.PowerCellHoodMedium,
