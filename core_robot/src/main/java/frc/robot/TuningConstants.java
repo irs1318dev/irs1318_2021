@@ -221,7 +221,7 @@ public class TuningConstants
     public static final double DRIVETRAIN_ROTATION_B_MULTIPLIER = HardwareConstants.DRIVETRAIN_VERTICAL_WHEEL_SEPERATION_DISTANCE / 2.0;
 
     // REDUCED FOR OUTREACH
-    public static final double DRIVETRAIN_MAX_VELOCITY = TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS * HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND * 0.5; // max velocity in inches per second
+    public static final double DRIVETRAIN_MAX_VELOCITY = TuningConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_PID_KS * HardwareConstants.DRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND * 0.9; // max velocity in inches per second
     public static final double DRIVETRAIN_VELOCITY_TO_PERCENTAGE = 1.0 / TuningConstants.DRIVETRAIN_MAX_VELOCITY;
     public static final double DRIVETRAIN_TURN_GOAL_VELOCITY = 10.0 * 0.25; // degrees per second for turn goal // REDUCED FOR OUTREACH
     public static final double DRIVETRAIN_TURN_SCALE = 4.0; // radians per second
@@ -247,7 +247,10 @@ public class TuningConstants
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KF = 0.0113666; // 1023 / 90000
     public static final double POWERCELL_FLYWHEEL_ONE_VELOCITY_PID_KS = 85000.0;
 
-    public static final double POWERCELL_FLYWHEEL_MIN_PERCENTILE = 0.34;
+    public static final double POWERCELL_FLYWHEEL_MIN_PERCENTILE = 0.24;
+    public static final double POWERCELL_FLYWHEEL_SHOOT_PERCENTILE = 0.11; // .11 + .24 ==> .35
+    public static final double POWERCELL_FLYWHEEL_PERCENTILE_MULTIPLIER = 0.26; // .26 + .24 ==> .5
+
     public static final int POWERCELL_FLYWHEEL_VELOCITY_PERIOD = 10;
     public static final int POWERCELL_FLYWHEEL_VELOCITY_WINDOWSIZE = 32;
     public static final boolean POWERCELL_FLYWHEEL_MASTER_VELOCITY_VOLTAGE_COMPENSATION_ENABLED = true;
