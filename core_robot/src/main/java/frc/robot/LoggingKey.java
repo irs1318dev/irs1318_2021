@@ -26,10 +26,10 @@ public enum LoggingKey
     OffboardVisionEnableProcessing("rpi.enableProcessing"), // why do some have True?
     OffboardVisionMissedHeartbeats("rpi.missedHeartbeats"),
     NavxConnected("navx.connected", true),
-    NavxAngle("navx.angle", true),
-    NavxPitch("navx.pitch", true),
-    NavxRoll("navx.roll", true),
-    NavxYaw("navx.yaw", true),
+    NavxAngle("navx.angle"),
+    NavxPitch("navx.pitch"),
+    NavxRoll("navx.roll"),
+    NavxYaw("navx.yaw"),
     NavxX("navx.x"),
     NavxY("navx.y"),
     NavxZ("navx.z"),
@@ -47,7 +47,7 @@ public enum LoggingKey
     DriveTrainFieldOriented("dt.field"),
     DriveTrainMaintainPosition("dt.maintain_pos"),
 
-    DriveTrainAbsoluteEncoderAngle1("dt.absenc_ang1"),
+    DriveTrainAbsoluteEncoderAngle1("dt.absenc_ang1", true),
     DriveTrainDriveVelocity1("dt.drive_vel1"),
     DriveTrainDrivePosition1("dt.drive_pos1"),
     DriveTrainDriveError1("dt.drive_err1"),
@@ -58,7 +58,7 @@ public enum LoggingKey
     DriveTrainSteerError1("dt.steer_err1"),
     DriveTrainSteerPositionGoal1("dt.steer_goal1"),
 
-    DriveTrainAbsoluteEncoderAngle2("dt.absenc_ang2"),
+    DriveTrainAbsoluteEncoderAngle2("dt.absenc_ang2", true),
     DriveTrainDriveVelocity2("dt.drive_vel2"),
     DriveTrainDrivePosition2("dt.drive_pos2"),
     DriveTrainDriveError2("dt.drive_err2"),
@@ -69,7 +69,7 @@ public enum LoggingKey
     DriveTrainSteerError2("dt.steer_err2"),
     DriveTrainSteerPositionGoal2("dt.steer_goal2"),
 
-    DriveTrainAbsoluteEncoderAngle3("dt.absenc_ang3"),
+    DriveTrainAbsoluteEncoderAngle3("dt.absenc_ang3", true),
     DriveTrainDriveVelocity3("dt.drive_vel3"),
     DriveTrainDrivePosition3("dt.drive_pos3"),
     DriveTrainDriveError3("dt.drive_err3"),
@@ -80,7 +80,7 @@ public enum LoggingKey
     DriveTrainSteerError3("dt.steer_err3"),
     DriveTrainSteerPositionGoal3("dt.steer_goal3"),
 
-    DriveTrainAbsoluteEncoderAngle4("dt.absenc_ang4"),
+    DriveTrainAbsoluteEncoderAngle4("dt.absenc_ang4", true),
     DriveTrainDriveVelocity4("dt.drive_vel4"),
     DriveTrainDrivePosition4("dt.drive_pos4"),
     DriveTrainDriveError4("dt.drive_err4"),

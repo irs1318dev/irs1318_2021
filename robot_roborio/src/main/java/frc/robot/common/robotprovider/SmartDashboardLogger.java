@@ -20,7 +20,7 @@ public class SmartDashboardLogger implements ISmartDashboardLogger
     @Override
     public void logBoolean(LoggingKey key, boolean value)
     {
-        if (key.shouldLog && SmartDashboard.getBoolean(key.value, !value) != value)
+        if (SmartDashboard.getBoolean(key.value, !value) != value)
         {
             SmartDashboard.putBoolean(key.value, value);
         }
@@ -34,10 +34,7 @@ public class SmartDashboardLogger implements ISmartDashboardLogger
     @Override
     public void logBooleanArray(LoggingKey key, boolean[] value)
     {
-        if (key.shouldLog)
-        {
-            SmartDashboard.putBooleanArray(key.value, value);
-        }
+        SmartDashboard.putBooleanArray(key.value, value);
     }
 
     /**
@@ -48,7 +45,7 @@ public class SmartDashboardLogger implements ISmartDashboardLogger
     @Override
     public void logNumber(LoggingKey key, double value)
     {
-        if (key.shouldLog && SmartDashboard.getNumber(key.value, value + 0.5) != value)
+        if (SmartDashboard.getNumber(key.value, value + 0.5) != value)
         {
             SmartDashboard.putNumber(key.value, value);
         }
@@ -62,16 +59,13 @@ public class SmartDashboardLogger implements ISmartDashboardLogger
     @Override
     public void logNumber(LoggingKey key, Double value)
     {
-        if (key.shouldLog)
+        String valueString = "N/A";
+        if (value != null)
         {
-            String valueString = "N/A";
-            if (value != null)
-            {
-                valueString = "" + value;
-            }
-
-            SmartDashboard.putString(key.value, valueString);
+            valueString = "" + value;
         }
+
+        SmartDashboard.putString(key.value, valueString);
     }
 
     /**
@@ -94,7 +88,7 @@ public class SmartDashboardLogger implements ISmartDashboardLogger
     @Override
     public void logInteger(LoggingKey key, int value, String formatString)
     {
-        if (key.shouldLog && SmartDashboard.getNumber(key.value, value + 0.5) != value)
+        if (SmartDashboard.getNumber(key.value, value + 0.5) != value)
         {
             SmartDashboard.putNumber(key.value, value);
         }
@@ -125,7 +119,7 @@ public class SmartDashboardLogger implements ISmartDashboardLogger
     @Override
     public void logString(LoggingKey key, String value)
     {
-        if (key.shouldLog && SmartDashboard.getString(key.value, null) != value)
+        if (SmartDashboard.getString(key.value, null) != value)
         {
             SmartDashboard.putString(key.value, value);
         }
