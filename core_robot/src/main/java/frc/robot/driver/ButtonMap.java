@@ -144,20 +144,20 @@ public class ButtonMap implements IButtonMap
             Shift.DriverDebug,
             Shift.DriverDebug,
             ButtonType.Click),
-        // new DigitalOperationDescription(
-        //     DigitalOperation.DriveTrainEnableFieldOrientation,
-        //     UserInputDevice.Driver,
-        //     UserInputDeviceButton.XBONE_B_BUTTON,
-        //     Shift.DriverDebug,
-        //     Shift.DriverDebug,
-        //     ButtonType.Click),
         new DigitalOperationDescription(
-            DigitalOperation.DriveTrainDisableFieldOrientation,
+            DigitalOperation.DriveTrainEnableFieldOrientation,
             UserInputDevice.Driver,
             UserInputDeviceButton.XBONE_X_BUTTON,
             Shift.DriverDebug,
             Shift.DriverDebug,
             ButtonType.Click),
+        // new DigitalOperationDescription(
+        //     DigitalOperation.DriveTrainDisableFieldOrientation,
+        //     UserInputDevice.Driver,
+        //     UserInputDeviceButton.XBONE_B_BUTTON,
+        //     Shift.DriverDebug,
+        //     Shift.DriverDebug,
+        //     ButtonType.Click),
         new DigitalOperationDescription(
             DigitalOperation.PositionResetFieldOrientation,
             UserInputDevice.Driver,
