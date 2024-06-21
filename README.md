@@ -1,6 +1,8 @@
 # irs1318_2021
 
-General robot code that can be copied from year to year
+Robot code for 2021 year challenges.
+
+For 2021's rebirth as an outreach bot, please see 2021Outreach branch of irs1318_general repository.
 
 ## Links
 1. [Robot Programming Guide](/Robot%20Programming%20Guide.md)
