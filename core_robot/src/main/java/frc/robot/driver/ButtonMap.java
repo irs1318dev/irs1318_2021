@@ -107,7 +107,7 @@ public class ButtonMap implements IButtonMap
             false,
             -1.0,
             0.125,
-            0.50),
+            2.0),
 
 /*        new AnalogOperationDescription(
             AnalogOperation.PowerCellFlywheelVelocity,
